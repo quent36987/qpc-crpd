@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+
+    <!-- ===========================================================
+         ChangeSet 2 : TABLE USERS
+         =========================================================== -->
+    <changeSet id="2-create-users-table" author="QGN">
+
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="nom" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="prenom" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="email" type="VARCHAR(128)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="password" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="tel" type="VARCHAR(25)"/>
+            <column name="hash" type="VARCHAR(255)"/>
+
+            <column name="role" type="VARCHAR(50)" defaultValue="USER">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Index pour accélérer la recherche par email -->
+        <createIndex tableName="users" indexName="idx_users_email">
+            <column name="email"/>
+        </createIndex>
+
+    </changeSet>
+
+    <!-- ===========================================================
+         ChangeSet 4 : TABLE SETTINGS (conforme au modèle Java)
+         =========================================================== -->
+    <changeSet id="4-create-settings-table" author="QGN">
+
+        <createTable tableName="settings">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <!-- ENUM : categorie -->
+            <column name="categorie" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- nom unique -->
+            <column name="nom" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <!-- ENUM -->
+            <column name="nom_enum" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <!-- description optionnelle -->
+            <column name="description" type="VARCHAR(500)"/>
+
+            <!-- valeur obligatoire -->
+            <column name="valeur" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- ENUM : type -->
+            <column name="type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- updated_at + updated_by -->
+            <column name="updated_at" type="TIMESTAMP"/>
+            <column name="updated_by_id" type="BIGINT"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="settings"
+                baseColumnNames="updated_by_id"
+                referencedTableName="users"
+                referencedColumnNames="id"
+                constraintName="fk_settings_updated_by"
+                onDelete="SET NULL"/>
+    </changeSet>
+
+</databaseChangeLog>

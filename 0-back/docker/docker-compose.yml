@@ -1,0 +1,11 @@
+
+services:
+  qpc-bdd:
+    image: postgres:12.1-alpine
+    container_name: qpc-bdd
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: qpc-bdd
+    ports:
+      - 5489:5432
