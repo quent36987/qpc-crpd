@@ -1,6 +1,6 @@
 package back.app.domain.service;
 
-import back.app.data.model.ERole;
+import back.app.data.model.user.ERole;
 import back.app.utils.errors.RestError;
 import back.app.utils.security.services.UserDetailsImpl;
 import org.springframework.security.core.Authentication;

@@ -10,6 +10,7 @@ public enum RestError {
 
     // CHAMP MANQUANT ET MAUVAISE REQUÊTE
     BAD_REQUEST(400, "Requête invalide"),
+    INVALID_FIELD(400, "Champ %s invalide"),
     INVALID_HASH(400, "Hash invalide"),
     EMAIL_ALREADY_EXISTS(400, "Email %s existe déjà"),
 

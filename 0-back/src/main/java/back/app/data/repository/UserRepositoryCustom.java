@@ -1,7 +1,7 @@
 package back.app.data.repository;
 
 
-import back.app.data.model.UserModel;
+import back.app.data.model.user.UserModel;
 import back.app.data.repository.interfaces.UserRepository;
 import back.app.utils.errors.RestError;
 import org.springframework.beans.factory.annotation.Autowired;

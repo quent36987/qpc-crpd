@@ -1,5 +1,6 @@
-package back.app.data.model;
+package back.app.data.model.setting;
 
+import back.app.data.model.user.UserModel;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -49,7 +50,6 @@ public class SettingsModel {
     @Column(name = "type", nullable = false, length = 50)
     private ESettingType type;
 
-    // Les deux suivants peuvent être NULL :
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 

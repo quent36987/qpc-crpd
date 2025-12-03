@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+
+    <!-- ===========================================================
+         ChangeSet 3 : TABLE LISTES_DEROUlANTES
+         (table générique pour toutes les listes déroulantes)
+         =========================================================== -->
+    <changeSet id="3-create-listes-deroulantes-table" author="QGN">
+
+        <createTable tableName="listes_deroulantes">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <!-- Nom logique du champ auquel la valeur se rattache
+                 Exemple : 'decision_qpc_cc.origine_qpc' -->
+            <column name="champ" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Valeur affichée dans la liste -->
+            <column name="valeur" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Optionnel : activer/désactiver une valeur -->
+            <column name="actif" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Un champ ne doit pas avoir deux fois la même valeur -->
+        <addUniqueConstraint
+                tableName="listes_deroulantes"
+                columnNames="champ, valeur"
+                constraintName="uk_listes_deroulantes_champ_valeur"/>
+
+        <!-- Index pour les recherches -->
+        <createIndex tableName="listes_deroulantes" indexName="idx_listes_deroulantes_champ">
+            <column name="champ"/>
+        </createIndex>
+
+    </changeSet>
+
+
+    <!-- ===========================================================
+         ChangeSet 4 : TABLE DROITS_LIBERTES
+         =========================================================== -->
+    <changeSet id="4-create-droits-libertes-table" author="QGN">
+
+        <createTable tableName="droits_libertes">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="texte" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+
+
+    <!-- ===========================================================
+         ChangeSet 5 : TABLE DECISION_QPC_CC
+         (décisions QPC du Conseil constitutionnel)
+         =========================================================== -->
+    <changeSet id="5-create-decision-qpc-cc-table" author="QGN">
+
+        <createTable tableName="decision_qpc_cc">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <!-- 1. reference_decision_conseil -->
+            <column name="reference_decision_conseil" type="VARCHAR(255)"/>
+
+            <!-- 2. numero -->
+            <column name="numero" type="VARCHAR(100)"/>
+
+            <!-- 3. date_decision -->
+            <column name="date_decision" type="DATE"/>
+
+            <!-- 4. origine_qpc : liste déroulante -->
+            <column name="origine_qpc_id" type="BIGINT"/>
+
+            <!-- 5. reference_decision_transmission -->
+            <column name="reference_decision_transmission" type="VARCHAR(255)"/>
+
+            <!-- 6. qualite_demandeur : liste déroulante -->
+            <column name="qualite_demandeur_id" type="BIGINT"/>
+
+            <!-- 7. identite_demandeur -->
+            <column name="identite_demandeur" type="TEXT"/>
+
+            <!-- 8. dispositions_legislatives_contestees -->
+            <column name="dispositions_legislatives_contestees" type="TEXT"/>
+
+            <!-- 9. type_disposition_legislative : liste déroulante -->
+            <column name="type_disposition_legislative_id" type="BIGINT"/>
+
+            <!-- 10. matiere : liste déroulante -->
+            <column name="matiere_id" type="BIGINT"/>
+
+            <!-- 11. dispositif_decision_cc : liste déroulante -->
+            <column name="dispositif_decision_cc_id" type="BIGINT"/>
+
+            <!-- 12. date_abrogation_differee -->
+            <column name="date_abrogation_differee" type="DATE"/>
+
+            <!-- 13. delai_avant_abrogation_mois -->
+            <column name="delai_avant_abrogation_mois" type="INT"/>
+
+            <!-- 14. traitement_effets_passes : liste déroulante -->
+            <column name="traitement_effets_passes_id" type="BIGINT"/>
+
+            <!-- 15. nombre_membres_sieges -->
+            <column name="nombre_membres_sieges" type="INT"/>
+
+            <!-- 16. demande_recusation -->
+            <column name="demande_recusation" type="INT"/>
+
+            <!-- 17. deport -->
+            <column name="deport" type="INT"/>
+
+            <!-- 18. nom_membre_deporte_ou_recuse -->
+            <column name="nom_membre_deporte_ou_recuse" type="TEXT"/>
+
+            <!-- 19. oralite : liste déroulante -->
+            <column name="oralite_id" type="BIGINT"/>
+
+            <!-- 20. application_theorie_changement_circonstances : booléen -->
+            <column name="application_theorie_changement_circonstances" type="BOOLEAN"/>
+
+            <!-- 21. nombre_droits_libertes_invoques -->
+            <column name="nombre_droits_libertes_invoques" type="INT"/>
+
+            <!-- 22. nombre_interventions_admises -->
+            <column name="nombre_interventions_admises" type="INT"/>
+
+            <!-- 23. qualite_tiers_intervention : liste déroulante -->
+            <column name="qualite_tiers_intervention_id" type="BIGINT"/>
+
+            <!-- 24. nombre_personnes_physiques -->
+            <column name="nombre_personnes_physiques" type="INT"/>
+
+            <!-- 25. identite_personnes_physiques -->
+            <column name="identite_personnes_physiques" type="TEXT"/>
+
+            <!-- 26. nombre_associations -->
+            <column name="nombre_associations" type="INT"/>
+
+            <!-- 27. identite_associations -->
+            <column name="identite_associations" type="TEXT"/>
+
+            <!-- 28. nombre_entreprises -->
+            <column name="nombre_entreprises" type="INT"/>
+
+            <!-- 29. identite_entreprises -->
+            <column name="identite_entreprises" type="TEXT"/>
+
+            <!-- 30. nombre_syndicats_ap_op -->
+            <column name="nombre_syndicats_ap_op" type="INT"/>
+
+            <!-- 31. identite_syndicats_ap_op -->
+            <column name="identite_syndicats_ap_op" type="TEXT"/>
+
+            <!-- 32. nombre_collectivites_territoriales -->
+            <column name="nombre_collectivites_territoriales" type="INT"/>
+
+            <!-- 33. identite_collectivites -->
+            <column name="identite_collectivites" type="TEXT"/>
+
+            <!-- 34. reserve_opportunite : booléen -->
+            <column name="reserve_opportunite" type="BOOLEAN"/>
+
+            <!-- 35. reserve_incompetence_conseil : liste déroulante -->
+            <column name="reserve_incompetence_conseil_id" type="BIGINT"/>
+
+            <!-- 36. prise_en_compte_interpretation_jurisprudentielle : booléen -->
+            <column name="prise_en_compte_interpretation_jurisprudentielle" type="BOOLEAN"/>
+
+            <!-- 37. techniques_controle -->
+            <column name="techniques_controle" type="TEXT"/>
+
+            <!-- 38. motif_inconstitutionnalite -->
+            <column name="motif_inconstitutionnalite" type="TEXT"/>
+
+            <!-- 39. autres_remarques -->
+            <column name="autres_remarques" type="TEXT"/>
+
+            <!-- 40. caractere_notable_decision -->
+            <column name="caractere_notable_decision" type="BOOLEAN"/>
+
+            <!-- métadonnées (optionnel) -->
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+
+        <!-- Index utiles -->
+        <createIndex tableName="decision_qpc_cc" indexName="idx_decision_qpc_cc_numero">
+            <column name="numero"/>
+        </createIndex>
+
+        <createIndex tableName="decision_qpc_cc" indexName="idx_decision_qpc_cc_date_decision">
+            <column name="date_decision"/>
+        </createIndex>
+
+        <!-- FKs vers listes_deroulantes -->
+        <addForeignKeyConstraint baseTableName="decision_qpc_cc"
+                                 baseColumnNames="origine_qpc_id"
+                                 referencedTableName="listes_deroulantes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_qpc_cc_origine_qpc"/>
+
+        <addForeignKeyConstraint baseTableName="decision_qpc_cc"
+                                 baseColumnNames="qualite_demandeur_id"
+                                 referencedTableName="listes_deroulantes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_qpc_cc_qualite_demandeur"/>
+
+        <addForeignKeyConstraint baseTableName="decision_qpc_cc"
+                                 baseColumnNames="type_disposition_legislative_id"
+                                 referencedTableName="listes_deroulantes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_qpc_cc_type_disposition"/>
+
+        <addForeignKeyConstraint baseTableName="decision_qpc_cc"
+                                 baseColumnNames="matiere_id"
+                                 referencedTableName="listes_deroulantes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_qpc_cc_matiere"/>
+
+        <addForeignKeyConstraint baseTableName="decision_qpc_cc"
+                                 baseColumnNames="dispositif_decision_cc_id"
+                                 referencedTableName="listes_deroulantes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_qpc_cc_dispositif"/>
+
+        <addForeignKeyConstraint baseTableName="decision_qpc_cc"
+                                 baseColumnNames="traitement_effets_passes_id"
+                                 referencedTableName="listes_deroulantes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_qpc_cc_traitement_effets"/>
+
+        <addForeignKeyConstraint baseTableName="decision_qpc_cc"
+                                 baseColumnNames="oralite_id"
+                                 referencedTableName="listes_deroulantes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_qpc_cc_oralite"/>
+
+        <addForeignKeyConstraint baseTableName="decision_qpc_cc"
+                                 baseColumnNames="qualite_tiers_intervention_id"
+                                 referencedTableName="listes_deroulantes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_qpc_cc_qualite_tiers"/>
+
+        <addForeignKeyConstraint baseTableName="decision_qpc_cc"
+                                 baseColumnNames="reserve_incompetence_conseil_id"
+                                 referencedTableName="listes_deroulantes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_qpc_cc_reserve_incompetence"/>
+
+    </changeSet>
+
+
+    <!-- ===========================================================
+         ChangeSet 6 : TABLE DECISION_QPC_CC__DROITS_LIBERTES
+         (many-to-many)
+         =========================================================== -->
+    <changeSet id="6-create-decision-qpc-cc-droits-libertes-table" author="QGN">
+
+        <createTable tableName="decision_qpc_cc__droits_libertes">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="id_decision_qpc_cc" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="id_droit_liberte" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="decision_qpc_cc__droits_libertes"
+                                 baseColumnNames="id_decision_qpc_cc"
+                                 referencedTableName="decision_qpc_cc"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_qpc_cc_dl_decision"
+                                 onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint baseTableName="decision_qpc_cc__droits_libertes"
+                                 baseColumnNames="id_droit_liberte"
+                                 referencedTableName="droits_libertes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_qpc_cc_dl_droit"
+                                 onDelete="CASCADE"/>
+
+        <addUniqueConstraint tableName="decision_qpc_cc__droits_libertes"
+                             columnNames="id_decision_qpc_cc, id_droit_liberte"
+                             constraintName="uk_decision_qpc_cc_dl_unique"/>
+
+    </changeSet>
+
+
+    <!-- ===========================================================
+         ChangeSet 7 : TABLE DECISION_FILTRAGE_QPC
+         (Décisions de filtrage CE / Cour de cassation)
+         =========================================================== -->
+    <changeSet id="7-create-decision-filtrage-qpc-table" author="QGN">
+
+        <createTable tableName="decision_filtrage_qpc">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <!-- 1. ordre_juridictionnel : énum-->
+            <column name="ordre_juridictionnel" type="varchar(100)"/>
+
+            <!-- 2. juridiction : énum-->
+            <column name="juridiction" type="varchar(100)"/>
+
+            <!-- 3. chambre_sous_section : liste déroulante -->
+            <column name="chambre_sous_section_id" type="BIGINT"/>
+
+            <!-- 4. numero_chambres_reunies : liste déroulante -->
+            <column name="numero_chambres_reunies_id" type="BIGINT"/>
+
+            <!-- 5. niveau_filtrage : énum -->
+            <column name="niveau_filtrage" type="varchar(100)"/>
+
+            <!-- 6. origine_juridictionnelle_qpc : texte -->
+            <column name="origine_juridictionnelle_qpc" type="TEXT"/>
+
+            <!-- 7. niveau_competence : liste déroulante -->
+            <column name="niveau_competence_id" type="BIGINT"/>
+
+            <!-- 8. date_filtrage : date -->
+            <column name="date_filtrage" type="DATE"/>
+
+            <!-- 9. formation_jugement : énum -->
+            <column name="formation_jugement" type="varchar(100)"/>
+
+            <!-- 10. reference : texte -->
+            <column name="reference" type="VARCHAR(255)"/>
+
+            <!-- 11. numero_decision : texte -->
+            <column name="numero_decision" type="VARCHAR(100)"/>
+
+            <!-- 12. reference_dispositions_contestees : texte -->
+            <column name="reference_dispositions_contestees" type="TEXT"/>
+
+            <!-- 13. loi_origine_disposition : texte -->
+            <column name="loi_origine_disposition" type="TEXT"/>
+
+            <!-- 14. matiere : liste déroulante -->
+            <column name="matiere_id" type="BIGINT"/>
+
+            <!-- 15. qualite_demandeur : liste déroulante -->
+            <column name="qualite_demandeur_id" type="BIGINT"/>
+
+            <!-- 16. qualite_precise_demandeur : liste déroulante -->
+            <column name="qualite_precise_demandeur_id" type="BIGINT"/>
+
+            <!-- 17. identite_demandeur : texte -->
+            <column name="identite_demandeur" type="TEXT"/>
+
+            <!-- 18. decision_renvoi : liste déroulante -->
+            <column name="decision_renvoi_id" type="BIGINT"/>
+
+            <!-- 19. decision_non_renvoi : liste déroulante -->
+            <column name="decision_non_renvoi_id" type="BIGINT"/>
+
+            <!-- 20. application_theorie_changement_circonstances : liste déroulante -->
+            <column name="application_theorie_changement_circonstances_id" type="BIGINT"/>
+
+            <!-- 22. nombre_droits_non_mentionnes -->
+            <column name="nombre_droits_non_mentionnes" type="TEXT"/>
+
+            <!-- 23. autres_remarques -->
+            <column name="autres_remarques" type="TEXT"/>
+
+            <!-- 24. mots_cles -->
+            <column name="mots_cles" type="TEXT"/>
+
+            <!-- métadonnées (optionnel) -->
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+
+        <!-- Index utiles -->
+        <createIndex tableName="decision_filtrage_qpc" indexName="idx_decision_filtrage_qpc_numero">
+            <column name="numero_decision"/>
+        </createIndex>
+
+        <createIndex tableName="decision_filtrage_qpc" indexName="idx_decision_filtrage_qpc_date_filtrage">
+            <column name="date_filtrage"/>
+        </createIndex>
+
+        <!-- FKs vers listes_deroulantes -->
+        <addForeignKeyConstraint baseTableName="decision_filtrage_qpc"
+                                 baseColumnNames="chambre_sous_section_id"
+                                 referencedTableName="listes_deroulantes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_filtrage_chambre"/>
+
+        <addForeignKeyConstraint baseTableName="decision_filtrage_qpc"
+                                 baseColumnNames="numero_chambres_reunies_id"
+                                 referencedTableName="listes_deroulantes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_filtrage_numero_chambres_reunies"/>
+
+        <addForeignKeyConstraint baseTableName="decision_filtrage_qpc"
+                                 baseColumnNames="niveau_competence_id"
+                                 referencedTableName="listes_deroulantes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_filtrage_niveau_competence"/>
+
+        <addForeignKeyConstraint baseTableName="decision_filtrage_qpc"
+                                 baseColumnNames="matiere_id"
+                                 referencedTableName="listes_deroulantes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_filtrage_matiere"/>
+
+        <addForeignKeyConstraint baseTableName="decision_filtrage_qpc"
+                                 baseColumnNames="qualite_demandeur_id"
+                                 referencedTableName="listes_deroulantes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_filtrage_qualite_demandeur"/>
+
+        <addForeignKeyConstraint baseTableName="decision_filtrage_qpc"
+                                 baseColumnNames="qualite_precise_demandeur_id"
+                                 referencedTableName="listes_deroulantes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_filtrage_qualite_precise_demandeur"/>
+
+        <addForeignKeyConstraint baseTableName="decision_filtrage_qpc"
+                                 baseColumnNames="decision_renvoi_id"
+                                 referencedTableName="listes_deroulantes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_filtrage_decision_renvoi"/>
+
+        <addForeignKeyConstraint baseTableName="decision_filtrage_qpc"
+                                 baseColumnNames="decision_non_renvoi_id"
+                                 referencedTableName="listes_deroulantes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_filtrage_decision_non_renvoi"/>
+
+        <addForeignKeyConstraint baseTableName="decision_filtrage_qpc"
+                                 baseColumnNames="application_theorie_changement_circonstances_id"
+                                 referencedTableName="listes_deroulantes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_filtrage_theorie_changement"/>
+    </changeSet>
+
+
+    <!-- ===========================================================
+         ChangeSet 8 : TABLE DECISION_FILTRAGE_QPC__DROITS_LIBERTES
+         (many-to-many)
+         =========================================================== -->
+    <changeSet id="8-create-decision-filtrage-qpc-droits-libertes-table" author="QGN">
+
+        <createTable tableName="decision_filtrage_qpc__droits_libertes">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="id_decision_filtrage" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="id_droit_liberte" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="decision_filtrage_qpc__droits_libertes"
+                                 baseColumnNames="id_decision_filtrage"
+                                 referencedTableName="decision_filtrage_qpc"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_filtrage_dl_decision"
+                                 onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint baseTableName="decision_filtrage_qpc__droits_libertes"
+                                 baseColumnNames="id_droit_liberte"
+                                 referencedTableName="droits_libertes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_filtrage_dl_droit"
+                                 onDelete="CASCADE"/>
+
+        <addUniqueConstraint tableName="decision_filtrage_qpc__droits_libertes"
+                             columnNames="id_decision_filtrage, id_droit_liberte"
+                             constraintName="uk_decision_filtrage_dl_unique"/>
+
+    </changeSet>
+
+</databaseChangeLog>

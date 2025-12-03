@@ -1,10 +1,10 @@
 package back.app.utils;
 
 
-import back.app.data.model.ESettingCategorie;
-import back.app.data.model.ESettingNom;
-import back.app.data.model.ESettingType;
-import back.app.data.model.SettingsModel;
+import back.app.data.model.setting.ESettingCategorie;
+import back.app.data.model.setting.ESettingNom;
+import back.app.data.model.setting.ESettingType;
+import back.app.data.model.setting.SettingsModel;
 import back.app.data.repository.interfaces.SettingRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;

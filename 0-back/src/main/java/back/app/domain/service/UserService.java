@@ -1,8 +1,6 @@
 package back.app.domain.service;
 
 
-import back.app.domain.service.BaseService;
-import back.app.domain.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import back.app.domain.entity.UserDTO;
@@ -11,8 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import back.app.data.model.ERole;
-import back.app.data.model.UserModel;
+import back.app.data.model.user.ERole;
+import back.app.data.model.user.UserModel;
 import back.app.data.repository.UserRepositoryCustom;
 import back.app.data.repository.interfaces.UserRepository;
 import back.app.utils.errors.RestError;

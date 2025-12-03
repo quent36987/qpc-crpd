@@ -1,8 +1,8 @@
 package back.app.data.repository.interfaces;
 
 
-import back.app.data.model.ESettingNom;
-import back.app.data.model.SettingsModel;
+import back.app.data.model.setting.ESettingNom;
+import back.app.data.model.setting.SettingsModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

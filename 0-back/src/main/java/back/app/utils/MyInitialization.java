@@ -1,7 +1,7 @@
 package back.app.utils;
 
-import back.app.data.model.ERole;
-import back.app.data.model.UserModel;
+import back.app.data.model.user.ERole;
+import back.app.data.model.user.UserModel;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
 import back.app.domain.service.UserService;

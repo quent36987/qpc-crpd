@@ -1,4 +1,4 @@
-package back.app.data.model;
+package back.app.data.model.setting;
 
 public enum ESettingType {
     STRING,

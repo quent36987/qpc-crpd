@@ -1,8 +1,8 @@
 package back.app.utils.security.services;
 
-import back.app.data.model.EDroit;
-import back.app.data.model.ERole;
-import back.app.data.model.UserModel;
+import back.app.data.model.user.EDroit;
+import back.app.data.model.user.ERole;
+import back.app.data.model.user.UserModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,7 +10,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 

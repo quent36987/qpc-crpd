@@ -1,6 +1,6 @@
 package back.app.domain.mapper;
 
-import back.app.data.model.SettingsModel;
+import back.app.data.model.setting.SettingsModel;
 import back.app.domain.entity.SettingsDTO;
 import org.mapstruct.*;
 
@@ -21,13 +21,4 @@ public interface SettingsMapper {
     SettingsModel toEntity(SettingsDTO dto);
 
     List<SettingsModel> toEntityList(List<SettingsDTO> dtos);
-
-
-    /**
-     * Mise à jour partielle d'une entité existante depuis un DTO.
-     * - Ignore les champs null du DTO (ne les écrase pas).
-     * - Conserve l'id de l'entité.
-     */
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntityFromDto(SettingsDTO dto, @MappingTarget SettingsModel entity);
 }

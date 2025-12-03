@@ -1,8 +1,7 @@
 package back.app.data.repository.interfaces;
 
 
-import back.app.data.model.RoleModel;
-import back.app.data.model.UserModel;
+import back.app.data.model.user.UserModel;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

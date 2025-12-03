@@ -1,4 +1,4 @@
-package back.app.data.model;
+package back.app.data.model.user;
 
 
 /**
@@ -11,13 +11,20 @@ package back.app.data.model;
  */
 public enum EDroit {
 
+    // --- Users ---
     USER_LIRE,
     USER_MANAGEMENT,
     USER_MODIFIER_ROLES,
 
+    // --- Paramètres ---
     SETTING_LIRE,
     SETTING_MODIFIER,
 
+    // --- Listes déroulantes ---
+    LISTES_DEROUlANTES_MODIFIER,
+
+    // --- Droits & libertés ---
+    DROITS_LIBERTES_MODIFIER,
 
 }
 

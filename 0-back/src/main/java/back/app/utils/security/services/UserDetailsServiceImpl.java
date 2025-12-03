@@ -1,7 +1,7 @@
 package back.app.utils.security.services;
 
 
-import back.app.data.model.UserModel;
+import back.app.data.model.user.UserModel;
 import back.app.data.repository.interfaces.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,7 +1,7 @@
 package back.app.domain.entity;
-import back.app.data.model.ESettingCategorie;
-import back.app.data.model.ESettingNom;
-import back.app.data.model.ESettingType;
+import back.app.data.model.setting.ESettingCategorie;
+import back.app.data.model.setting.ESettingNom;
+import back.app.data.model.setting.ESettingType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 

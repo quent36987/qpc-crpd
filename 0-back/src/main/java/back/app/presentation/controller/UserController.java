@@ -1,6 +1,6 @@
 package back.app.presentation.controller;
 
-import back.app.data.model.ERole;
+import back.app.data.model.user.ERole;
 import back.app.domain.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

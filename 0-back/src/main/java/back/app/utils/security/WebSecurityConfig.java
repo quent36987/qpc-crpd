@@ -73,6 +73,10 @@ public class WebSecurityConfig {
                         auth.requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/swagger-ui/**").permitAll()
                                 .requestMatchers("/v3/api-docs/**").permitAll()
+                                .requestMatchers("/api/decisions-qpc-cc/**").permitAll()
+                                .requestMatchers("/api/decisions-filtrage-qpc/**").permitAll()
+                                .requestMatchers("/api/decisions-qpc-cc/**").permitAll()
+                                .requestMatchers("/api/listes-deroulantes/**").permitAll()
                                 .anyRequest().authenticated()
 
                 );

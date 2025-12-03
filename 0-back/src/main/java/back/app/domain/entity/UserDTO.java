@@ -1,10 +1,9 @@
 package back.app.domain.entity;
 
-import back.app.data.model.ERole;
+import back.app.data.model.user.ERole;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter

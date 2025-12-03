@@ -27,7 +27,6 @@ public class SettingsController extends BaseController {
     // ===========================
 
     @Operation(summary = "Get all settings")
-    @PreAuthorize("hasAuthority('SETTING_LIRE')")
     @GetMapping
     public List<SettingsDTO> getAll() {
         return settingsService.getAll();

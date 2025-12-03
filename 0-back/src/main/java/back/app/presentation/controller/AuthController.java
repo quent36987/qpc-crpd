@@ -1,7 +1,7 @@
 package back.app.presentation.controller;
 
-import back.app.data.model.ERole;
-import back.app.data.model.UserModel;
+import back.app.data.model.user.ERole;
+import back.app.data.model.user.UserModel;
 import back.app.data.repository.interfaces.UserRepository;
 import back.app.domain.entity.UserDTO;
 import back.app.domain.mapper.UserMapper;

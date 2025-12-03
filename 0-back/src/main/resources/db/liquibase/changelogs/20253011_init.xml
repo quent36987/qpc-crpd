@@ -7,9 +7,9 @@
 
 
     <!-- ===========================================================
-         ChangeSet 2 : TABLE USERS
+         ChangeSet 1 : TABLE USERS
          =========================================================== -->
-    <changeSet id="2-create-users-table" author="QGN">
+    <changeSet id="1-create-users-table" author="QGN">
 
         <createTable tableName="users">
             <column name="id" type="BIGINT" autoIncrement="true">
@@ -49,9 +49,9 @@
     </changeSet>
 
     <!-- ===========================================================
-         ChangeSet 4 : TABLE SETTINGS (conforme au modèle Java)
+         ChangeSet 2 : TABLE SETTINGS
          =========================================================== -->
-    <changeSet id="4-create-settings-table" author="QGN">
+    <changeSet id="2-create-settings-table" author="QGN">
 
         <createTable tableName="settings">
             <column name="id" type="BIGINT" autoIncrement="true">

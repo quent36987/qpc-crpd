@@ -1,9 +1,8 @@
 package back.app.domain.service;
 
-import back.app.data.model.ESettingNom;
-import back.app.data.model.SettingsModel;
-import back.app.data.model.UserModel;
-import back.app.data.model.*;
+import back.app.data.model.setting.ESettingNom;
+import back.app.data.model.setting.SettingsModel;
+import back.app.data.model.user.UserModel;
 import back.app.data.repository.interfaces.SettingRepository;
 import back.app.data.repository.interfaces.UserRepository;
 import back.app.domain.entity.SettingsDTO;
