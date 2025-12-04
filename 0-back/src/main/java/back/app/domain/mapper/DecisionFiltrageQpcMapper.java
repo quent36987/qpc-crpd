@@ -2,8 +2,11 @@ package back.app.domain.mapper;
 
 import back.app.data.model.qpc.DecisionFiltrageQpcModel;
 import back.app.domain.entity.DecisionFiltrageQpcDTO;
+import back.app.domain.entity.DecisionFiltrageQpcRowDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import java.util.List;
 
 @Mapper(
         componentModel = "spring",
@@ -24,4 +27,8 @@ public interface DecisionFiltrageQpcMapper {
     @Mapping(target = "applicationTheorieChangementCirconstances",
             source = "applicationTheorieChangementCirconstances.valeur")
     DecisionFiltrageQpcDTO toDTO(DecisionFiltrageQpcModel model);
+
+    DecisionFiltrageQpcRowDTO toRowDTO(DecisionFiltrageQpcModel model);
+
+    List<DecisionFiltrageQpcRowDTO> toRowDTOs(List<DecisionFiltrageQpcModel> models);
 }

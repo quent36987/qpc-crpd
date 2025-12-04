@@ -2,6 +2,7 @@ package back.app.presentation.controller;
 
 import back.app.data.model.qpc.DecisionFiltrageQpcModel;
 import back.app.domain.entity.DecisionFiltrageQpcDTO;
+import back.app.domain.entity.DecisionFiltrageQpcRowDTO;
 import back.app.domain.entity.PageDTO;
 import back.app.domain.service.DecisionFiltrageQpcService;
 import back.app.presentation.request.DecisionFiltrageQpcSearchRequest;
@@ -29,7 +30,7 @@ public class DecisionFiltrageQpcController {
 
     @Operation(summary = "Search paginated décisions de filtrage QPC")
     @PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public PageDTO<DecisionFiltrageQpcDTO> searchDecisionFiltrage(
+    public PageDTO<DecisionFiltrageQpcRowDTO> searchDecisionFiltrage(
             @RequestParam(defaultValue = "0", name = "page") int page,
             @RequestParam(defaultValue = "10", name = "size") int size,
             @RequestParam(defaultValue = "id.desc", name = "sort") String[] sort,

@@ -2,8 +2,11 @@ package back.app.domain.mapper;
 
 import back.app.data.model.qpc.DecisionQpcCcModel;
 import back.app.domain.entity.DecisionQpcCcDTO;
+import back.app.domain.entity.DecisionQpcCcRowDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import java.util.List;
 
 @Mapper(
         componentModel = "spring",
@@ -23,4 +26,10 @@ public interface DecisionQpcCcMapper {
     @Mapping(target = "qualiteTiersIntervention",  source = "qualiteTiersIntervention.valeur")
     @Mapping(target = "reserveIncompetenceConseil",source = "reserveIncompetenceConseil.valeur")
     DecisionQpcCcDTO toDTO(DecisionQpcCcModel model);
+
+    DecisionQpcCcRowDTO toRowDTO(DecisionQpcCcModel model);
+
+    List<DecisionQpcCcDTO> toDTOList(List<DecisionQpcCcModel> models);
+
+    List<DecisionQpcCcRowDTO> toRowDTOList(List<DecisionQpcCcModel> models);
 }

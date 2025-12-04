@@ -3,6 +3,7 @@ package back.app.domain.service;
 import back.app.data.model.qpc.DecisionFiltrageQpcModel;
 import back.app.data.repository.interfaces.DecisionFiltrageQpcRepository;
 import back.app.domain.entity.DecisionFiltrageQpcDTO;
+import back.app.domain.entity.DecisionFiltrageQpcRowDTO;
 import back.app.domain.entity.PageDTO;
 import back.app.domain.mapper.DecisionFiltrageQpcMapper;
 import lombok.RequiredArgsConstructor;
@@ -23,21 +24,17 @@ public class DecisionFiltrageQpcService {
     private final DecisionFiltrageQpcMapper decisionFiltrageQpcMapper;
 
     @Transactional(readOnly = true)
-    public PageDTO<DecisionFiltrageQpcDTO> getPaginatedDecisionsFiltrage(
+    public PageDTO<DecisionFiltrageQpcRowDTO> getPaginatedDecisionsFiltrage(
             Specification<DecisionFiltrageQpcModel> specification,
             Pageable pageable
     ) {
         Page<DecisionFiltrageQpcModel> page = decisionFiltrageQpcRepository.findAll(specification, pageable);
 
-        List<DecisionFiltrageQpcDTO> content = page.getContent().stream()
-                .map(decisionFiltrageQpcMapper::toDTO)
-                .toList();
-
-        PageDTO<DecisionFiltrageQpcDTO> pageDTO = new PageDTO<>();
+        PageDTO<DecisionFiltrageQpcRowDTO> pageDTO = new PageDTO<>();
         pageDTO.setPage(pageable.getPageNumber());
         pageDTO.setSize(pageable.getPageSize());
         pageDTO.setTotalElements(decisionFiltrageQpcRepository.count(specification));
-        pageDTO.setContent(content);
+        pageDTO.setContent(decisionFiltrageQpcMapper.toRowDTOs(page.getContent()));
 
         return pageDTO;
     }
