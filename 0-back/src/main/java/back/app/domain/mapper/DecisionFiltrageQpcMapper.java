@@ -28,6 +28,9 @@ public interface DecisionFiltrageQpcMapper {
             source = "applicationTheorieChangementCirconstances.valeur")
     DecisionFiltrageQpcDTO toDTO(DecisionFiltrageQpcModel model);
 
+    @Mapping(target = "decisionRenvoi",                     source = "decisionRenvoi.valeur")
+    @Mapping(target = "decisionNonRenvoi",                  source = "decisionNonRenvoi.valeur")
+    @Mapping(target = "niveauCompetence",                   source = "niveauCompetence.valeur")
     DecisionFiltrageQpcRowDTO toRowDTO(DecisionFiltrageQpcModel model);
 
     List<DecisionFiltrageQpcRowDTO> toRowDTOs(List<DecisionFiltrageQpcModel> models);

@@ -1,0 +1,43 @@
+
+<div class="multi-select-container" #container>
+  <div class="multi-select-input" (click)="toggleDropdown()">
+    <div class="tags-container">
+      <div class="tag" *ngFor="let item of selected()">
+        <span>{{ item }}</span>
+        <button type="button" class="remove-tag" (click)="removeItem($event, item)">
+          ×
+        </button>
+      </div>
+      <input
+        type="text"
+        class="search-input"
+        [(ngModel)]="searchText"
+        (input)="filterOptions()"
+        (keydown.escape)="closeDropdown()"
+        [placeholder]="selected().length === 0 ? placeholder : ''"
+      />
+    </div>
+    <svg class="chevron" [class.open]="isOpen()" width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M7 8L10 11L13 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div class="dropdown" *ngIf="isOpen()" (click)="$event.stopPropagation()">
+    <div class="dropdown-list">
+      <div class="dropdown-option" *ngFor="let option of filteredOptions()" (click)="toggleOption(option)">
+        <input
+          type="checkbox"
+          [checked]="isSelected(option)"
+          [id]="'option-' + option"
+          class="checkbox"
+        />
+        <label [for]="'option-' + option" class="option-label">
+          {{ option }}
+        </label>
+      </div>
+      <div class="empty-message" *ngIf="filteredOptions().length === 0">
+        Aucune option trouvée
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,126 @@
+
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>Connexion</h1>
+      <p>Connectez-vous pour accéder à votre compte</p>
+    </div>
+
+    <form class="login-form" (ngSubmit)="onLogin()">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="votre@email.com"
+          required
+          [disabled]="isLoading()"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="••••••••"
+          required
+          [disabled]="isLoading()"
+        >
+      </div>
+
+      <div class="error-message" *ngIf="errorMessage()">
+        {{ errorMessage() }}
+      </div>
+
+      <button type="submit" class="btn-login" [disabled]="isLoading()">
+        <span *ngIf="!isLoading()">Se connecter</span>
+        <span *ngIf="isLoading()">Connexion en cours...</span>
+      </button>
+    </form>
+
+    <div class="divider">
+      <span>ou</span>
+    </div>
+
+    <div class="signup-section">
+      <p>Pas encore de compte ?</p>
+      <button type="button" class="btn-signup" (click)="toggleMode()" [disabled]="isLoading()">
+        Créer un compte
+      </button>
+    </div>
+  </div>
+
+  <div class="signup-card" *ngIf="isSignupMode()">
+    <div class="login-header">
+      <h1>Créer un compte</h1>
+      <p>Inscrivez-vous pour accéder à la plateforme</p>
+    </div>
+
+    <form class="login-form" (ngSubmit)="onSignup()">
+      <div class="form-group">
+        <label for="signup-email">Email</label>
+        <input
+          type="email"
+          id="signup-email"
+          name="signup-email"
+          [(ngModel)]="signupEmail"
+          placeholder="votre@email.com"
+          required
+          [disabled]="isLoading()"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="signup-password">Mot de passe</label>
+        <input
+          type="password"
+          id="signup-password"
+          name="signup-password"
+          [(ngModel)]="signupPassword"
+          placeholder="••••••••"
+          required
+          [disabled]="isLoading()"
+        >
+        <small>Minimum 6 caractères</small>
+      </div>
+
+      <div class="form-group">
+        <label for="signup-confirm">Confirmer le mot de passe</label>
+        <input
+          type="password"
+          id="signup-confirm"
+          name="signup-confirm"
+          [(ngModel)]="signupConfirm"
+          placeholder="••••••••"
+          required
+          [disabled]="isLoading()"
+        >
+      </div>
+
+      <div class="error-message" *ngIf="errorMessage()">
+        {{ errorMessage() }}
+      </div>
+
+      <button type="submit" class="btn-login" [disabled]="isLoading()">
+        <span *ngIf="!isLoading()">Créer mon compte</span>
+        <span *ngIf="isLoading()">Création en cours...</span>
+      </button>
+    </form>
+
+    <div class="divider">
+      <span>ou</span>
+    </div>
+
+    <div class="signup-section">
+      <p>Déjà un compte ?</p>
+      <button type="button" class="btn-signup" (click)="toggleMode()" [disabled]="isLoading()">
+        Se connecter
+      </button>
+    </div>
+  </div>
+</div>

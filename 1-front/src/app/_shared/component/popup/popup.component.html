@@ -1,0 +1,79 @@
+<div class='popup-overlay' *ngIf='popupConfig'>
+  <div class='popup-content'>
+    <div class="modal-header">
+      <h4 class="heading-4 title" data-cy="popup-title">{{ popupConfig.title }}</h4>
+      <button class="button-close" type="button" (click)="onCancel()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class='modal-body'>
+      <p *ngIf="popupConfig.description" [innerHTML]="popupConfig.description"></p>
+
+      <ng-container [ngSwitch]='popupConfig.type'>
+        <ng-container *ngSwitchCase='popupType.Input' class="width-100">
+          <input class="input" type='text' [(ngModel)]='popupConfig.inputValue' placeholder='Entrez votre réponse' #popupInput />
+        </ng-container>
+
+        <ng-container *ngSwitchCase='popupType.DATE' class="width-100">
+          <input class="input" type='date' [(ngModel)]='popupConfig.dateValue' #popupDate />
+        </ng-container>
+
+        <ng-container *ngSwitchCase="popupType.COMPONENT">
+          <ng-template dynamicHost></ng-template>
+        </ng-container>
+
+        <ng-container *ngSwitchCase='popupType.CHOICE'>
+          <div class='buttons-choice'>
+            <button class='button small' *ngFor='let choice of popupConfig.choiceButtons' (click)='choice.callback()'>
+              {{ choice.text }}
+            </button>
+          </div>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="popupType.UPLOAD">
+          <div class="file-upload">
+            <button class="button small secondary" (click)="fileInput.click()">Choisir des fichiers</button>
+            <input type="file" multiple  #fileInput (change)="onFileSelected($event)" style="display: none;" />
+
+            <p *ngFor="let file of selectedFiles" class="file-name">Document: {{ file.name }}</p>
+          </div>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="popupType.SINGLE_UPLOAD">
+          <div class="file-upload">
+            <button class="button small secondary" (click)="fileInput.click()">Choisir des fichiers</button>
+            <input type="file"   #fileInput (change)="onFileSelected($event)" style="display: none;" />
+
+            <p *ngFor="let file of selectedFiles" class="file-name">Document: {{ file.name }}</p>
+          </div>
+        </ng-container>
+
+        <ng-container *ngSwitchCase='popupType.IMAGE_VIEWER'>
+          <img *ngIf="popupConfig.imageUrl" [src]="popupConfig.imageUrl" alt="Image preview" class="image-preview" />
+        </ng-container>
+
+        <ng-container *ngSwitchCase="popupType.SELECT">
+          <label class="select-label">{{ popupConfig.title }}</label>
+          <select
+            class="input width-100"
+            [(ngModel)]="selectedValue"
+          >
+            <option
+              *ngFor="let opt of popupConfig.options"
+              [ngValue]="opt.value"
+            >
+              {{ opt.label }}
+            </option>
+          </select>
+        </ng-container>
+      </ng-container>
+
+      <div class='popup-buttons'
+           *ngIf='popupConfig.type != popupType.CHOICE && popupConfig.type != popupType.IMAGE_VIEWER && popupConfig.type != popupType.COMPONENT'>
+        <button class='button small secondary cancel' (click)='onCancel()'>Annuler</button>
+        <button class='button small confirm' (click)='onConfirm()'>{{ popupConfig.confirmButton }}</button>
+      </div>
+    </div>
+  </div>
+</div>

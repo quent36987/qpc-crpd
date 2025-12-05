@@ -1,0 +1,8 @@
+{
+  "strictNullChecks": true,
+  "ngVersion": "17",
+  "typeMappings": {
+    "Date": "Date",
+    "DateTime": "Date"
+  }
+}

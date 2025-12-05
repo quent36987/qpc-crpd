@@ -1,0 +1,73 @@
+.aviation-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(30, 41, 59, 0.41); /* Fond sombre */
+  backdrop-filter: blur(3px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aviation-box {
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.aviation-icon-wrapper {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 16px;
+}
+
+.orbit {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  animation: airplaneOrbit 3s linear infinite;
+}
+
+.aviation-icon {
+  color: #2563eb; /* Bleu moderne */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center;
+  animation: airplaneRotation 3s linear infinite;
+}
+
+
+@keyframes airplaneOrbit {
+  0% { transform: rotate(0deg) translateX(50px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(50px) rotate(-360deg); }
+}
+
+@keyframes airplaneRotation {
+  0% { transform: translate(-50%, -50%) rotate(-180deg); }
+  100% { transform: translate(-50%, -50%) rotate(180deg); }
+}
+
+.aviation-message {
+  font-size: 16px;
+  color: #475569;
+  font-weight: 500;
+}
+
+.aviation-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(to right, transparent, #2563eb, transparent);
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}

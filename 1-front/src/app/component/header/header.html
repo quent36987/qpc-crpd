@@ -1,0 +1,33 @@
+
+<header class="header">
+  <div class="header-content">
+    <h1 class="logo">Base QPC</h1>
+
+    <button class="hamburger" (click)="toggleMenu()" [class.active]="menuOpen()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="nav" [class.open]="menuOpen()">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">
+        Accueil
+      </a>
+      <a routerLink="/recherche" routerLinkActive="active" (click)="closeMenu()">
+        Décisions de Filtrage
+      </a>
+      <a routerLink="/decisions-cc" routerLinkActive="active" (click)="closeMenu()">
+        Décisions du Conseil Constitutionnel
+      </a>
+    </nav>
+
+    <a routerLink="/login" class="btn-login" (click)="closeMenu()">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M10 10a4 4 0 100-8 4 4 0 000 8zm0 2c-4.42 0-8 1.79-8 4v2h16v-2c0-2.21-3.58-4-8-4z" fill="currentColor"/>
+      </svg>
+      <span>Connexion</span>
+    </a>
+  </div>
+
+  <div class="overlay" [class.visible]="menuOpen()" (click)="closeMenu()"></div>
+</header>

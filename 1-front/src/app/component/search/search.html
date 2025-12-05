@@ -1,0 +1,340 @@
+
+<div class="search-container">
+  <div class="search-header">
+    <h1>Recherche de Décisions de Filtrage QPC</h1>
+    <p>Utilisez les filtres ci-dessous pour affiner votre recherche</p>
+  </div>
+
+  <div class="search-content" [class.results-view]="showResults()">
+    <form class="search-form" [class.collapsed]="showResults()" (ngSubmit)="onSearch()">
+      <div class="form-header" (click)="toggleForm()" *ngIf="showResults()">
+        <h2>Critères de recherche</h2>
+        <span class="toggle-icon">{{ formCollapsed() ? '▼' : '▲' }}</span>
+      </div>
+
+      <div class="form-content" [class.hidden]="formCollapsed() && showResults()">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Numéro de décision</label>
+            <input type="text" [(ngModel)]="searchCriteria.numeroDecision" name="numeroDecision" placeholder="Ex: 24-10.001">
+          </div>
+
+          <div class="form-group">
+            <label>Référence</label>
+            <input type="text" [(ngModel)]="searchCriteria.reference" name="reference" placeholder="Ex: 2024-QPC-001">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Juridiction</label>
+            <app-multi-select
+              [options]="options.juridictions"
+              [selectedItems]="selectedJuridictions"
+              (selectedItemsChange)="selectedJuridictions = $event"
+              placeholder="Sélectionner juridiction(s)...">
+            </app-multi-select>
+          </div>
+
+          <div class="form-group">
+            <label>Niveau de filtrage</label>
+            <app-multi-select
+              [options]="options.niveauxFiltrage"
+              [selectedItems]="selectedNiveauxFiltrage"
+              (selectedItemsChange)="selectedNiveauxFiltrage = $event"
+              placeholder="Sélectionner niveau(x)...">
+            </app-multi-select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date de filtrage - Du</label>
+            <input type="date" [(ngModel)]="searchCriteria.dateDebut" name="dateDebut">
+          </div>
+
+          <div class="form-group">
+            <label>Date de filtrage - Au</label>
+            <input type="date" [(ngModel)]="searchCriteria.dateFin" name="dateFin">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Formation de jugement</label>
+            <app-multi-select
+              [options]="options.formationsJugement"
+              [selectedItems]="selectedFormationsJugement"
+              (selectedItemsChange)="selectedFormationsJugement = $event"
+              placeholder="Sélectionner formation(s)...">
+            </app-multi-select>
+          </div>
+
+          <div class="form-group">
+            <label>Chambre ou section</label>
+            <app-multi-select
+              [options]="options.chambresSection"
+              [selectedItems]="selectedChambresSection"
+              (selectedItemsChange)="selectedChambresSection = $event"
+              placeholder="Sélectionner chambre(s)...">
+            </app-multi-select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Numéro de sous-chambre</label>
+            <app-multi-select
+              [options]="options.numerosChambresReunies"
+              [selectedItems]="selectedNumerosChambresReunies"
+              (selectedItemsChange)="selectedNumerosChambresReunies = $event"
+              placeholder="Sélectionner numéro(s)...">
+            </app-multi-select>
+          </div>
+
+          <div class="form-group">
+            <label>Application théorie changement circonstances</label>
+            <app-multi-select
+              [options]="options.applicationTheorieOptions"
+              [selectedItems]="selectedApplicationTheorie"
+              (selectedItemsChange)="selectedApplicationTheorie = $event"
+              placeholder="Sélectionner option(s)...">
+            </app-multi-select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Origine juridictionnelle</label>
+            <app-multi-select
+              [options]="options.origines"
+              [selectedItems]="selectedOrigines"
+              (selectedItemsChange)="selectedOrigines = $event"
+              placeholder="Sélectionner origine(s)...">
+            </app-multi-select>
+          </div>
+
+          <div class="form-group">
+            <label>Code</label>
+            <app-multi-select
+              [options]="options.codes"
+              [selectedItems]="selectedCodes"
+              (selectedItemsChange)="selectedCodes = $event"
+              placeholder="Sélectionner code(s)...">
+            </app-multi-select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Matière</label>
+            <app-multi-select
+              [options]="options.matieres"
+              [selectedItems]="selectedMatieres"
+              (selectedItemsChange)="selectedMatieres = $event"
+              placeholder="Sélectionner matière(s)...">
+            </app-multi-select>
+          </div>
+
+          <div class="form-group">
+            <label>Droits et libertés</label>
+            <app-multi-select
+              [options]="options.droitsLibertes"
+              [selectedItems]="selectedDroitsLibertes"
+              (selectedItemsChange)="selectedDroitsLibertes = $event"
+              placeholder="Sélectionner droit(s)...">
+            </app-multi-select>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" [disabled]="isLoading()">
+            <span *ngIf="!isLoading()">🔍 Rechercher</span>
+            <span *ngIf="isLoading()">Recherche en cours...</span>
+          </button>
+          <button type="button" class="btn-secondary" (click)="resetForm()" [disabled]="isLoading()">
+            ↺ Réinitialiser
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <div class="results-section" *ngIf="showResults()">
+      <div class="results-header">
+        <h2>Résultats de recherche</h2>
+        <p class="results-count">{{ searchResult()?.total || 0 }} décision(s) trouvée(s)</p>
+      </div>
+
+      <div class="table-container">
+        <table class="results-table">
+          <thead>
+          <tr>
+            <th>Numéro</th>
+            <th>Référence</th>
+            <th>Juridiction</th>
+            <th>Date</th>
+            <th>Niveau de filtrage</th>
+            <th>Matière</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let decision of searchResult()?.decisions || []">
+            <td>{{ decision.numeroDecision }}</td>
+            <td>{{ decision.reference }}</td>
+            <td>{{ decision.juridiction }}</td>
+            <td>{{ decision.dateFiltrage | date: 'dd/MM/yyyy' }}</td>
+            <td>
+                    <span class="badge" [class.badge-success]="decision.niveauFiltrage === 'Renvoi'"
+                          [class.badge-warning]="decision.niveauFiltrage !== 'Renvoi'">
+                      {{ decision.niveauFiltrage }}
+                    </span>
+            </td>
+            <td>{{ decision.matiere }}</td>
+            <td>
+              <button class="btn-view" (click)="viewDetails(decision)">👁 Voir</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination" *ngIf="searchResult()">
+        <button class="btn-page" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1">
+          ← Précédent
+        </button>
+        <div class="page-info">
+          Page {{ currentPage() }} sur {{ totalPages() }}
+        </div>
+        <button class="btn-page" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()">
+          Suivant →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" *ngIf="selectedDecision()" (click)="closeDetails()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Détails de la décision</h2>
+        <button class="close-btn" (click)="closeDetails()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-section">
+          <h3>Informations générales</h3>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <strong>Numéro:</strong>
+              <span>{{ selectedDecision()!.numeroDecision }}</span>
+            </div>
+            <div class="detail-item">
+              <strong>Référence:</strong>
+              <span>{{ selectedDecision()!.reference }}</span>
+            </div>
+            <div class="detail-item">
+              <strong>Juridiction:</strong>
+              <span>{{ selectedDecision()!.juridiction }}</span>
+            </div>
+            <div class="detail-item">
+              <strong>Date de filtrage:</strong>
+              <span>{{ selectedDecision()!.dateFiltrage | date: 'dd/MM/yyyy' }}</span>
+            </div>
+            <div class="detail-item">
+              <strong>Chambre/Section:</strong>
+              <span>{{ selectedDecision()!.chambreSousSection }}</span>
+            </div>
+            <div class="detail-item">
+              <strong>Formation de jugement:</strong>
+              <span>{{ selectedDecision()!.formationJugement }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>Décision</h3>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <strong>Niveau de filtrage:</strong>
+              <span class="badge" [class.badge-success]="selectedDecision()!.niveauFiltrage === 'Renvoi'"
+                    [class.badge-warning]="selectedDecision()!.niveauFiltrage !== 'Renvoi'">
+                    {{ selectedDecision()!.niveauFiltrage }}
+                  </span>
+            </div>
+            <div class="detail-item" *ngIf="selectedDecision()!.decisionRenvoi">
+              <strong>Décision de renvoi:</strong>
+              <span>{{ selectedDecision()!.decisionRenvoi }}</span>
+            </div>
+            <div class="detail-item" *ngIf="selectedDecision()!.decisionNonRenvoi">
+              <strong>Décision de non-renvoi:</strong>
+              <span>{{ selectedDecision()!.decisionNonRenvoi }}</span>
+            </div>
+            <div class="detail-item">
+              <strong>Application théorie changement:</strong>
+              <span>{{ selectedDecision()!.applicationTheorieChangementCirconstances }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>Dispositions contestées</h3>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <strong>Référence:</strong>
+              <span>{{ selectedDecision()!.referenceDispositionsContestees }}</span>
+            </div>
+            <div class="detail-item">
+              <strong>Loi d'origine:</strong>
+              <span>{{ selectedDecision()!.loiOrigineDisposition }}</span>
+            </div>
+            <div class="detail-item">
+              <strong>Matière:</strong>
+              <span>{{ selectedDecision()!.matiere }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>Demandeur</h3>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <strong>Identité:</strong>
+              <span>{{ selectedDecision()!.identiteDemandeur }}</span>
+            </div>
+            <div class="detail-item">
+              <strong>Qualité:</strong>
+              <span>{{ selectedDecision()!.qualiteDemandeur }}</span>
+            </div>
+            <div class="detail-item">
+              <strong>Qualité précise:</strong>
+              <span>{{ selectedDecision()!.qualitePreciseDemandeur }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section" *ngIf="selectedDecision()!.droitsLibertes.length > 0">
+          <h3>Droits et libertés invoqués</h3>
+          <div class="rights-list">
+            <div class="right-item" *ngFor="let droit of selectedDecision()!.droitsLibertes">
+              <strong>{{ droit.nom }}</strong>
+              <span *ngIf="droit.description">{{ droit.description }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section" *ngIf="selectedDecision()!.motsCles">
+          <h3>Mots-clés</h3>
+          <div class="keywords">
+                <span class="keyword" *ngFor="let keyword of selectedDecision()!.motsCles.split(',')">
+                  {{ keyword.trim() }}
+                </span>
+          </div>
+        </div>
+
+        <div class="detail-section" *ngIf="selectedDecision()!.autresRemarques">
+          <h3>Remarques</h3>
+          <p>{{ selectedDecision()!.autresRemarques }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

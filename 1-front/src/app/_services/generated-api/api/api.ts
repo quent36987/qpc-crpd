@@ -1,0 +1,15 @@
+export * from './auth.service';
+import { AuthApi } from './auth.service';
+export * from './dcisionsDeFiltrageQPC.service';
+import { DcisionsDeFiltrageQPCApi } from './dcisionsDeFiltrageQPC.service';
+export * from './dcisionsQPCCC.service';
+import { DcisionsQPCCCApi } from './dcisionsQPCCC.service';
+export * from './droitsLiberts.service';
+import { DroitsLibertsApi } from './droitsLiberts.service';
+export * from './listesDroulantes.service';
+import { ListesDroulantesApi } from './listesDroulantes.service';
+export * from './settings.service';
+import { SettingsApi } from './settings.service';
+export * from './user.service';
+import { UserApi } from './user.service';
+export const APIS = [AuthApi, DcisionsDeFiltrageQPCApi, DcisionsQPCCCApi, DroitsLibertsApi, ListesDroulantesApi, SettingsApi, UserApi];

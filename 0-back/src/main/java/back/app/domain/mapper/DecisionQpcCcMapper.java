@@ -27,9 +27,14 @@ public interface DecisionQpcCcMapper {
     @Mapping(target = "reserveIncompetenceConseil",source = "reserveIncompetenceConseil.valeur")
     DecisionQpcCcDTO toDTO(DecisionQpcCcModel model);
 
+    @Mapping(target = "traitementEffetsPasses",    source = "traitementEffetsPasses.valeur")
+    @Mapping(target = "matiere",                   source = "matiere.valeur")
+    @Mapping(target = "dispositifDecisionCc",      source = "dispositifDecisionCc.valeur")
+    @Mapping(target = "origineQpc",                source = "origineQpc.valeur")
     DecisionQpcCcRowDTO toRowDTO(DecisionQpcCcModel model);
 
     List<DecisionQpcCcDTO> toDTOList(List<DecisionQpcCcModel> models);
+
 
     List<DecisionQpcCcRowDTO> toRowDTOList(List<DecisionQpcCcModel> models);
 }
