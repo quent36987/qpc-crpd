@@ -5,18 +5,26 @@ import back.app.domain.entity.DecisionFiltrageQpcDTO;
 import back.app.domain.entity.DecisionFiltrageQpcRowDTO;
 import back.app.domain.entity.PageDTO;
 import back.app.domain.service.DecisionFiltrageQpcService;
+import back.app.domain.service.excel.export.DecisionFiltrageQpcExportService;
+import back.app.domain.service.excel.upload.DecisionFiltrageQpcImportService;
 import back.app.presentation.request.DecisionFiltrageQpcSearchRequest;
 import back.app.utils.errors.RestError;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 
@@ -27,6 +35,9 @@ import java.util.Arrays;
 public class DecisionFiltrageQpcController {
 
     private final DecisionFiltrageQpcService decisionFiltrageQpcService;
+    private final DecisionFiltrageQpcExportService decisionFiltrageQpcExportService;
+    private final DecisionFiltrageQpcImportService importService;
+
 
     @Operation(summary = "Search paginated décisions de filtrage QPC")
     @PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -61,10 +72,49 @@ public class DecisionFiltrageQpcController {
         return decisionFiltrageQpcService.getPaginatedDecisionsFiltrage(spec, pageable);
     }
 
+    @Operation(
+            summary = "Export XLSX d'une requête de décisions de filtrage QPC",
+            responses = @ApiResponse(
+                    responseCode = "200",
+                    description = "Fichier XLSX",
+                    content = @Content(
+                            mediaType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                            schema = @Schema(type = "string", format = "binary")
+                    )
+            )
+    )
+    @GetMapping(value = "/export-xls", produces = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    public ResponseEntity<byte[]> exportXlsQpcFiltrage(@RequestBody(required = false) DecisionFiltrageQpcSearchRequest searchRequest) {
+
+        Specification<DecisionFiltrageQpcModel> spec = Specification.where(null);
+
+        if (searchRequest != null) {
+            spec = spec.and(buildSearchSpecification(searchRequest));
+        }
+
+        var bytes = decisionFiltrageQpcExportService.getXlsDecisionsFiltrage(spec);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=%s.xlsx".formatted("decisions_filtrage_qpc"))
+                .contentType(MediaType.parseMediaType(
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(bytes);
+    }
+
     @Operation(summary = "Get a décision de filtrage QPC by ID")
     @GetMapping("/{id}")
     public DecisionFiltrageQpcDTO getDecisionFiltrageById(@PathVariable Long id) {
         return decisionFiltrageQpcService.getById(id);
+    }
+
+    @Operation(summary = "Import XLSX des décisions de filtrage QPC")
+    @PreAuthorize("hasAuthority('IMPORT_XLS')")
+    @PostMapping(value = "/import-xls", consumes = "multipart/form-data")
+    public ResponseEntity<Void> importDecisionFiltrageXls(@RequestPart("file") MultipartFile file) throws Exception {
+        try (var in = file.getInputStream()) {
+            importService.importFromXls(in);
+        }
+        return ResponseEntity.ok().build();
     }
 
     // ------------------------------------------------------------------------

@@ -26,5 +26,7 @@ public enum EDroit {
     // --- Droits & libertés ---
     DROITS_LIBERTES_MODIFIER,
 
+    IMPORT_XLS,
+
 }
 

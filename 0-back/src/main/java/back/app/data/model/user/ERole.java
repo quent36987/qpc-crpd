@@ -24,7 +24,8 @@ public enum ERole {
             EDroit.SETTING_LIRE,
             EDroit.SETTING_MODIFIER,
             EDroit.LISTES_DEROUlANTES_MODIFIER,
-            EDroit.DROITS_LIBERTES_MODIFIER
+            EDroit.DROITS_LIBERTES_MODIFIER,
+            EDroit.IMPORT_XLS
     )),
 
     ROLE_SUPERVISEUR(EnumSet.allOf(EDroit.class));

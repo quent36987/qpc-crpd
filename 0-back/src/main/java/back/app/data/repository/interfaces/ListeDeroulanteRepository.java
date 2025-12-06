@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ListeDeroulanteRepository extends CrudRepository<ListeDeroulanteModel, Long> {
@@ -14,4 +15,7 @@ public interface ListeDeroulanteRepository extends CrudRepository<ListeDeroulant
     List<ListeDeroulanteModel> findAll();
 
     Long count(Specification<ListeDeroulanteModel> specification);
+
+    Optional<ListeDeroulanteModel> findByChampAndValeur(String champ, String valeur);
+
 }

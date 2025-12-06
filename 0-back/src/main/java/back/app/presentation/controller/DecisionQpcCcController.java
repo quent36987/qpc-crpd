@@ -4,6 +4,8 @@ import back.app.domain.entity.DecisionQpcCcDTO;
 import back.app.domain.entity.DecisionQpcCcRowDTO;
 import back.app.domain.entity.PageDTO;
 import back.app.domain.service.DecisionQpcCcService;
+import back.app.domain.service.excel.export.DecisionQpcCcExportService;
+import back.app.domain.service.excel.upload.DecisionQpcCcImportService;
 import back.app.presentation.request.DecisionQpcCcSearchRequest;
 import back.app.utils.errors.RestError;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,9 +15,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 
@@ -26,6 +31,9 @@ import java.util.Arrays;
 public class DecisionQpcCcController {
 
     private final DecisionQpcCcService decisionQpcCcService;
+    private final DecisionQpcCcExportService decisionQpcCcServiceExport;
+    private final DecisionQpcCcImportService decisionQpcCcImportService;
+
 
     @Operation(summary = "Search paginated décisions QPC CC")
     @PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -60,10 +68,42 @@ public class DecisionQpcCcController {
         return decisionQpcCcService.getPaginatedDecisionsQpcCc(spec, pageable);
     }
 
+    @Operation(summary = "Export XLSX des décisions QPC CC")
+    @GetMapping(value = "/export-xls", produces = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    public ResponseEntity<byte[]> exportQpcCcXls(
+            @RequestBody(required = false) DecisionQpcCcSearchRequest searchRequest
+    ) {
+        Specification<DecisionQpcCcModel> spec = Specification.where(null);
+
+        if (searchRequest != null) {
+            spec = spec.and(buildSearchSpecification(searchRequest));
+        }
+
+        byte[] bytes = decisionQpcCcServiceExport.getXlsDecisionsQpcCc(spec);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=%s.xlsx".formatted("decisions_qpc_cc"))
+                .contentType(MediaType.parseMediaType(
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(bytes);
+    }
+
     @Operation(summary = "Get a décision QPC CC by ID")
     @GetMapping("/{id}")
     public DecisionQpcCcDTO getDecisionsById(@PathVariable Long id) {
         return decisionQpcCcService.getById(id);
+    }
+
+
+    @Operation(summary = "Import XLSX des décisions QPC CC")
+    @PreAuthorize("hasAuthority('IMPORT_XLS')")
+    @PostMapping(value = "/import-xls", consumes = "multipart/form-data")
+    public ResponseEntity<Void> importQpcCcXls(@RequestPart("file") MultipartFile file) throws Exception {
+        try (var in = file.getInputStream()) {
+            decisionQpcCcImportService.importFromXls(in);
+        }
+        return ResponseEntity.ok().build();
     }
 
     // ------------------------------------------------------------------------

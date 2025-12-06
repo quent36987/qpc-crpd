@@ -7,10 +7,13 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface DecisionFiltrageQpcRepository extends CrudRepository<DecisionFiltrageQpcModel, Long> {
 
     Page<DecisionFiltrageQpcModel> findAll(Specification<DecisionFiltrageQpcModel> specification, Pageable pageable);
+    List<DecisionFiltrageQpcModel> findAll(Specification<DecisionFiltrageQpcModel> specification);
 
     Long count(Specification<DecisionFiltrageQpcModel> specification);
 }
