@@ -17,6 +17,8 @@ import {SearchComponent} from "./app/component/search/search";
 import {DecisionCCComponent} from "./app/component/decision-cc/decision-cc";
 import {HomeComponent} from "./app/component/home/home";
 import {LoginComponent} from "./app/component/login/login";
+import {Import} from "./app/component/import/import";
+import {IsLoginGuard} from "./app/_helpers/IsLoginGuard";
 
 
 @Component({
@@ -46,7 +48,8 @@ bootstrapApplication(App, {
       { path: '', component: HomeComponent },
       { path: 'recherche', component: SearchComponent },
       { path: 'decisions-cc', component: DecisionCCComponent },
-      { path: 'login', component: LoginComponent }
+      { path: 'login', component: LoginComponent },
+      { path: 'import', component: Import , canActivate: [IsLoginGuard] }
     ]),
     { provide: LOCALE_ID, useValue: 'fr-FR' },
     { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },

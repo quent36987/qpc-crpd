@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 README.md
 api.base.service.ts
 api.module.ts
@@ -16,16 +15,18 @@ encoder.ts
 git_push.sh
 index.ts
 model/decisionFiltrageQpcDTO.ts
+model/decisionFiltrageQpcRowDTO.ts
 model/decisionFiltrageQpcSearchRequest.ts
 model/decisionQpcCcDTO.ts
+model/decisionQpcCcRowDTO.ts
 model/decisionQpcCcSearchRequest.ts
 model/droitLiberteDTO.ts
 model/listeDeroulanteDTO.ts
 model/loginRequest.ts
 model/messageResponse.ts
 model/models.ts
-model/pageDTODecisionFiltrageQpcDTO.ts
-model/pageDTODecisionQpcCcDTO.ts
+model/pageDTODecisionFiltrageQpcRowDTO.ts
+model/pageDTODecisionQpcCcRowDTO.ts
 model/resetPasswordConfirmRequest.ts
 model/resetPasswordRequest.ts
 model/settingsDTO.ts

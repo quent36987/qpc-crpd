@@ -22,6 +22,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class DecisionQpcCcImportService {
 
+
     private final GenericExcelImportService genericExcelImportService;
     private final DecisionQpcCcRepository decisionQpcCcRepository;
     private final ListeDeroulanteRepository listeDeroulanteRepository;

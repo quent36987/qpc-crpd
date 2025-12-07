@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DecisionFiltrageQpcExportService {
 
+
         private final DecisionFiltrageQpcRepository decisionFiltrageQpcRepository;
         private final DecisionFiltrageQpcMapper decisionFiltrageQpcMapper;
         private final GenericExcelExportService genericExcelExportService;

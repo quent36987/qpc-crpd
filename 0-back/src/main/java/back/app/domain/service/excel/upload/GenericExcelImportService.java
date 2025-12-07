@@ -11,6 +11,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class GenericExcelImportService {
 
+    
     public <T> List<T> importFromXls(InputStream in, ExcelImportConfig<T> config) {
         try (Workbook wb = WorkbookFactory.create(in)) {
 

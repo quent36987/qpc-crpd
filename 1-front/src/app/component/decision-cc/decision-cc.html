@@ -1,575 +1,575 @@
 
-<div class="search-container">
-  <div class="search-header">
-    <h1>Recherche de Décisions QPC du Conseil Constitutionnel</h1>
-    <p>Utilisez les filtres ci-dessous pour affiner votre recherche</p>
-  </div>
+<!--<div class="search-container">-->
+<!--  <div class="search-header">-->
+<!--    <h1>Recherche de Décisions QPC du Conseil Constitutionnel</h1>-->
+<!--    <p>Utilisez les filtres ci-dessous pour affiner votre recherche</p>-->
+<!--  </div>-->
 
-  <div class="search-content" [class.results-view]="showResults()">
-    <form class="search-form" [class.collapsed]="showResults()" (ngSubmit)="onSearch()">
-      <div class="form-header" (click)="toggleForm()" *ngIf="showResults()">
-        <h2>Critères de recherche</h2>
-        <span class="toggle-icon">{{ formCollapsed() ? '▼' : '▲' }}</span>
-      </div>
+<!--  <div class="search-content" [class.results-view]="showResults()">-->
+<!--    <form class="search-form" [class.collapsed]="showResults()" (ngSubmit)="onSearch()">-->
+<!--      <div class="form-header" (click)="toggleForm()" *ngIf="showResults()">-->
+<!--        <h2>Critères de recherche</h2>-->
+<!--        <span class="toggle-icon">{{ formCollapsed() ? '▼' : '▲' }}</span>-->
+<!--      </div>-->
 
-      <div class="form-content" [class.hidden]="formCollapsed() && showResults()">
-        <div class="form-row">
-          <div class="form-group">
-            <label>Numéro</label>
-            <input type="text" [(ngModel)]="searchCriteria.numero" name="numero" placeholder="Ex: 2024-001">
-          </div>
+<!--      <div class="form-content" [class.hidden]="formCollapsed() && showResults()">-->
+<!--        <div class="form-row">-->
+<!--          <div class="form-group">-->
+<!--            <label>Numéro</label>-->
+<!--            <input type="text" [(ngModel)]="searchCriteria.numero" name="numero" placeholder="Ex: 2024-001">-->
+<!--          </div>-->
 
-          <div class="form-group">
-            <label>Réf. de la décision du CC</label>
-            <input type="text" [(ngModel)]="searchCriteria.referenceDecisionConseil" name="refCC" placeholder="Ex: 2024-1001 QPC">
-          </div>
-        </div>
+<!--          <div class="form-group">-->
+<!--            <label>Réf. de la décision du CC</label>-->
+<!--            <input type="text" [(ngModel)]="searchCriteria.referenceDecisionConseil" name="refCC" placeholder="Ex: 2024-1001 QPC">-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="form-row">
-          <div class="form-group">
-            <label>Réf. décision de transmission</label>
-            <input type="text" [(ngModel)]="searchCriteria.referenceDecisionTransmission" name="refTransm" placeholder="Ex: CE, 2024-02-10">
-          </div>
+<!--        <div class="form-row">-->
+<!--          <div class="form-group">-->
+<!--            <label>Réf. décision de transmission</label>-->
+<!--            <input type="text" [(ngModel)]="searchCriteria.referenceDecisionTransmission" name="refTransm" placeholder="Ex: CE, 2024-02-10">-->
+<!--          </div>-->
 
-          <div class="form-group">
-            <label>Origine</label>
-            <app-multi-select
-              [options]="options.origines"
-              [selectedItems]="selectedOrigines"
-              (selectedItemsChange)="selectedOrigines = $event"
-              placeholder="Sélectionner origine(s)...">
-            </app-multi-select>
-          </div>
-        </div>
+<!--          <div class="form-group">-->
+<!--            <label>Origine</label>-->
+<!--            <app-multi-select-->
+<!--              [options]="options.origines"-->
+<!--              [selectedItems]="selectedOrigines"-->
+<!--              (selectedItemsChange)="selectedOrigines = $event"-->
+<!--              placeholder="Sélectionner origine(s)...">-->
+<!--            </app-multi-select>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="form-row">
-          <div class="form-group">
-            <label>Identité(s) de(s) l'auteur(s) de la QPC</label>
-            <input type="text" [(ngModel)]="searchCriteria.identiteDemandeur" name="identite" placeholder="Ex: M. Dupont">
-          </div>
+<!--        <div class="form-row">-->
+<!--          <div class="form-group">-->
+<!--            <label>Identité(s) de(s) l'auteur(s) de la QPC</label>-->
+<!--            <input type="text" [(ngModel)]="searchCriteria.identiteDemandeur" name="identite" placeholder="Ex: M. Dupont">-->
+<!--          </div>-->
 
-          <div class="form-group">
-            <label>Catégorie des auteurs de QPC</label>
-            <app-multi-select
-              [options]="options.qualitesDemandeur"
-              [selectedItems]="selectedQualitesDemandeur"
-              (selectedItemsChange)="selectedQualitesDemandeur = $event"
-              placeholder="Sélectionner qualité(s)...">
-            </app-multi-select>
-          </div>
-        </div>
+<!--          <div class="form-group">-->
+<!--            <label>Catégorie des auteurs de QPC</label>-->
+<!--            <app-multi-select-->
+<!--              [options]="options.qualitesDemandeur"-->
+<!--              [selectedItems]="selectedQualitesDemandeur"-->
+<!--              (selectedItemsChange)="selectedQualitesDemandeur = $event"-->
+<!--              placeholder="Sélectionner qualité(s)...">-->
+<!--            </app-multi-select>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="form-row">
-          <div class="form-group">
-            <label>Droit(s) et liberté(s) invoqué(s)</label>
-            <app-multi-select
-              [options]="options.droitsLibertes"
-              [selectedItems]="selectedDroitsLibertes"
-              (selectedItemsChange)="selectedDroitsLibertes = $event"
-              placeholder="Sélectionner liberté(s)...">
-            </app-multi-select>
-          </div>
+<!--        <div class="form-row">-->
+<!--          <div class="form-group">-->
+<!--            <label>Droit(s) et liberté(s) invoqué(s)</label>-->
+<!--            <app-multi-select-->
+<!--              [options]="options.droitsLibertes"-->
+<!--              [selectedItems]="selectedDroitsLibertes"-->
+<!--              (selectedItemsChange)="selectedDroitsLibertes = $event"-->
+<!--              placeholder="Sélectionner liberté(s)...">-->
+<!--            </app-multi-select>-->
+<!--          </div>-->
 
-          <div class="form-group">
-            <label>Qualité du/des tiers intervenants</label>
-            <app-multi-select
-              [options]="options.qualitesTiers"
-              [selectedItems]="selectedQualitesTiers"
-              (selectedItemsChange)="selectedQualitesTiers = $event"
-              placeholder="Sélectionner qualité(s)...">
-            </app-multi-select>
-          </div>
-        </div>
+<!--          <div class="form-group">-->
+<!--            <label>Qualité du/des tiers intervenants</label>-->
+<!--            <app-multi-select-->
+<!--              [options]="options.qualitesTiers"-->
+<!--              [selectedItems]="selectedQualitesTiers"-->
+<!--              (selectedItemsChange)="selectedQualitesTiers = $event"-->
+<!--              placeholder="Sélectionner qualité(s)...">-->
+<!--            </app-multi-select>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="form-row">
-          <div class="form-group">
-            <label>Date - De</label>
-            <input type="date" [(ngModel)]="searchCriteria.dateDebut" name="dateDebut">
-          </div>
+<!--        <div class="form-row">-->
+<!--          <div class="form-group">-->
+<!--            <label>Date - De</label>-->
+<!--            <input type="date" [(ngModel)]="searchCriteria.dateDebut" name="dateDebut">-->
+<!--          </div>-->
 
-          <div class="form-group">
-            <label>Date - À</label>
-            <input type="date" [(ngModel)]="searchCriteria.dateFin" name="dateFin">
-          </div>
-        </div>
+<!--          <div class="form-group">-->
+<!--            <label>Date - À</label>-->
+<!--            <input type="date" [(ngModel)]="searchCriteria.dateFin" name="dateFin">-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="form-row">
-          <div class="form-group">
-            <label>Matière</label>
-            <app-multi-select
-              [options]="options.matieres"
-              [selectedItems]="selectedMatieres"
-              (selectedItemsChange)="selectedMatieres = $event"
-              placeholder="Sélectionner matière(s)...">
-            </app-multi-select>
-          </div>
+<!--        <div class="form-row">-->
+<!--          <div class="form-group">-->
+<!--            <label>Matière</label>-->
+<!--            <app-multi-select-->
+<!--              [options]="options.matieres"-->
+<!--              [selectedItems]="selectedMatieres"-->
+<!--              (selectedItemsChange)="selectedMatieres = $event"-->
+<!--              placeholder="Sélectionner matière(s)...">-->
+<!--            </app-multi-select>-->
+<!--          </div>-->
 
-          <div class="form-group">
-            <label>Dispositif</label>
-            <app-multi-select
-              [options]="options.dispositifs"
-              [selectedItems]="selectedDispositifs"
-              (selectedItemsChange)="selectedDispositifs = $event"
-              placeholder="Sélectionner dispositif(s)...">
-            </app-multi-select>
-          </div>
-        </div>
+<!--          <div class="form-group">-->
+<!--            <label>Dispositif</label>-->
+<!--            <app-multi-select-->
+<!--              [options]="options.dispositifs"-->
+<!--              [selectedItems]="selectedDispositifs"-->
+<!--              (selectedItemsChange)="selectedDispositifs = $event"-->
+<!--              placeholder="Sélectionner dispositif(s)...">-->
+<!--            </app-multi-select>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="form-row">
-          <div class="form-group">
-            <label>Délai avant abrogation (en mois)</label>
-            <input type="text" [(ngModel)]="searchCriteria.delaiAbrogation" name="delai" placeholder="Ex: >6 ou =12">
-            <small>Opérateurs possibles: &lt;, &lt;=, &gt;, &gt;=, &lt;&gt;, =</small>
-          </div>
+<!--        <div class="form-row">-->
+<!--          <div class="form-group">-->
+<!--            <label>Délai avant abrogation (en mois)</label>-->
+<!--            <input type="text" [(ngModel)]="searchCriteria.delaiAbrogation" name="delai" placeholder="Ex: >6 ou =12">-->
+<!--            <small>Opérateurs possibles: &lt;, &lt;=, &gt;, &gt;=, &lt;&gt;, =</small>-->
+<!--          </div>-->
 
-          <div class="form-group">
-            <label>Traitement des effets passés</label>
-            <app-multi-select
-              [options]="options.traitementsEffetsPasses"
-              [selectedItems]="selectedTraitements"
-              (selectedItemsChange)="selectedTraitements = $event"
-              placeholder="Sélectionner traitement(s)...">
-            </app-multi-select>
-          </div>
-        </div>
+<!--          <div class="form-group">-->
+<!--            <label>Traitement des effets passés</label>-->
+<!--            <app-multi-select-->
+<!--              [options]="options.traitementsEffetsPasses"-->
+<!--              [selectedItems]="selectedTraitements"-->
+<!--              (selectedItemsChange)="selectedTraitements = $event"-->
+<!--              placeholder="Sélectionner traitement(s)...">-->
+<!--            </app-multi-select>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="form-row">
-          <div class="form-group">
-            <label>Nombre exact d'interventions admises</label>
-            <input type="number" [(ngModel)]="searchCriteria.nombreInterventionsExact" name="nbIntExact" placeholder="Nombre exact">
-          </div>
+<!--        <div class="form-row">-->
+<!--          <div class="form-group">-->
+<!--            <label>Nombre exact d'interventions admises</label>-->
+<!--            <input type="number" [(ngModel)]="searchCriteria.nombreInterventionsExact" name="nbIntExact" placeholder="Nombre exact">-->
+<!--          </div>-->
 
-          <div class="form-group">
-            <label>Ou entre</label>
-            <div class="input-group">
-              <input type="number" [(ngModel)]="searchCriteria.nombreInterventionsMin" name="nbIntMin" placeholder="Min">
-              <span>et</span>
-              <input type="number" [(ngModel)]="searchCriteria.nombreInterventionsMax" name="nbIntMax" placeholder="Max">
-            </div>
-          </div>
-        </div>
+<!--          <div class="form-group">-->
+<!--            <label>Ou entre</label>-->
+<!--            <div class="input-group">-->
+<!--              <input type="number" [(ngModel)]="searchCriteria.nombreInterventionsMin" name="nbIntMin" placeholder="Min">-->
+<!--              <span>et</span>-->
+<!--              <input type="number" [(ngModel)]="searchCriteria.nombreInterventionsMax" name="nbIntMax" placeholder="Max">-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="form-row">
-          <div class="form-group">
-            <label>Nombre de membres siégeant</label>
-            <div class="radio-group-inline">
-              <label class="radio-label">
-                <input type="radio" [(ngModel)]="searchCriteria.nombreMembresSieges" name="nbMembres" [value]="6">
-                6
-              </label>
-              <label class="radio-label">
-                <input type="radio" [(ngModel)]="searchCriteria.nombreMembresSieges" name="nbMembres" [value]="7">
-                7
-              </label>
-              <label class="radio-label">
-                <input type="radio" [(ngModel)]="searchCriteria.nombreMembresSieges" name="nbMembres" [value]="8">
-                8
-              </label>
-              <label class="radio-label">
-                <input type="radio" [(ngModel)]="searchCriteria.nombreMembresSieges" name="nbMembres" [value]="9">
-                9
-              </label>
-              <label class="radio-label">
-                <input type="radio" [(ngModel)]="searchCriteria.nombreMembresSieges" name="nbMembres" [value]="10">
-                10
-              </label>
-            </div>
-          </div>
+<!--        <div class="form-row">-->
+<!--          <div class="form-group">-->
+<!--            <label>Nombre de membres siégeant</label>-->
+<!--            <div class="radio-group-inline">-->
+<!--              <label class="radio-label">-->
+<!--                <input type="radio" [(ngModel)]="searchCriteria.nombreMembresSieges" name="nbMembres" [value]="6">-->
+<!--                6-->
+<!--              </label>-->
+<!--              <label class="radio-label">-->
+<!--                <input type="radio" [(ngModel)]="searchCriteria.nombreMembresSieges" name="nbMembres" [value]="7">-->
+<!--                7-->
+<!--              </label>-->
+<!--              <label class="radio-label">-->
+<!--                <input type="radio" [(ngModel)]="searchCriteria.nombreMembresSieges" name="nbMembres" [value]="8">-->
+<!--                8-->
+<!--              </label>-->
+<!--              <label class="radio-label">-->
+<!--                <input type="radio" [(ngModel)]="searchCriteria.nombreMembresSieges" name="nbMembres" [value]="9">-->
+<!--                9-->
+<!--              </label>-->
+<!--              <label class="radio-label">-->
+<!--                <input type="radio" [(ngModel)]="searchCriteria.nombreMembresSieges" name="nbMembres" [value]="10">-->
+<!--                10-->
+<!--              </label>-->
+<!--            </div>-->
+<!--          </div>-->
 
-          <div class="form-group">
-            <label>Demande de récusation</label>
-            <div class="radio-group-inline">
-              <label class="radio-label">
-                <input type="radio" [(ngModel)]="searchCriteria.demandeRecusation" name="recusation" [value]="true">
-                Oui
-              </label>
-              <label class="radio-label">
-                <input type="radio" [(ngModel)]="searchCriteria.demandeRecusation" name="recusation" [value]="false">
-                Non
-              </label>
-            </div>
-          </div>
-        </div>
+<!--          <div class="form-group">-->
+<!--            <label>Demande de récusation</label>-->
+<!--            <div class="radio-group-inline">-->
+<!--              <label class="radio-label">-->
+<!--                <input type="radio" [(ngModel)]="searchCriteria.demandeRecusation" name="recusation" [value]="true">-->
+<!--                Oui-->
+<!--              </label>-->
+<!--              <label class="radio-label">-->
+<!--                <input type="radio" [(ngModel)]="searchCriteria.demandeRecusation" name="recusation" [value]="false">-->
+<!--                Non-->
+<!--              </label>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="form-row">
-          <div class="form-group">
-            <label>Déport</label>
-            <div class="radio-group-inline">
-              <label class="radio-label">
-                <input type="radio" [(ngModel)]="searchCriteria.deport" name="deport" [value]="true">
-                Oui
-              </label>
-              <label class="radio-label">
-                <input type="radio" [(ngModel)]="searchCriteria.deport" name="deport" [value]="false">
-                Non
-              </label>
-            </div>
-          </div>
+<!--        <div class="form-row">-->
+<!--          <div class="form-group">-->
+<!--            <label>Déport</label>-->
+<!--            <div class="radio-group-inline">-->
+<!--              <label class="radio-label">-->
+<!--                <input type="radio" [(ngModel)]="searchCriteria.deport" name="deport" [value]="true">-->
+<!--                Oui-->
+<!--              </label>-->
+<!--              <label class="radio-label">-->
+<!--                <input type="radio" [(ngModel)]="searchCriteria.deport" name="deport" [value]="false">-->
+<!--                Non-->
+<!--              </label>-->
+<!--            </div>-->
+<!--          </div>-->
 
-          <div class="form-group">
-            <label>Nom du membre déporté/récusé</label>
-            <input type="text" [(ngModel)]="searchCriteria.nomMembreDeporte" name="nomDeporte" placeholder="Ex: M. Martin">
-          </div>
-        </div>
+<!--          <div class="form-group">-->
+<!--            <label>Nom du membre déporté/récusé</label>-->
+<!--            <input type="text" [(ngModel)]="searchCriteria.nomMembreDeporte" name="nomDeporte" placeholder="Ex: M. Martin">-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="form-row">
-          <div class="form-group">
-            <label>Théorie changement de circonstances</label>
-            <div class="radio-group-inline">
-              <label class="radio-label">
-                <input type="radio" [(ngModel)]="searchCriteria.theorieChangement" name="theorie" [value]="true">
-                Oui
-              </label>
-              <label class="radio-label">
-                <input type="radio" [(ngModel)]="searchCriteria.theorieChangement" name="theorie" [value]="false">
-                Non
-              </label>
-            </div>
-          </div>
+<!--        <div class="form-row">-->
+<!--          <div class="form-group">-->
+<!--            <label>Théorie changement de circonstances</label>-->
+<!--            <div class="radio-group-inline">-->
+<!--              <label class="radio-label">-->
+<!--                <input type="radio" [(ngModel)]="searchCriteria.theorieChangement" name="theorie" [value]="true">-->
+<!--                Oui-->
+<!--              </label>-->
+<!--              <label class="radio-label">-->
+<!--                <input type="radio" [(ngModel)]="searchCriteria.theorieChangement" name="theorie" [value]="false">-->
+<!--                Non-->
+<!--              </label>-->
+<!--            </div>-->
+<!--          </div>-->
 
-          <div class="form-group">
-            <label>Réserve d'opportunité</label>
-            <div class="radio-group-inline">
-              <label class="radio-label">
-                <input type="radio" [(ngModel)]="searchCriteria.reserveOpportunite" name="opportunite" [value]="true">
-                Oui
-              </label>
-              <label class="radio-label">
-                <input type="radio" [(ngModel)]="searchCriteria.reserveOpportunite" name="opportunite" [value]="false">
-                Non
-              </label>
-            </div>
-          </div>
-        </div>
+<!--          <div class="form-group">-->
+<!--            <label>Réserve d'opportunité</label>-->
+<!--            <div class="radio-group-inline">-->
+<!--              <label class="radio-label">-->
+<!--                <input type="radio" [(ngModel)]="searchCriteria.reserveOpportunite" name="opportunite" [value]="true">-->
+<!--                Oui-->
+<!--              </label>-->
+<!--              <label class="radio-label">-->
+<!--                <input type="radio" [(ngModel)]="searchCriteria.reserveOpportunite" name="opportunite" [value]="false">-->
+<!--                Non-->
+<!--              </label>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="form-row">
-          <div class="form-group">
-            <label>Réserve d'incompétence</label>
-            <app-multi-select
-              [options]="options.reservesIncompetence"
-              [selectedItems]="selectedReservesIncompetence"
-              (selectedItemsChange)="selectedReservesIncompetence = $event"
-              placeholder="Sélectionner réserve(s)...">
-            </app-multi-select>
-          </div>
+<!--        <div class="form-row">-->
+<!--          <div class="form-group">-->
+<!--            <label>Réserve d'incompétence</label>-->
+<!--            <app-multi-select-->
+<!--              [options]="options.reservesIncompetence"-->
+<!--              [selectedItems]="selectedReservesIncompetence"-->
+<!--              (selectedItemsChange)="selectedReservesIncompetence = $event"-->
+<!--              placeholder="Sélectionner réserve(s)...">-->
+<!--            </app-multi-select>-->
+<!--          </div>-->
 
-          <div class="form-group">
-            <label>Interprétation de la jurisprudence</label>
-            <div class="radio-group-inline">
-              <label class="radio-label">
-                <input type="radio" [(ngModel)]="searchCriteria.interpretationJurisprudence" name="interpretation" [value]="true">
-                Oui
-              </label>
-              <label class="radio-label">
-                <input type="radio" [(ngModel)]="searchCriteria.interpretationJurisprudence" name="interpretation" [value]="false">
-                Non
-              </label>
-            </div>
-          </div>
-        </div>
+<!--          <div class="form-group">-->
+<!--            <label>Interprétation de la jurisprudence</label>-->
+<!--            <div class="radio-group-inline">-->
+<!--              <label class="radio-label">-->
+<!--                <input type="radio" [(ngModel)]="searchCriteria.interpretationJurisprudence" name="interpretation" [value]="true">-->
+<!--                Oui-->
+<!--              </label>-->
+<!--              <label class="radio-label">-->
+<!--                <input type="radio" [(ngModel)]="searchCriteria.interpretationJurisprudence" name="interpretation" [value]="false">-->
+<!--                Non-->
+<!--              </label>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="form-row">
-          <div class="form-group">
-            <label>Technique de contrôle</label>
-            <app-multi-select
-              [options]="options.techniquesControle"
-              [selectedItems]="selectedTechniques"
-              (selectedItemsChange)="selectedTechniques = $event"
-              placeholder="Sélectionner technique(s)...">
-            </app-multi-select>
-          </div>
+<!--        <div class="form-row">-->
+<!--          <div class="form-group">-->
+<!--            <label>Technique de contrôle</label>-->
+<!--            <app-multi-select-->
+<!--              [options]="options.techniquesControle"-->
+<!--              [selectedItems]="selectedTechniques"-->
+<!--              (selectedItemsChange)="selectedTechniques = $event"-->
+<!--              placeholder="Sélectionner technique(s)...">-->
+<!--            </app-multi-select>-->
+<!--          </div>-->
 
-          <div class="form-group">
-            <label>Motif d'inconstitutionnalité</label>
-            <app-multi-select
-              [options]="options.motifsInconstitutionnalite"
-              [selectedItems]="selectedMotifs"
-              (selectedItemsChange)="selectedMotifs = $event"
-              placeholder="Sélectionner motif(s)...">
-            </app-multi-select>
-          </div>
-        </div>
+<!--          <div class="form-group">-->
+<!--            <label>Motif d'inconstitutionnalité</label>-->
+<!--            <app-multi-select-->
+<!--              [options]="options.motifsInconstitutionnalite"-->
+<!--              [selectedItems]="selectedMotifs"-->
+<!--              (selectedItemsChange)="selectedMotifs = $event"-->
+<!--              placeholder="Sélectionner motif(s)...">-->
+<!--            </app-multi-select>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="form-row">
-          <div class="form-group">
-            <label>Remarque</label>
-            <input type="text" [(ngModel)]="searchCriteria.remarque" name="remarque" placeholder="Rechercher dans les remarques">
-          </div>
+<!--        <div class="form-row">-->
+<!--          <div class="form-group">-->
+<!--            <label>Remarque</label>-->
+<!--            <input type="text" [(ngModel)]="searchCriteria.remarque" name="remarque" placeholder="Rechercher dans les remarques">-->
+<!--          </div>-->
 
-          <div class="form-group">
-            <label>Caractère notable de la décision</label>
-            <div class="radio-group-inline">
-              <label class="radio-label">
-                <input type="radio" [(ngModel)]="searchCriteria.caractereNotable" name="notable" [value]="true">
-                Oui
-              </label>
-              <label class="radio-label">
-                <input type="radio" [(ngModel)]="searchCriteria.caractereNotable" name="notable" [value]="false">
-                Non
-              </label>
-            </div>
-          </div>
-        </div>
+<!--          <div class="form-group">-->
+<!--            <label>Caractère notable de la décision</label>-->
+<!--            <div class="radio-group-inline">-->
+<!--              <label class="radio-label">-->
+<!--                <input type="radio" [(ngModel)]="searchCriteria.caractereNotable" name="notable" [value]="true">-->
+<!--                Oui-->
+<!--              </label>-->
+<!--              <label class="radio-label">-->
+<!--                <input type="radio" [(ngModel)]="searchCriteria.caractereNotable" name="notable" [value]="false">-->
+<!--                Non-->
+<!--              </label>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="form-row">
-          <div class="form-group">
-            <label>Oralité</label>
-            <div class="radio-group-inline">
-              <label class="radio-label">
-                <input type="radio" [(ngModel)]="searchCriteria.oralite" name="oralite" [value]="true">
-                Oui
-              </label>
-              <label class="radio-label">
-                <input type="radio" [(ngModel)]="searchCriteria.oralite" name="oralite" [value]="false">
-                Non
-              </label>
-            </div>
-          </div>
-        </div>
+<!--        <div class="form-row">-->
+<!--          <div class="form-group">-->
+<!--            <label>Oralité</label>-->
+<!--            <div class="radio-group-inline">-->
+<!--              <label class="radio-label">-->
+<!--                <input type="radio" [(ngModel)]="searchCriteria.oralite" name="oralite" [value]="true">-->
+<!--                Oui-->
+<!--              </label>-->
+<!--              <label class="radio-label">-->
+<!--                <input type="radio" [(ngModel)]="searchCriteria.oralite" name="oralite" [value]="false">-->
+<!--                Non-->
+<!--              </label>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="form-actions">
-          <button type="submit" class="btn-primary" [disabled]="isLoading()">
-            <span *ngIf="!isLoading()">🔍 Rechercher</span>
-            <span *ngIf="isLoading()">Recherche en cours...</span>
-          </button>
-          <button type="button" class="btn-secondary" (click)="resetForm()" [disabled]="isLoading()">
-            ↺ Réinitialiser
-          </button>
-        </div>
-      </div>
-    </form>
+<!--        <div class="form-actions">-->
+<!--          <button type="submit" class="btn-primary" [disabled]="isLoading()">-->
+<!--            <span *ngIf="!isLoading()">🔍 Rechercher</span>-->
+<!--            <span *ngIf="isLoading()">Recherche en cours...</span>-->
+<!--          </button>-->
+<!--          <button type="button" class="btn-secondary" (click)="resetForm()" [disabled]="isLoading()">-->
+<!--            ↺ Réinitialiser-->
+<!--          </button>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </form>-->
 
-    <div class="results-section" *ngIf="showResults()">
-      <div class="results-header">
-        <h2>Résultats de recherche</h2>
-        <p class="results-count">{{ searchResult()?.total || 0 }} décision(s) trouvée(s)</p>
-      </div>
+<!--    <div class="results-section" *ngIf="showResults()">-->
+<!--      <div class="results-header">-->
+<!--        <h2>Résultats de recherche</h2>-->
+<!--        <p class="results-count">{{ searchResult()?.total || 0 }} décision(s) trouvée(s)</p>-->
+<!--      </div>-->
 
-      <div class="table-container">
-        <table class="results-table">
-          <thead>
-          <tr>
-            <th>Numéro</th>
-            <th>Référence CC</th>
-            <th>Date</th>
-            <th>Origine</th>
-            <th>Dispositif</th>
-            <th>Matière</th>
-            <th>Actions</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let decision of searchResult()?.decisions || []">
-            <td>{{ decision.numero }}</td>
-            <td>{{ decision.referenceDecisionConseil }}</td>
-            <td>{{ decision.dateDecision | date: 'dd/MM/yyyy' }}</td>
-            <td>{{ decision.origineQpc }}</td>
-            <td>
-                    <span class="badge"
-                          [class.badge-success]="decision.dispositifDecisionCc === 'Conformité'"
-                          [class.badge-warning]="decision.dispositifDecisionCc.includes('sous réserve')"
-                          [class.badge-danger]="decision.dispositifDecisionCc.includes('Non-conformité')">
-                      {{ decision.dispositifDecisionCc }}
-                    </span>
-            </td>
-            <td>{{ decision.matiere }}</td>
-            <td>
-              <button class="btn-view" (click)="viewDetails(decision)">👁 Voir</button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
+<!--      <div class="table-container">-->
+<!--        <table class="results-table">-->
+<!--          <thead>-->
+<!--          <tr>-->
+<!--            <th>Numéro</th>-->
+<!--            <th>Référence CC</th>-->
+<!--            <th>Date</th>-->
+<!--            <th>Origine</th>-->
+<!--            <th>Dispositif</th>-->
+<!--            <th>Matière</th>-->
+<!--            <th>Actions</th>-->
+<!--          </tr>-->
+<!--          </thead>-->
+<!--          <tbody>-->
+<!--          <tr *ngFor="let decision of searchResult()?.decisions || []">-->
+<!--            <td>{{ decision.numero }}</td>-->
+<!--            <td>{{ decision.referenceDecisionConseil }}</td>-->
+<!--            <td>{{ decision.dateDecision | date: 'dd/MM/yyyy' }}</td>-->
+<!--            <td>{{ decision.origineQpc }}</td>-->
+<!--            <td>-->
+<!--                    <span class="badge"-->
+<!--                          [class.badge-success]="decision.dispositifDecisionCc === 'Conformité'"-->
+<!--                          [class.badge-warning]="decision.dispositifDecisionCc.includes('sous réserve')"-->
+<!--                          [class.badge-danger]="decision.dispositifDecisionCc.includes('Non-conformité')">-->
+<!--                      {{ decision.dispositifDecisionCc }}-->
+<!--                    </span>-->
+<!--            </td>-->
+<!--            <td>{{ decision.matiere }}</td>-->
+<!--            <td>-->
+<!--              <button class="btn-view" (click)="viewDetails(decision)">👁 Voir</button>-->
+<!--            </td>-->
+<!--          </tr>-->
+<!--          </tbody>-->
+<!--        </table>-->
+<!--      </div>-->
 
-      <div class="pagination" *ngIf="searchResult()">
-        <button class="btn-page" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1">
-          ← Précédent
-        </button>
-        <div class="page-info">
-          Page {{ currentPage() }} sur {{ totalPages() }}
-        </div>
-        <button class="btn-page" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()">
-          Suivant →
-        </button>
-      </div>
-    </div>
-  </div>
+<!--      <div class="pagination" *ngIf="searchResult()">-->
+<!--        <button class="btn-page" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1">-->
+<!--          ← Précédent-->
+<!--        </button>-->
+<!--        <div class="page-info">-->
+<!--          Page {{ currentPage() }} sur {{ totalPages() }}-->
+<!--        </div>-->
+<!--        <button class="btn-page" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()">-->
+<!--          Suivant →-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
 
-  <div class="modal" *ngIf="selectedDecision()" (click)="closeDetails()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h2>Détails de la décision</h2>
-        <button class="close-btn" (click)="closeDetails()">✕</button>
-      </div>
-      <div class="modal-body">
-        <div class="detail-section">
-          <h3>Informations générales</h3>
-          <div class="detail-grid">
-            <div class="detail-item">
-              <strong>Numéro:</strong>
-              <span>{{ selectedDecision()!.numero }}</span>
-            </div>
-            <div class="detail-item">
-              <strong>Référence CC:</strong>
-              <span>{{ selectedDecision()!.referenceDecisionConseil }}</span>
-            </div>
-            <div class="detail-item">
-              <strong>Date:</strong>
-              <span>{{ selectedDecision()!.dateDecision | date: 'dd/MM/yyyy' }}</span>
-            </div>
-            <div class="detail-item">
-              <strong>Origine:</strong>
-              <span>{{ selectedDecision()!.origineQpc }}</span>
-            </div>
-            <div class="detail-item">
-              <strong>Réf. transmission:</strong>
-              <span>{{ selectedDecision()!.referenceDecisionTransmission }}</span>
-            </div>
-            <div class="detail-item">
-              <strong>Matière:</strong>
-              <span>{{ selectedDecision()!.matiere }}</span>
-            </div>
-          </div>
-        </div>
+<!--  <div class="modal" *ngIf="selectedDecision()" (click)="closeDetails()">-->
+<!--    <div class="modal-content" (click)="$event.stopPropagation()">-->
+<!--      <div class="modal-header">-->
+<!--        <h2>Détails de la décision</h2>-->
+<!--        <button class="close-btn" (click)="closeDetails()">✕</button>-->
+<!--      </div>-->
+<!--      <div class="modal-body">-->
+<!--        <div class="detail-section">-->
+<!--          <h3>Informations générales</h3>-->
+<!--          <div class="detail-grid">-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Numéro:</strong>-->
+<!--              <span>{{ selectedDecision()!.numero }}</span>-->
+<!--            </div>-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Référence CC:</strong>-->
+<!--              <span>{{ selectedDecision()!.referenceDecisionConseil }}</span>-->
+<!--            </div>-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Date:</strong>-->
+<!--              <span>{{ selectedDecision()!.dateDecision | date: 'dd/MM/yyyy' }}</span>-->
+<!--            </div>-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Origine:</strong>-->
+<!--              <span>{{ selectedDecision()!.origineQpc }}</span>-->
+<!--            </div>-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Réf. transmission:</strong>-->
+<!--              <span>{{ selectedDecision()!.referenceDecisionTransmission }}</span>-->
+<!--            </div>-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Matière:</strong>-->
+<!--              <span>{{ selectedDecision()!.matiere }}</span>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="detail-section">
-          <h3>Demandeur</h3>
-          <div class="detail-grid">
-            <div class="detail-item">
-              <strong>Identité:</strong>
-              <span>{{ selectedDecision()!.identiteDemandeur }}</span>
-            </div>
-            <div class="detail-item">
-              <strong>Qualité:</strong>
-              <span>{{ selectedDecision()!.qualiteDemandeur }}</span>
-            </div>
-          </div>
-        </div>
+<!--        <div class="detail-section">-->
+<!--          <h3>Demandeur</h3>-->
+<!--          <div class="detail-grid">-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Identité:</strong>-->
+<!--              <span>{{ selectedDecision()!.identiteDemandeur }}</span>-->
+<!--            </div>-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Qualité:</strong>-->
+<!--              <span>{{ selectedDecision()!.qualiteDemandeur }}</span>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="detail-section">
-          <h3>Dispositions contestées</h3>
-          <div class="detail-grid">
-            <div class="detail-item">
-              <strong>Dispositions:</strong>
-              <span>{{ selectedDecision()!.dispositionsLegislativesContestees }}</span>
-            </div>
-            <div class="detail-item">
-              <strong>Type:</strong>
-              <span>{{ selectedDecision()!.typeDispositionLegislative }}</span>
-            </div>
-          </div>
-        </div>
+<!--        <div class="detail-section">-->
+<!--          <h3>Dispositions contestées</h3>-->
+<!--          <div class="detail-grid">-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Dispositions:</strong>-->
+<!--              <span>{{ selectedDecision()!.dispositionsLegislativesContestees }}</span>-->
+<!--            </div>-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Type:</strong>-->
+<!--              <span>{{ selectedDecision()!.typeDispositionLegislative }}</span>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="detail-section">
-          <h3>Décision</h3>
-          <div class="detail-grid">
-            <div class="detail-item">
-              <strong>Dispositif:</strong>
-              <span class="badge"
-                    [class.badge-success]="selectedDecision()!.dispositifDecisionCc === 'Conformité'"
-                    [class.badge-warning]="selectedDecision()!.dispositifDecisionCc.includes('sous réserve')"
-                    [class.badge-danger]="selectedDecision()!.dispositifDecisionCc.includes('Non-conformité')">
-                    {{ selectedDecision()!.dispositifDecisionCc }}
-                  </span>
-            </div>
-            <div class="detail-item" *ngIf="selectedDecision()!.delaiAvantAbrogationMois">
-              <strong>Délai avant abrogation:</strong>
-              <span>{{ selectedDecision()!.delaiAvantAbrogationMois }} mois</span>
-            </div>
-            <div class="detail-item">
-              <strong>Traitement effets passés:</strong>
-              <span>{{ selectedDecision()!.traitementEffetsPasses }}</span>
-            </div>
-          </div>
-        </div>
+<!--        <div class="detail-section">-->
+<!--          <h3>Décision</h3>-->
+<!--          <div class="detail-grid">-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Dispositif:</strong>-->
+<!--              <span class="badge"-->
+<!--                    [class.badge-success]="selectedDecision()!.dispositifDecisionCc === 'Conformité'"-->
+<!--                    [class.badge-warning]="selectedDecision()!.dispositifDecisionCc.includes('sous réserve')"-->
+<!--                    [class.badge-danger]="selectedDecision()!.dispositifDecisionCc.includes('Non-conformité')">-->
+<!--                    {{ selectedDecision()!.dispositifDecisionCc }}-->
+<!--                  </span>-->
+<!--            </div>-->
+<!--            <div class="detail-item" *ngIf="selectedDecision()!.delaiAvantAbrogationMois">-->
+<!--              <strong>Délai avant abrogation:</strong>-->
+<!--              <span>{{ selectedDecision()!.delaiAvantAbrogationMois }} mois</span>-->
+<!--            </div>-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Traitement effets passés:</strong>-->
+<!--              <span>{{ selectedDecision()!.traitementEffetsPasses }}</span>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="detail-section">
-          <h3>Composition et procédure</h3>
-          <div class="detail-grid">
-            <div class="detail-item">
-              <strong>Membres siégeant:</strong>
-              <span>{{ selectedDecision()!.nombreMembresSieges }}</span>
-            </div>
-            <div class="detail-item">
-              <strong>Demande récusation:</strong>
-              <span>{{ selectedDecision()!.demandeRecusation ? 'Oui' : 'Non' }}</span>
-            </div>
-            <div class="detail-item">
-              <strong>Déport:</strong>
-              <span>{{ selectedDecision()!.deport ? 'Oui' : 'Non' }}</span>
-            </div>
-            <div class="detail-item" *ngIf="selectedDecision()!.nomMembreDeporteOuRecuse">
-              <strong>Membre déporté/récusé:</strong>
-              <span>{{ selectedDecision()!.nomMembreDeporteOuRecuse }}</span>
-            </div>
-            <div class="detail-item">
-              <strong>Oralité:</strong>
-              <span>{{ selectedDecision()!.oralite ? 'Oui' : 'Non' }}</span>
-            </div>
-            <div class="detail-item">
-              <strong>Interventions admises:</strong>
-              <span>{{ selectedDecision()!.nombreInterventionsAdmises }}</span>
-            </div>
-          </div>
-        </div>
+<!--        <div class="detail-section">-->
+<!--          <h3>Composition et procédure</h3>-->
+<!--          <div class="detail-grid">-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Membres siégeant:</strong>-->
+<!--              <span>{{ selectedDecision()!.nombreMembresSieges }}</span>-->
+<!--            </div>-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Demande récusation:</strong>-->
+<!--              <span>{{ selectedDecision()!.demandeRecusation ? 'Oui' : 'Non' }}</span>-->
+<!--            </div>-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Déport:</strong>-->
+<!--              <span>{{ selectedDecision()!.deport ? 'Oui' : 'Non' }}</span>-->
+<!--            </div>-->
+<!--            <div class="detail-item" *ngIf="selectedDecision()!.nomMembreDeporteOuRecuse">-->
+<!--              <strong>Membre déporté/récusé:</strong>-->
+<!--              <span>{{ selectedDecision()!.nomMembreDeporteOuRecuse }}</span>-->
+<!--            </div>-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Oralité:</strong>-->
+<!--              <span>{{ selectedDecision()!.oralite ? 'Oui' : 'Non' }}</span>-->
+<!--            </div>-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Interventions admises:</strong>-->
+<!--              <span>{{ selectedDecision()!.nombreInterventionsAdmises }}</span>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="detail-section">
-          <h3>Contrôle</h3>
-          <div class="detail-grid">
-            <div class="detail-item">
-              <strong>Technique:</strong>
-              <span>{{ selectedDecision()!.techniquesControle }}</span>
-            </div>
-            <div class="detail-item">
-              <strong>Motif:</strong>
-              <span>{{ selectedDecision()!.motifInconstitutionnalite }}</span>
-            </div>
-            <div class="detail-item">
-              <strong>Théorie changement:</strong>
-              <span>{{ selectedDecision()!.applicationTheorieChangementCirconstances ? 'Oui' : 'Non' }}</span>
-            </div>
-            <div class="detail-item">
-              <strong>Réserve opportunité:</strong>
-              <span>{{ selectedDecision()!.reserveOpportunite ? 'Oui' : 'Non' }}</span>
-            </div>
-            <div class="detail-item">
-              <strong>Réserve incompétence:</strong>
-              <span>{{ selectedDecision()!.reserveIncompetenceConseil }}</span>
-            </div>
-            <div class="detail-item">
-              <strong>Interprétation jurisprudence:</strong>
-              <span>{{ selectedDecision()!.priseEnCompteInterpretationJurisprudentielle ? 'Oui' : 'Non' }}</span>
-            </div>
-          </div>
-        </div>
+<!--        <div class="detail-section">-->
+<!--          <h3>Contrôle</h3>-->
+<!--          <div class="detail-grid">-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Technique:</strong>-->
+<!--              <span>{{ selectedDecision()!.techniquesControle }}</span>-->
+<!--            </div>-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Motif:</strong>-->
+<!--              <span>{{ selectedDecision()!.motifInconstitutionnalite }}</span>-->
+<!--            </div>-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Théorie changement:</strong>-->
+<!--              <span>{{ selectedDecision()!.applicationTheorieChangementCirconstances ? 'Oui' : 'Non' }}</span>-->
+<!--            </div>-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Réserve opportunité:</strong>-->
+<!--              <span>{{ selectedDecision()!.reserveOpportunite ? 'Oui' : 'Non' }}</span>-->
+<!--            </div>-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Réserve incompétence:</strong>-->
+<!--              <span>{{ selectedDecision()!.reserveIncompetenceConseil }}</span>-->
+<!--            </div>-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Interprétation jurisprudence:</strong>-->
+<!--              <span>{{ selectedDecision()!.priseEnCompteInterpretationJurisprudentielle ? 'Oui' : 'Non' }}</span>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="detail-section" *ngIf="selectedDecision()!.droitsLibertes.length > 0">
-          <h3>Droits et libertés invoqués ({{ selectedDecision()!.nombreDroitsLibertesInvoques }})</h3>
-          <div class="rights-list">
-            <div class="right-item" *ngFor="let droit of selectedDecision()!.droitsLibertes">
-              <strong>{{ droit.nom }}</strong>
-              <span *ngIf="droit.description">{{ droit.description }}</span>
-            </div>
-          </div>
-        </div>
+<!--        <div class="detail-section" *ngIf="selectedDecision()!.droitsLibertes.length > 0">-->
+<!--          <h3>Droits et libertés invoqués ({{ selectedDecision()!.nombreDroitsLibertesInvoques }})</h3>-->
+<!--          <div class="rights-list">-->
+<!--            <div class="right-item" *ngFor="let droit of selectedDecision()!.droitsLibertes">-->
+<!--              <strong>{{ droit.nom }}</strong>-->
+<!--              <span *ngIf="droit.description">{{ droit.description }}</span>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="detail-section" *ngIf="selectedDecision()!.autresRemarques">
-          <h3>Remarques</h3>
-          <p>{{ selectedDecision()!.autresRemarques }}</p>
-        </div>
+<!--        <div class="detail-section" *ngIf="selectedDecision()!.autresRemarques">-->
+<!--          <h3>Remarques</h3>-->
+<!--          <p>{{ selectedDecision()!.autresRemarques }}</p>-->
+<!--        </div>-->
 
-        <div class="detail-section">
-          <h3>Caractéristiques</h3>
-          <div class="detail-grid">
-            <div class="detail-item">
-              <strong>Décision notable:</strong>
-              <span class="badge" [class.badge-success]="selectedDecision()!.caractereNotableDecision">
-                    {{ selectedDecision()!.caractereNotableDecision ? 'Oui' : 'Non' }}
-                  </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<!--        <div class="detail-section">-->
+<!--          <h3>Caractéristiques</h3>-->
+<!--          <div class="detail-grid">-->
+<!--            <div class="detail-item">-->
+<!--              <strong>Décision notable:</strong>-->
+<!--              <span class="badge" [class.badge-success]="selectedDecision()!.caractereNotableDecision">-->
+<!--                    {{ selectedDecision()!.caractereNotableDecision ? 'Oui' : 'Non' }}-->
+<!--                  </span>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->

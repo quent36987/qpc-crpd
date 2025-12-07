@@ -10,6 +10,7 @@ import java.util.function.Function;
 @Builder
 public class ExcelColumn<T> {
 
+
     /**
      * Label affiché sur la 2ème ligne (ligne des colonnes).
      */

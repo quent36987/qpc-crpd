@@ -24,6 +24,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class DecisionFiltrageQpcImportService {
 
+    
     private final GenericExcelImportService genericExcelImportService;
     private final DecisionFiltrageQpcRepository decisionFiltrageQpcRepository;
     private final ListeDeroulanteRepository listeDeroulanteRepository;

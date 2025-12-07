@@ -1,19 +1,21 @@
 import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {NotificationService} from "../../_services/notification.service";
+import {SpinnerService} from "../../_services/spinner.service";
+import {StorageService} from "../../_services/storage.service";
+import {AuthApi, LoginRequest, SignupRequest, UserDTO} from "../../_services/generated-api";
+import {apiWrapper} from "../../_services/api-wrapper";
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './login.html',
-  styleUrls: ['./login.scss'],
+  styleUrls: ['./login.css'],
 })
 export class LoginComponent {
-  private authService = inject(AuthService);
-  private router = inject(Router);
 
   email = '';
   password = '';
@@ -21,32 +23,48 @@ export class LoginComponent {
   signupPassword = '';
   signupConfirm = '';
 
+  constructor(
+    private authService: AuthApi,
+    private storageService: StorageService,
+    private spinnerService: SpinnerService,
+    private notifService: NotificationService,
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {
+    if (this.storageService.isLoggedIn()) {
+      this.router.navigate(['/']);
+    }
+  }
+
   isLoading = signal(false);
   errorMessage = signal('');
   isSignupMode = signal(false);
 
-  async onLogin() {
+  login(): void {
     if (!this.email || !this.password) {
       this.errorMessage.set('Veuillez remplir tous les champs');
       return;
     }
 
-    this.isLoading.set(true);
-    this.errorMessage.set('');
+    const loginData: LoginRequest = {
+      email: this.email,
+      password: this.password
+    };
 
-    try {
-      const { data, error } = await this.authService.signIn(this.email, this.password);
+    this.authService.authenticateUser(loginData)
+      .pipe(apiWrapper(this.spinnerService, this.notifService))
+      .subscribe({
+        next: (data: UserDTO) => {
+          this.storageService.saveUser(data);
+          this.storageService.saveTokenRefreshDate();
 
-      if (error) {
-        this.errorMessage.set('Email ou mot de passe incorrect');
-      } else {
-        this.router.navigate(['/']);
-      }
-    } catch (err) {
-      this.errorMessage.set('Une erreur est survenue');
-    } finally {
-      this.isLoading.set(false);
-    }
+          const returnUrl = this.route.snapshot.queryParams['redirectUrl'] || '/';
+          this.router.navigateByUrl(returnUrl);
+        },
+        error: () => {
+          this.errorMessage.set('Email ou mot de passe incorrect');
+        }
+      });
   }
 
   async onSignup() {
@@ -68,19 +86,26 @@ export class LoginComponent {
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    try {
-      const { data, error } = await this.authService.signUp(this.signupEmail, this.signupPassword);
+    const registerData: SignupRequest = {
+      prenom: '', //this.prenom,
+      nom: '', //this.nom,
+      email: this.email,
+      password: this.password,
+      tel: "0",
+    };
 
-      if (error) {
-        this.errorMessage.set(error.message);
-      } else {
-        this.router.navigate(['/']);
-      }
-    } catch (err) {
-      this.errorMessage.set('Une erreur est survenue');
-    } finally {
-      this.isLoading.set(false);
-    }
+    this.authService.registerUser(registerData)
+      .pipe(apiWrapper(this.spinnerService, this.notifService, 'Erreur lors de l\'inscription', 'Inscription réussie'))
+      .subscribe({
+        next: (user : UserDTO) => {
+          this.storageService.saveUser(user);
+          this.storageService.saveTokenRefreshDate();
+
+          setTimeout(() => {
+            this.router.navigate(['/']);
+          }, 200);
+        }
+      });
   }
 
   toggleMode() {

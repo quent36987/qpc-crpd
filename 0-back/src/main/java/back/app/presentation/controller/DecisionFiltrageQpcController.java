@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.criteria.JoinType;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -123,69 +124,84 @@ public class DecisionFiltrageQpcController {
     private Specification<DecisionFiltrageQpcModel> buildSearchSpecification(DecisionFiltrageQpcSearchRequest req) {
         Specification<DecisionFiltrageQpcModel> spec = Specification.where(null);
 
-        // Enums
-        if (req.getOrdreJuridictionnel() != null) {
+        if (req.getNumeroDecision() != null && !req.getNumeroDecision().isBlank()) {
+            String value = "%" + req.getNumeroDecision().toLowerCase() + "%";
             spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("ordreJuridictionnel"), req.getOrdreJuridictionnel()));
+                    cb.like(cb.lower(root.get("numeroDecision")), value));
         }
 
-        if (req.getJuridiction() != null) {
+        if (req.getReference() != null && !req.getReference().isBlank()) {
+            String value = "%" + req.getReference().toLowerCase() + "%";
             spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("juridiction"), req.getJuridiction()));
+                    cb.like(cb.lower(root.get("reference")), value));
         }
 
-        if (req.getNiveauFiltrage() != null) {
+        if (req.getJuridictions() != null && !req.getJuridictions().isEmpty()) {
             spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("niveauFiltrage"), req.getNiveauFiltrage()));
+                    root.get("juridiction").in(req.getJuridictions()));
         }
 
-        // Listes déroulantes
-        if (req.getChambreSousSectionId() != null) {
+        if (req.getNiveauxFiltrage() != null && !req.getNiveauxFiltrage().isEmpty()) {
             spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("chambreSousSection").get("id"), req.getChambreSousSectionId()));
+                    root.get("niveauFiltrage").in(req.getNiveauxFiltrage()));
         }
 
-        if (req.getNumeroChambresReuniesId() != null) {
+        if (req.getDateFiltrageFrom() != null) {
             spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("numeroChambresReunies").get("id"), req.getNumeroChambresReuniesId()));
+                    cb.greaterThanOrEqualTo(root.get("dateFiltrage"), req.getDateFiltrageFrom()));
         }
 
-        if (req.getNiveauCompetenceId() != null) {
+        if (req.getDateFiltrageTo() != null) {
             spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("niveauCompetence").get("id"), req.getNiveauCompetenceId()));
+                    cb.lessThanOrEqualTo(root.get("dateFiltrage"), req.getDateFiltrageTo()));
         }
 
-        if (req.getMatiereId() != null) {
+        if (req.getFormationsJugement() != null && !req.getFormationsJugement().isEmpty()) {
             spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("matiere").get("id"), req.getMatiereId()));
+                    root.get("formationJugement").in(req.getFormationsJugement()));
         }
 
-        if (req.getQualiteDemandeurId() != null) {
+        if (req.getChambresSousSectionIds() != null && !req.getChambresSousSectionIds().isEmpty()) {
             spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("qualiteDemandeur").get("id"), req.getQualiteDemandeurId()));
+                    root.get("chambreSousSection").get("id").in(req.getChambresSousSectionIds()));
         }
 
-        if (req.getQualitePreciseDemandeurId() != null) {
+        if (req.getNumerosChambresReuniesIds() != null && !req.getNumerosChambresReuniesIds().isEmpty()) {
             spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("qualitePreciseDemandeur").get("id"), req.getQualitePreciseDemandeurId()));
+                    root.get("numeroChambresReunies").get("id").in(req.getNumerosChambresReuniesIds()));
         }
 
-        if (req.getDecisionRenvoiId() != null) {
+        if (req.getApplicationTheorieChangementCirconstancesIds() != null
+                && !req.getApplicationTheorieChangementCirconstancesIds().isEmpty()) {
+
             spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("decisionRenvoi").get("id"), req.getDecisionRenvoiId()));
+                    root.get("applicationTheorieChangementCirconstances")
+                            .get("id")
+                            .in(req.getApplicationTheorieChangementCirconstancesIds()));
         }
 
-        if (req.getDecisionNonRenvoiId() != null) {
+        if (req.getOriginesJuridictionnellesQpc() != null
+                && !req.getOriginesJuridictionnellesQpc().isEmpty()) {
+
             spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("decisionNonRenvoi").get("id"), req.getDecisionNonRenvoiId()));
+                    root.get("origineJuridictionnelleQpc").in(req.getOriginesJuridictionnellesQpc()));
         }
 
-        if (req.getApplicationTheorieChangementCirconstancesId() != null) {
+        if (req.getMatieresIds() != null && !req.getMatieresIds().isEmpty()) {
             spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("applicationTheorieChangementCirconstances").get("id"),
-                            req.getApplicationTheorieChangementCirconstancesId()));
+                    root.get("matiere").get("id").in(req.getMatieresIds()));
+        }
+
+        // ⭐ NOUVEAU : droits/libertés via leur id (many-to-many)
+        if (req.getDroitsLibertesIds() != null && !req.getDroitsLibertesIds().isEmpty()) {
+            spec = spec.and((root, query, cb) -> {
+                query.distinct(true);
+                var join = root.join("droitsLibertes", JoinType.INNER);
+                return join.get("id").in(req.getDroitsLibertesIds());
+            });
         }
 
         return spec;
     }
+
 }

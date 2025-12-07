@@ -1,35 +1,63 @@
-import {Component, Input, Output, EventEmitter, signal, HostListener, ViewChild, ElementRef} from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  signal,
+  HostListener,
+  ViewChild,
+  ElementRef,
+  OnInit,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+
+export interface MultiSelectOption {
+  value: string | number;
+  label: string;
+}
 
 @Component({
   selector: 'app-multi-select',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './multi-select.html',
-  styleUrls: ['./multi-select.scss'],
+  styleUrls: ['./multi-select.css'],
 })
-export class MultiSelectComponent {
-  @Input() options: string[] = [];
+export class MultiSelectComponent implements OnInit, OnChanges {
+
+  // ⚠️ maintenant : options = { value, label }
+  @Input() options: MultiSelectOption[] = [];
   @Input() placeholder: string = 'Sélectionner...';
-  @Input() selectedItems: string[] = [];
-  @Output() selectedItemsChange = new EventEmitter<string[]>();
+
+  /**
+   * selectedItems = liste des values (id ou enum)
+   * → c’est CE TABLEAU que tu envoies direct au back.
+   */
+  @Input() selectedItems: (string | number)[] = [];
+  @Output() selectedItemsChange = new EventEmitter<(string | number)[]>();
 
   @ViewChild('container') container!: ElementRef;
 
   isOpen = signal(false);
   searchText = '';
-  filteredOptions = signal<string[]>([]);
-  selected = signal<string[]>([]);
+  filteredOptions = signal<MultiSelectOption[]>([]);
+  selected = signal<(string | number)[]>([]);
 
   ngOnInit() {
-    this.selected.set(this.selectedItems);
+    this.selected.set(this.selectedItems ?? []);
     this.updateFilteredOptions();
   }
 
-  ngOnChanges() {
-    this.selected.set(this.selectedItems);
-    this.updateFilteredOptions();
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['selectedItems']) {
+      this.selected.set(this.selectedItems ?? []);
+    }
+    if (changes['options']) {
+      this.updateFilteredOptions();
+    }
   }
 
   toggleDropdown() {
@@ -43,41 +71,50 @@ export class MultiSelectComponent {
     this.updateFilteredOptions();
   }
 
-  toggleOption(option: string) {
-    const selected = this.selected();
-    const index = selected.indexOf(option);
+  toggleOption(option: MultiSelectOption) {
+    const current = this.selected();
+    const index = current.indexOf(option.value);
+    let next: (string | number)[];
 
     if (index === -1) {
-      this.selected.set([...selected, option]);
+      next = [...current, option.value];
     } else {
-      this.selected.set(selected.filter((_, i) => i !== index));
+      next = current.filter((_, i) => i !== index);
     }
 
-    this.selectedItemsChange.emit(this.selected());
+    this.selected.set(next);
+    this.selectedItemsChange.emit(next);
   }
 
-  removeItem(event: Event, item: string) {
+  removeItem(event: Event, value: string | number) {
     event.stopPropagation();
-    const selected = this.selected();
-    this.selected.set(selected.filter(s => s !== item));
-    this.selectedItemsChange.emit(this.selected());
+    const current = this.selected();
+    const next = current.filter(v => v !== value);
+    this.selected.set(next);
+    this.selectedItemsChange.emit(next);
   }
 
-  isSelected(option: string): boolean {
-    return this.selected().includes(option);
+  isSelected(value: string | number): boolean {
+    return this.selected().includes(value);
   }
 
   filterOptions() {
     const text = this.searchText.toLowerCase();
     this.filteredOptions.set(
-      this.options.filter(opt => opt.toLowerCase().includes(text))
+      this.options.filter(opt => opt.label.toLowerCase().includes(text))
     );
   }
 
   updateFilteredOptions() {
+    const text = this.searchText.toLowerCase();
     this.filteredOptions.set(
-      this.options.filter(opt => opt.toLowerCase().includes(this.searchText.toLowerCase()))
+      this.options.filter(opt => opt.label.toLowerCase().includes(text))
     );
+  }
+
+  getSelectedOptions(): MultiSelectOption[] {
+    const values = this.selected();
+    return this.options.filter(o => values.includes(o.value));
   }
 
   @HostListener('document:click', ['$event'])

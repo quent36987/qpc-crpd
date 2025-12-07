@@ -21,7 +21,7 @@ import { DecisionFiltrageQpcDTO } from '../model/decisionFiltrageQpcDTO';
 // @ts-ignore
 import { DecisionFiltrageQpcSearchRequest } from '../model/decisionFiltrageQpcSearchRequest';
 // @ts-ignore
-import { PageDTODecisionFiltrageQpcDTO } from '../model/pageDTODecisionFiltrageQpcDTO';
+import { PageDTODecisionFiltrageQpcRowDTO } from '../model/pageDTODecisionFiltrageQpcRowDTO';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -37,6 +37,53 @@ export class DcisionsDeFiltrageQPCApi extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
+    }
+
+    /**
+     * Export XLSX d\&#39;une requête de décisions de filtrage QPC
+     * @param searchRequest 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public exportXlsQpcFiltrage(searchRequest: DecisionFiltrageQpcSearchRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
+    public exportXlsQpcFiltrage(searchRequest: DecisionFiltrageQpcSearchRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
+    public exportXlsQpcFiltrage(searchRequest: DecisionFiltrageQpcSearchRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
+    public exportXlsQpcFiltrage(searchRequest: DecisionFiltrageQpcSearchRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (searchRequest === null || searchRequest === undefined) {
+            throw new Error('Required parameter searchRequest was null or undefined when calling exportXlsQpcFiltrage.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>searchRequest, 'searchRequest');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let localVarPath = `/api/decisions-filtrage-qpc/export-xls`;
+        return this.httpClient.request('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: "blob",
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
@@ -93,6 +140,81 @@ export class DcisionsDeFiltrageQPCApi extends BaseService {
     }
 
     /**
+     * Import XLSX des décisions de filtrage QPC
+     * @param file 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public importDecisionFiltrageXls(file: Blob, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public importDecisionFiltrageXls(file: Blob, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public importDecisionFiltrageXls(file: Blob, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public importDecisionFiltrageXls(file: Blob, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (file === null || file === undefined) {
+            throw new Error('Required parameter file was null or undefined when calling importDecisionFiltrageXls.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'multipart/form-data'
+        ];
+
+        const canConsumeForm = this.canConsumeForm(consumes);
+
+        let localVarFormParams: { append(param: string, value: any): any; };
+        let localVarUseForm = false;
+        let localVarConvertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        localVarUseForm = canConsumeForm;
+        if (localVarUseForm) {
+            localVarFormParams = new FormData();
+        } else {
+            localVarFormParams = new HttpParams({encoder: this.encoder});
+        }
+
+        if (file !== undefined) {
+            localVarFormParams = localVarFormParams.append('file', <any>file) as any || localVarFormParams;
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/decisions-filtrage-qpc/import-xls`;
+        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Search paginated décisions de filtrage QPC
      * @param page 
      * @param size 
@@ -101,9 +223,9 @@ export class DcisionsDeFiltrageQPCApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public searchDecisionFiltrage(page?: number, size?: number, sort?: Array<string>, decisionFiltrageQpcSearchRequest?: DecisionFiltrageQpcSearchRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageDTODecisionFiltrageQpcDTO>;
-    public searchDecisionFiltrage(page?: number, size?: number, sort?: Array<string>, decisionFiltrageQpcSearchRequest?: DecisionFiltrageQpcSearchRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageDTODecisionFiltrageQpcDTO>>;
-    public searchDecisionFiltrage(page?: number, size?: number, sort?: Array<string>, decisionFiltrageQpcSearchRequest?: DecisionFiltrageQpcSearchRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageDTODecisionFiltrageQpcDTO>>;
+    public searchDecisionFiltrage(page?: number, size?: number, sort?: Array<string>, decisionFiltrageQpcSearchRequest?: DecisionFiltrageQpcSearchRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageDTODecisionFiltrageQpcRowDTO>;
+    public searchDecisionFiltrage(page?: number, size?: number, sort?: Array<string>, decisionFiltrageQpcSearchRequest?: DecisionFiltrageQpcSearchRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageDTODecisionFiltrageQpcRowDTO>>;
+    public searchDecisionFiltrage(page?: number, size?: number, sort?: Array<string>, decisionFiltrageQpcSearchRequest?: DecisionFiltrageQpcSearchRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageDTODecisionFiltrageQpcRowDTO>>;
     public searchDecisionFiltrage(page?: number, size?: number, sort?: Array<string>, decisionFiltrageQpcSearchRequest?: DecisionFiltrageQpcSearchRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -153,7 +275,7 @@ export class DcisionsDeFiltrageQPCApi extends BaseService {
         }
 
         let localVarPath = `/api/decisions-filtrage-qpc/search`;
-        return this.httpClient.request<PageDTODecisionFiltrageQpcDTO>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<PageDTODecisionFiltrageQpcRowDTO>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: decisionFiltrageQpcSearchRequest,

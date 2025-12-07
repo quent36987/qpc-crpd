@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DecisionQpcCcExportService {
 
+
     private final DecisionQpcCcRepository decisionQpcCcRepository;
     private final DecisionQpcCcMapper decisionQpcCcMapper;
     private final GenericExcelExportService genericExcelExportService;

@@ -10,6 +10,7 @@ import java.util.function.Function;
 @Builder
 public class ExcelImportColumn<T> {
 
+
     /**
      * Valeur exacte du header (ligne 2).
      */

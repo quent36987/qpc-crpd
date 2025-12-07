@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 @Builder
 public class ExcelImportConfig<T> {
 
+
     /**
      * Nom de l'onglet. null => premier onglet.
      */

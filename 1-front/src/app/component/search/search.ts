@@ -1,103 +1,206 @@
 import {Component, OnInit, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {DecisionFiltrageService} from '../services/decision-filtrage.service';
-import {DecisionFiltrageQpc, SearchResult} from '../models/decision-filtrage.model';
-import {MultiSelectComponent} from './multi-select.component';
+import {SpinnerService} from "../../_services/spinner.service";
+import {NotificationService} from "../../_services/notification.service";
+import {
+  DcisionsDeFiltrageQPCApi,
+  DecisionFiltrageQpcDTO,
+  DecisionFiltrageQpcRowDTO,
+  DecisionFiltrageQpcSearchRequest,
+  ListeDeroulanteDTO,
+  ListesDroulantesApi,
+  PageDTODecisionFiltrageQpcRowDTO
+} from "../../_services/generated-api";
+import {apiWrapper} from "../../_services/api-wrapper";
+import {MultiSelectComponent, MultiSelectOption} from "../multi-select/multi-select";
 
 @Component({
   selector: 'app-search',
   standalone: true,
   imports: [CommonModule, FormsModule, MultiSelectComponent],
   templateUrl: './search.html',
-  styleUrls: ['./search.scss'],
+  styleUrls: ['./search.css'],
 })
 export class SearchComponent implements OnInit {
-  service = new DecisionFiltrageService();
-  options: any = {};
 
-  searchCriteria: any = {};
-  selectedJuridictions: string[] = [];
-  selectedNiveauxFiltrage: string[] = [];
+  // === DTO de recherche, c’est lui qui sera envoyé au back ===
+  searchCriteria: DecisionFiltrageQpcSearchRequest = {} as any;
+
+  // === Données brutes venant du back pour les listes déroulantes ===
+  listeDeroulanteOptions: ListeDeroulanteDTO[] = [];
+
+  // === Options pour le template (utilisées par les <app-multi-select>) ===
+  options = {
+    juridictions: [] as MultiSelectOption[],
+    niveauxFiltrage: [] as MultiSelectOption[],
+    formationsJugement: [] as MultiSelectOption[],
+    chambresSection: [] as MultiSelectOption[],
+    numerosChambresReunies: [] as MultiSelectOption[],
+    applicationTheorieOptions: [] as MultiSelectOption[],
+    origines: [] as MultiSelectOption[],
+    codes: [] as MultiSelectOption[],
+    matieres: [] as MultiSelectOption[],
+    droitsLibertes: [] as MultiSelectOption[],
+  };
+
+  // === Valeurs sélectionnées dans chaque multi-select ===
+  selectedJuridictions: DecisionFiltrageQpcSearchRequest.JuridictionsEnum[] = [];
+  selectedNiveauxFiltrage: DecisionFiltrageQpcSearchRequest.NiveauxFiltrageEnum[] = [];
+
   selectedFormationsJugement: string[] = [];
-  selectedChambresSection: string[] = [];
-  selectedNumerosChambresReunies: string[] = [];
+  selectedChambresSection: ListeDeroulanteDTO[] = [];
+  selectedNumerosChambresReunies: ListeDeroulanteDTO[] = [];
+  selectedApplicationTheorie: ListeDeroulanteDTO[] = [];
   selectedOrigines: string[] = [];
   selectedCodes: string[] = [];
-  selectedMatieres: string[] = [];
-  selectedDroitsLibertes: string[] = [];
-  selectedApplicationTheorie: string[] = [];
+  selectedMatieres: ListeDeroulanteDTO[] = [];
+  selectedDroitsLibertes: { id: number; label: string }[] = [];
 
-  searchResult = signal<SearchResult | null>(null);
-  showResults = signal(false);
-  isLoading = signal(false);
-  currentPage = signal(1);
+  // === le reste comme avant ===
+  searchResult: PageDTODecisionFiltrageQpcRowDTO | null = null;
+  showResults = false;
+  isLoading = false;
+  currentPage = 1;
   pageSize = 10;
-  selectedDecision = signal<DecisionFiltrageQpc | null>(null);
-  formCollapsed = signal(false);
+  selectedDecision: DecisionFiltrageQpcDTO | null = null;
+  formCollapsed = false;
+
+  constructor(
+    private spinnerService: SpinnerService,
+    private notifService: NotificationService,
+    private listeDeroulanteApi: ListesDroulantesApi,
+    private decisionFiltrageService: DcisionsDeFiltrageQPCApi,
+  ) {
+  }
+
 
   ngOnInit() {
-    this.options = this.service.getOptions();
+
+    // enums → value = enum, label = text lisible
+    this.options.juridictions = [
+      {
+        value: DecisionFiltrageQpcSearchRequest.JuridictionsEnum.ConseilEtat,
+        label: 'Conseil d\'État',
+      },
+      {
+        value: DecisionFiltrageQpcSearchRequest.JuridictionsEnum.CourDeCassation,
+        label: 'Cour de cassation',
+      },
+    ];
+
+    this.options.niveauxFiltrage = [
+      { value: DecisionFiltrageQpcSearchRequest.NiveauxFiltrageEnum.None, label: 'Aucun' },
+      { value: DecisionFiltrageQpcSearchRequest.NiveauxFiltrageEnum.PremierEtDernier, label: 'Premier et dernier' },
+      { value: DecisionFiltrageQpcSearchRequest.NiveauxFiltrageEnum.DeuxiemeFiltrage, label: 'Deuxième filtrage' },
+    ];
+
+    this.listeDeroulanteApi.getAllListeDeroulante()
+      .pipe(apiWrapper(this.spinnerService, this.notifService))
+      .subscribe(data => {
+        this.listeDeroulanteOptions = data;
+        this.buildListeDeroulanteOptions();
+      });
+
+    // si tu as un service pour droitsLibertes, tu peux aussi les charger ici
+  }
+
+  private buildListeDeroulanteOptions() {
+    const byChamp = (champ: string) =>
+      this.listeDeroulanteOptions.filter(o => o.champ === champ && o.actif);
+
+    this.options.chambresSection = byChamp('CHAMBRE_SOUS_SECTION').map(o => ({
+      value: o.id,
+      label: o.valeur,
+    }));
+
+    this.options.numerosChambresReunies = byChamp('NUMERO_CHAMBRES_REUNIES').map(o => ({
+      value: o.id,
+      label: o.valeur,
+    }));
+
+    this.options.matieres = byChamp('MATIERE').map(o => ({
+      value: o.id,
+      label: o.valeur,
+    }));
+
+    this.options.applicationTheorieOptions = byChamp('APPLICATION_THEORIE_CHANGEMENT_CIRCONSTANCES').map(o => ({
+      value: o.id,
+      label: o.valeur,
+    }));
+
+    // si ces champs viennent aussi de liste déroulante :
+    // this.options.formationsJugement = byChamp('FORMATION_JUGEMENT').map(o => ({ value: o.valeur, label: o.valeur }));
+    // this.options.origines = byChamp('ORIGINE_JURIDICTIONNELLE').map(o => ({ value: o.valeur, label: o.valeur }));
+    // this.options.codes = byChamp('CODE').map(o => ({ value: o.valeur, label: o.valeur }));
   }
 
   onSearch() {
-    this.isLoading.set(true);
-    this.currentPage.set(1);
+    this.isLoading = true;
+    this.currentPage = 1;
+    this.search(this.searchCriteria);
+  }
 
-    this.service.search(this.searchCriteria, this.currentPage(), this.pageSize)
-      .subscribe(result => {
-        this.searchResult.set(result);
-        this.showResults.set(true);
-        this.isLoading.set(false);
-        this.formCollapsed.set(true);
+  private search(payload: DecisionFiltrageQpcSearchRequest) {
+    this.decisionFiltrageService
+      .searchDecisionFiltrage(this.currentPage, this.pageSize, [], payload)
+      .pipe(apiWrapper(this.spinnerService, this.notifService))
+      .subscribe(res => {
+        this.searchResult = res;
+        this.showResults = true;
+        this.isLoading = false;
+        this.formCollapsed = true;
       });
   }
 
   goToPage(page: number) {
     if (page < 1 || page > this.totalPages()) return;
 
-    this.currentPage.set(page);
-    this.isLoading.set(true);
+    this.currentPage = page;
+    this.isLoading = true;
 
-    this.service.search(this.searchCriteria, page, this.pageSize)
-      .subscribe(result => {
-        this.searchResult.set(result);
-        this.isLoading.set(false);
-        window.scrollTo({top: 0, behavior: 'smooth'});
-      });
+    const payload: DecisionFiltrageQpcSearchRequest = {
+      ...this.searchCriteria,
+      juridictions: this.selectedJuridictions,
+      niveauxFiltrage: this.selectedNiveauxFiltrage,
+      formationsJugement: this.selectedFormationsJugement,
+      chambresSousSectionIds: this.selectedChambresSection.map(s => s.id),
+      numerosChambresReuniesIds: this.selectedNumerosChambresReunies.map(s => s.id),
+      applicationTheorieChangementCirconstancesIds: this.selectedApplicationTheorie.map(s => s.id),
+      originesJuridictionnellesQpc: this.selectedOrigines,
+      matieresIds: this.selectedMatieres.map(s => s.id),
+      droitsLibertesIds: this.selectedDroitsLibertes.map(d => d.id),
+      codes: this.selectedCodes,
+    };
+
+    this.search(payload);
   }
 
   totalPages(): number {
-    const result = this.searchResult();
+    const result = this.searchResult;
     if (!result) return 0;
-    return Math.ceil(result.total / this.pageSize);
+    return Math.ceil(result.totalElements / this.pageSize);
   }
 
   resetForm() {
-    this.searchCriteria = {};
-    this.selectedJuridictions = [];
-    this.selectedNiveauxFiltrage = [];
-    this.selectedFormationsJugement = [];
-    this.selectedChambresSection = [];
-    this.selectedNumerosChambresReunies = [];
-    this.selectedOrigines = [];
-    this.selectedCodes = [];
-    this.selectedMatieres = [];
-    this.selectedDroitsLibertes = [];
-    this.selectedApplicationTheorie = [];
-    this.showResults.set(false);
-    this.searchResult.set(null);
+    this.searchCriteria = {} as any;
+    this.showResults = false;
+    this.searchResult = null;
   }
 
-  viewDetails(decision: DecisionFiltrageQpc) {
-    this.selectedDecision.set(decision);
+  viewDetails(decision: DecisionFiltrageQpcRowDTO) {
+    this.decisionFiltrageService.getDecisionFiltrageById(decision.id)
+      .pipe(apiWrapper(this.spinnerService, this.notifService))
+      .subscribe(data => {
+        this.selectedDecision = data;
+      });
   }
 
   closeDetails() {
-    this.selectedDecision.set(null);
+    this.selectedDecision = null;
   }
 
   toggleForm() {
-    this.formCollapsed.update(val => !val);
+    this.formCollapsed = !this.formCollapsed;
   }
 }

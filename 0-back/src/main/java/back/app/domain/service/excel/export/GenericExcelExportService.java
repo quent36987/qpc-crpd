@@ -17,6 +17,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class GenericExcelExportService {
 
+
     public <T> byte[] export(ExcelExportConfig<T> cfg, List<T> data) {
         try (Workbook wb = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 

@@ -1,10 +1,12 @@
-
 <div class="multi-select-container" #container>
   <div class="multi-select-input" (click)="toggleDropdown()">
     <div class="tags-container">
-      <div class="tag" *ngFor="let item of selected()">
-        <span>{{ item }}</span>
-        <button type="button" class="remove-tag" (click)="removeItem($event, item)">
+      <div class="tag" *ngFor="let item of getSelectedOptions()">
+        <span>{{ item.label }}</span>
+        <button
+          type="button"
+          class="remove-tag"
+          (click)="removeItem($event, item.value)">
           ×
         </button>
       </div>
@@ -14,7 +16,7 @@
         [(ngModel)]="searchText"
         (input)="filterOptions()"
         (keydown.escape)="closeDropdown()"
-        [placeholder]="selected().length === 0 ? placeholder : ''"
+        [placeholder]="getSelectedOptions().length === 0 ? placeholder : ''"
       />
     </div>
     <svg class="chevron" [class.open]="isOpen()" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -24,15 +26,18 @@
 
   <div class="dropdown" *ngIf="isOpen()" (click)="$event.stopPropagation()">
     <div class="dropdown-list">
-      <div class="dropdown-option" *ngFor="let option of filteredOptions()" (click)="toggleOption(option)">
+      <div
+        class="dropdown-option"
+        *ngFor="let option of filteredOptions()"
+        (click)="toggleOption(option)">
         <input
           type="checkbox"
-          [checked]="isSelected(option)"
-          [id]="'option-' + option"
+          [checked]="isSelected(option.value)"
+          [id]="'option-' + option.value"
           class="checkbox"
         />
-        <label [for]="'option-' + option" class="option-label">
-          {{ option }}
+        <label [for]="'option-' + option.value" class="option-label">
+          {{ option.label }}
         </label>
       </div>
       <div class="empty-message" *ngIf="filteredOptions().length === 0">

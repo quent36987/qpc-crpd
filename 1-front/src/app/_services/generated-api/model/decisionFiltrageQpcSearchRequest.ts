@@ -9,36 +9,36 @@
  */
 
 
+/**
+ * Requête de recherche pour les décisions de filtrage QPC
+ */
 export interface DecisionFiltrageQpcSearchRequest { 
-    ordreJuridictionnel?: DecisionFiltrageQpcSearchRequest.OrdreJuridictionnelEnum;
-    juridiction?: DecisionFiltrageQpcSearchRequest.JuridictionEnum;
-    niveauFiltrage?: DecisionFiltrageQpcSearchRequest.NiveauFiltrageEnum;
-    chambreSousSectionId?: number;
-    numeroChambresReuniesId?: number;
-    niveauCompetenceId?: number;
-    matiereId?: number;
-    qualiteDemandeurId?: number;
-    qualitePreciseDemandeurId?: number;
-    decisionRenvoiId?: number;
-    decisionNonRenvoiId?: number;
-    applicationTheorieChangementCirconstancesId?: number;
+    numeroDecision: string;
+    reference: string;
+    juridictions: Array<DecisionFiltrageQpcSearchRequest.JuridictionsEnum>;
+    niveauxFiltrage: Array<DecisionFiltrageQpcSearchRequest.NiveauxFiltrageEnum>;
+    dateFiltrageFrom: string;
+    dateFiltrageTo: string;
+    formationsJugement: Array<string>;
+    chambresSousSectionIds: Array<number>;
+    numerosChambresReuniesIds: Array<number>;
+    applicationTheorieChangementCirconstancesIds: Array<number>;
+    originesJuridictionnellesQpc: Array<string>;
+    matieresIds: Array<number>;
+    droitsLibertesIds: Array<number>;
+    codes: Array<string>;
 }
 export namespace DecisionFiltrageQpcSearchRequest {
-    export type OrdreJuridictionnelEnum = 'JUDICIAIRE' | 'ADMINISTRATIF';
-    export const OrdreJuridictionnelEnum = {
-        Judiciaire: 'JUDICIAIRE' as OrdreJuridictionnelEnum,
-        Administratif: 'ADMINISTRATIF' as OrdreJuridictionnelEnum
+    export type JuridictionsEnum = 'CONSEIL_ETAT' | 'COUR_DE_CASSATION';
+    export const JuridictionsEnum = {
+        ConseilEtat: 'CONSEIL_ETAT' as JuridictionsEnum,
+        CourDeCassation: 'COUR_DE_CASSATION' as JuridictionsEnum
     };
-    export type JuridictionEnum = 'CONSEIL_ETAT' | 'COUR_DE_CASSATION';
-    export const JuridictionEnum = {
-        ConseilEtat: 'CONSEIL_ETAT' as JuridictionEnum,
-        CourDeCassation: 'COUR_DE_CASSATION' as JuridictionEnum
-    };
-    export type NiveauFiltrageEnum = 'NONE' | 'PREMIER_ET_DERNIER' | 'DEUXIEME_FILTRAGE';
-    export const NiveauFiltrageEnum = {
-        None: 'NONE' as NiveauFiltrageEnum,
-        PremierEtDernier: 'PREMIER_ET_DERNIER' as NiveauFiltrageEnum,
-        DeuxiemeFiltrage: 'DEUXIEME_FILTRAGE' as NiveauFiltrageEnum
+    export type NiveauxFiltrageEnum = 'NONE' | 'PREMIER_ET_DERNIER' | 'DEUXIEME_FILTRAGE';
+    export const NiveauxFiltrageEnum = {
+        None: 'NONE' as NiveauxFiltrageEnum,
+        PremierEtDernier: 'PREMIER_ET_DERNIER' as NiveauxFiltrageEnum,
+        DeuxiemeFiltrage: 'DEUXIEME_FILTRAGE' as NiveauxFiltrageEnum
     };
 }
 

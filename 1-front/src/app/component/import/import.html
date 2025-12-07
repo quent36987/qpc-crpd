@@ -1,0 +1,18 @@
+<div class="import-container">
+  <h2>Importer un fichier</h2>
+
+  <!-- Sélection du fichier -->
+  <input
+    type="file"
+    (change)="onFileSelected($event)"
+    accept=".xls,.xlsx"
+  />
+
+  <!-- Bouton d'upload -->
+  <button
+    (click)="uploadFile()"
+    [disabled]="!fileToUpload"
+  >
+    Importer
+  </button>
+</div>
