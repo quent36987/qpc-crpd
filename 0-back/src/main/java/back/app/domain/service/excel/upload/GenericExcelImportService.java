@@ -1,6 +1,7 @@
 package back.app.domain.service.excel.upload;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
 
@@ -8,6 +9,7 @@ import java.io.InputStream;
 import java.util.*;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class GenericExcelImportService {
 
@@ -84,6 +86,8 @@ public class GenericExcelImportService {
 
                 result.add(target);
             }
+
+            log.info("Import Excel terminé : {} lignes importées depuis la feuille '{}'", result.size(), sheet.getSheetName());
 
             return result;
 

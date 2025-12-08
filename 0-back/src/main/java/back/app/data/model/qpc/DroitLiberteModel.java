@@ -16,7 +16,6 @@ public class DroitLiberteModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Lob
     @Column(nullable = false)
     private String texte;
 }

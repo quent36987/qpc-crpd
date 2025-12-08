@@ -32,7 +32,7 @@ public class DecisionQpcCcService {
         PageDTO<DecisionQpcCcRowDTO> pageDTO = new PageDTO<>();
         pageDTO.setPage(pageable.getPageNumber());
         pageDTO.setSize(pageable.getPageSize());
-        pageDTO.setTotalElements(decisionQpcCcRepository.count(specification));
+        pageDTO.setTotalElements(page.getTotalElements());
         pageDTO.setContent(decisionQpcCcMapper.toRowDTOList(page.getContent()));
 
         return pageDTO;

@@ -33,7 +33,7 @@ public class DecisionFiltrageQpcService {
         PageDTO<DecisionFiltrageQpcRowDTO> pageDTO = new PageDTO<>();
         pageDTO.setPage(pageable.getPageNumber());
         pageDTO.setSize(pageable.getPageSize());
-        pageDTO.setTotalElements(decisionFiltrageQpcRepository.count(specification));
+        pageDTO.setTotalElements(page.getTotalElements());
         pageDTO.setContent(decisionFiltrageQpcMapper.toRowDTOs(page.getContent()));
 
         return pageDTO;

@@ -24,6 +24,9 @@ public interface DecisionFiltrageQpcMapper {
     @Mapping(target = "qualitePreciseDemandeur",           source = "qualitePreciseDemandeur.valeur")
     @Mapping(target = "decisionRenvoi",                     source = "decisionRenvoi.valeur")
     @Mapping(target = "decisionNonRenvoi",                  source = "decisionNonRenvoi.valeur")
+    @Mapping(target = "formationJugement",                  source = "formationJugement.valeur")
+    @Mapping(target = "loiOrigineDisposition",                  source = "loiOrigineDisposition.valeur")
+    @Mapping(target = "origineJuridictionnelleQpc",                  source = "origineJuridictionnelleQpc.valeur")
     @Mapping(target = "applicationTheorieChangementCirconstances",
             source = "applicationTheorieChangementCirconstances.valeur")
     DecisionFiltrageQpcDTO toDTO(DecisionFiltrageQpcModel model);
@@ -31,6 +34,7 @@ public interface DecisionFiltrageQpcMapper {
     @Mapping(target = "decisionRenvoi",                     source = "decisionRenvoi.valeur")
     @Mapping(target = "decisionNonRenvoi",                  source = "decisionNonRenvoi.valeur")
     @Mapping(target = "niveauCompetence",                   source = "niveauCompetence.valeur")
+    @Mapping(target = "formationJugement",                  source = "formationJugement.valeur")
     DecisionFiltrageQpcRowDTO toRowDTO(DecisionFiltrageQpcModel model);
 
     List<DecisionFiltrageQpcRowDTO> toRowDTOs(List<DecisionFiltrageQpcModel> models);

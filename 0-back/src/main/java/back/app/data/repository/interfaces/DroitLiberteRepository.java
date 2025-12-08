@@ -16,7 +16,7 @@ public interface DroitLiberteRepository extends CrudRepository<DroitLiberteModel
 
     Long count(Specification<DroitLiberteModel> specification);
 
-    @Query("SELECT d FROM DroitLiberteModel d WHERE d.texte = ?1")
+    @Query("SELECT d FROM DroitLiberteModel d WHERE d.texte = :text")
     Optional<DroitLiberteModel> findByTexte(String text);
 
 }

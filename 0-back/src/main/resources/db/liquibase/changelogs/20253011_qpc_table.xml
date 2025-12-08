@@ -58,7 +58,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
 
-            <column name="texte" type="TEXT">
+            <column name="texte" type="varchar(500)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -150,7 +150,7 @@
             <column name="nombre_personnes_physiques" type="INT"/>
 
             <!-- 25. identite_personnes_physiques -->
-            <column name="identite_personnes_physiques" type="TEXT"/>
+            <column name="identite_personnes_physiques" type="VARCHAR(255)"/>
 
             <!-- 26. nombre_associations -->
             <column name="nombre_associations" type="INT"/>
@@ -337,7 +337,7 @@
             <column name="niveau_filtrage" type="varchar(100)"/>
 
             <!-- 6. origine_juridictionnelle_qpc : texte -->
-            <column name="origine_juridictionnelle_qpc" type="TEXT"/>
+            <column name="origine_juridictionnelle_qpc_id" type="BIGINT"/>
 
             <!-- 7. niveau_competence : liste déroulante -->
             <column name="niveau_competence_id" type="BIGINT"/>
@@ -345,8 +345,8 @@
             <!-- 8. date_filtrage : date -->
             <column name="date_filtrage" type="DATE"/>
 
-            <!-- 9. formation_jugement : énum -->
-            <column name="formation_jugement" type="varchar(100)"/>
+            <!-- 9. formation_jugement : liste déroulante -->
+            <column name="formation_jugement_id" type="BIGINT"/>
 
             <!-- 10. reference : texte -->
             <column name="reference" type="VARCHAR(255)"/>
@@ -355,10 +355,10 @@
             <column name="numero_decision" type="VARCHAR(100)"/>
 
             <!-- 12. reference_dispositions_contestees : texte -->
-            <column name="reference_dispositions_contestees" type="TEXT"/>
+            <column name="reference_dispositions_contestees" type="VARCHAR(255)"/>
 
-            <!-- 13. loi_origine_disposition : texte -->
-            <column name="loi_origine_disposition" type="TEXT"/>
+            <!-- 13. loi_origine_disposition : liste déroulante -->
+            <column name="loi_origine_disposition_id" type="BIGINT"/>
 
             <!-- 14. matiere : liste déroulante -->
             <column name="matiere_id" type="BIGINT"/>
@@ -370,7 +370,7 @@
             <column name="qualite_precise_demandeur_id" type="BIGINT"/>
 
             <!-- 17. identite_demandeur : texte -->
-            <column name="identite_demandeur" type="TEXT"/>
+            <column name="identite_demandeur" type="VARCHAR(255)"/>
 
             <!-- 18. decision_renvoi : liste déroulante -->
             <column name="decision_renvoi_id" type="BIGINT"/>
@@ -382,13 +382,13 @@
             <column name="application_theorie_changement_circonstances_id" type="BIGINT"/>
 
             <!-- 22. nombre_droits_non_mentionnes -->
-            <column name="nombre_droits_non_mentionnes" type="TEXT"/>
+            <column name="nombre_droits_non_mentionnes" type="VARCHAR(255)"/>
 
             <!-- 23. autres_remarques -->
-            <column name="autres_remarques" type="TEXT"/>
+            <column name="autres_remarques" type="VARCHAR(255)"/>
 
             <!-- 24. mots_cles -->
-            <column name="mots_cles" type="TEXT"/>
+            <column name="mots_cles" type="VARCHAR(255)"/>
 
             <!-- métadonnées (optionnel) -->
             <column name="created_at" type="TIMESTAMP"/>
@@ -458,6 +458,25 @@
                                  referencedTableName="listes_deroulantes"
                                  referencedColumnNames="id"
                                  constraintName="fk_decision_filtrage_theorie_changement"/>
+
+        <addForeignKeyConstraint baseTableName="decision_filtrage_qpc"
+                                 baseColumnNames="formation_jugement_id"
+                                 referencedTableName="listes_deroulantes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_filtrage_formation_jugement"/>
+
+        <addForeignKeyConstraint baseTableName="decision_filtrage_qpc"
+                                 baseColumnNames="loi_origine_disposition_id"
+                                 referencedTableName="listes_deroulantes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_filtrage_loi_origine_disposition"/>
+
+        <addForeignKeyConstraint baseTableName="decision_filtrage_qpc"
+                                 baseColumnNames="origine_juridictionnelle_qpc_id"
+                                 referencedTableName="listes_deroulantes"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_decision_filtrage_origine_juridictionnelle_qpc"/>
+
     </changeSet>
 
 

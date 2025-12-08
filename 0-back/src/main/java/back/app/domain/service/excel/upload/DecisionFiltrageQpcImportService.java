@@ -10,6 +10,8 @@ import back.app.data.repository.interfaces.DecisionFiltrageQpcRepository;
 import back.app.data.repository.interfaces.DroitLiberteRepository;
 import back.app.data.repository.interfaces.ListeDeroulanteRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.sl.draw.geom.GuideIf;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +23,11 @@ import java.util.*;
 import java.util.function.Function;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class DecisionFiltrageQpcImportService {
 
-    
+
     private final GenericExcelImportService genericExcelImportService;
     private final DecisionFiltrageQpcRepository decisionFiltrageQpcRepository;
     private final ListeDeroulanteRepository listeDeroulanteRepository;
@@ -47,6 +50,7 @@ public class DecisionFiltrageQpcImportService {
         decisionFiltrageQpcRepository.saveAll(entities);
     }
 
+
     // ----------------------------------------------------------------------
     // Construction de la config
     // ----------------------------------------------------------------------
@@ -61,109 +65,100 @@ public class DecisionFiltrageQpcImportService {
                         }),
 
                 // Enums
-                ExcelImportColumn.of("ordreJuridictionnel",
-                        enumParser(EOrdreJuridictionnel.class),
+                ExcelImportColumn.of("Ordre juridictionnel",
+                        EOrdreJuridictionnel::fromExcel,
                         DecisionFiltrageQpcModel::setOrdreJuridictionnel),
 
-                ExcelImportColumn.of("juridiction",
-                        enumParser(EJuridiction.class),
+                ExcelImportColumn.of("Juridiction",
+                        EJuridiction::fromExcel,
                         DecisionFiltrageQpcModel::setJuridiction),
 
-                ExcelImportColumn.of("niveauFiltrage",
-                        enumParser(ENiveauFiltrage.class),
+                ExcelImportColumn.of("Niveau de filtrage",
+                        ENiveauFiltrage::fromExcel,
                         DecisionFiltrageQpcModel::setNiveauFiltrage),
 
                 // Listes déroulantes
-                ExcelImportColumn.of("chambreSousSection",
+                ExcelImportColumn.of("Chambre ou Sous-section",
                         s -> findOrCreateListe("decision_filtrage_qpc.chambre_sous_section", s),
                         DecisionFiltrageQpcModel::setChambreSousSection),
 
-                ExcelImportColumn.of("numeroChambresReunies",
+                ExcelImportColumn.of("n° Si Chambre ou sous-Section réunies (CE)",
                         s -> findOrCreateListe("decision_filtrage_qpc.numero_chambres_reunies", s),
                         DecisionFiltrageQpcModel::setNumeroChambresReunies),
 
-                ExcelImportColumn.of("niveauCompetence",
+                ExcelImportColumn.of("Niveau de compétence",
                         s -> findOrCreateListe("decision_filtrage_qpc.niveau_competence", s),
                         DecisionFiltrageQpcModel::setNiveauCompetence),
 
-                ExcelImportColumn.of("matiere",
+                ExcelImportColumn.of("Matières",
                         s -> findOrCreateListe("decision_filtrage_qpc.matiere", s),
                         DecisionFiltrageQpcModel::setMatiere),
 
-                ExcelImportColumn.of("qualiteDemandeur",
+                ExcelImportColumn.of("Qualité du demandeur",
                         s -> findOrCreateListe("decision_filtrage_qpc.qualite_demandeur", s),
                         DecisionFiltrageQpcModel::setQualiteDemandeur),
 
-                ExcelImportColumn.of("qualitePreciseDemandeur",
+                ExcelImportColumn.of("Qualité précise du demandeur",
                         s -> findOrCreateListe("decision_filtrage_qpc.qualite_precise_demandeur", s),
                         DecisionFiltrageQpcModel::setQualitePreciseDemandeur),
 
-                ExcelImportColumn.of("decisionRenvoi",
+                ExcelImportColumn.of("Décisions de renvoi (filtrage)",
                         s -> findOrCreateListe("decision_filtrage_qpc.decision_renvoi", s),
                         DecisionFiltrageQpcModel::setDecisionRenvoi),
 
-                ExcelImportColumn.of("decisionNonRenvoi",
+                ExcelImportColumn.of("Décisions de non renvoi (filtrage)",
                         s -> findOrCreateListe("decision_filtrage_qpc.decision_non_renvoi", s),
                         DecisionFiltrageQpcModel::setDecisionNonRenvoi),
 
-                ExcelImportColumn.of("applicationTheorieChangementCirconstances",
+                ExcelImportColumn.of("Application de la théorie du changement des circonstances",
                         s -> findOrCreateListe("decision_filtrage_qpc.application_theorie_changement_circonstances", s),
                         DecisionFiltrageQpcModel::setApplicationTheorieChangementCirconstances),
 
-                // Textes simples
-                ExcelImportColumn.of("origineJuridictionnelleQpc",
-                        Function.identity(),
-                        DecisionFiltrageQpcModel::setOrigineJuridictionnelleQpc),
-
-                ExcelImportColumn.of("formationJugement",
-                        Function.identity(),
+                ExcelImportColumn.of("Formation de jugement",
+                        s -> findOrCreateListe("decision_filtrage_qpc.formation_jugement", s),
                         DecisionFiltrageQpcModel::setFormationJugement),
 
-                ExcelImportColumn.of("reference",
-                        Function.identity(),
-                        DecisionFiltrageQpcModel::setReference),
-
-                ExcelImportColumn.of("numeroDecision",
-                        Function.identity(),
-                        DecisionFiltrageQpcModel::setNumeroDecision),
-
-                ExcelImportColumn.of("referenceDispositionsContestees",
-                        Function.identity(),
-                        DecisionFiltrageQpcModel::setReferenceDispositionsContestees),
-
-                ExcelImportColumn.of("loiOrigineDisposition",
-                        Function.identity(),
+                ExcelImportColumn.of("Loi(s) à l'origine de la disposition en cause (date)",
+                        s -> findOrCreateListe("decision_filtrage_qpc.loi_origine_disposition", s),
                         DecisionFiltrageQpcModel::setLoiOrigineDisposition),
 
-                ExcelImportColumn.of("identiteDemandeur",
-                        Function.identity(),
+                ExcelImportColumn.of("Origine juridictionnelle de la QPC (si suite à transmission)",
+                        s -> findOrCreateListe("decision_filtrage_qpc.origine_juridictionnelle_qpc", s),
+                        DecisionFiltrageQpcModel::setOrigineJuridictionnelleQpc),
+
+                // Textes simples
+                ExcelImportColumn.of("Références",
+                        DecisionFiltrageQpcImportService::str,
+                        DecisionFiltrageQpcModel::setReference),
+
+                ExcelImportColumn.of("n° de la décision",
+                        DecisionFiltrageQpcImportService::str,
+                        DecisionFiltrageQpcModel::setNumeroDecision),
+
+                ExcelImportColumn.of("Références de la ou des dispositions législatives contestée(s) dans la QPC",
+                        DecisionFiltrageQpcImportService::str,
+                        DecisionFiltrageQpcModel::setReferenceDispositionsContestees),
+
+                ExcelImportColumn.of("Identité du demandeur",
+                        DecisionFiltrageQpcImportService::str,
                         DecisionFiltrageQpcModel::setIdentiteDemandeur),
 
-                ExcelImportColumn.of("nombreDroitsNonMentionnes",
-                        Function.identity(),
-                        DecisionFiltrageQpcModel::setNombreDroitsNonMentionnes),
-
-                ExcelImportColumn.of("autresRemarques",
-                        Function.identity(),
+                ExcelImportColumn.of("Autres remarques",
+                        DecisionFiltrageQpcImportService::str,
                         DecisionFiltrageQpcModel::setAutresRemarques),
 
-                ExcelImportColumn.of("motsCles",
-                        Function.identity(),
+                ExcelImportColumn.of("Mots-clés",
+                        DecisionFiltrageQpcImportService::str,
                         DecisionFiltrageQpcModel::setMotsCles),
 
+                ExcelImportColumn.of("Nombre de droits et libertés invoqués",
+                        DecisionFiltrageQpcImportService::str,
+                        DecisionFiltrageQpcModel::setNombreDroitsNonMentionnes),
+
                 // Dates
-                ExcelImportColumn.of("dateFiltrage",
+                ExcelImportColumn.of("Date",
                         this::parseDate,
-                        DecisionFiltrageQpcModel::setDateFiltrage),
-
-                // Métadonnées éventuelles si présentes dans le fichier
-                ExcelImportColumn.of("createdAt",
-                        this::parseDateTime,
-                        DecisionFiltrageQpcModel::setCreatedAt),
-
-                ExcelImportColumn.of("updatedAt",
-                        this::parseDateTime,
-                        DecisionFiltrageQpcModel::setUpdatedAt)
+                        DecisionFiltrageQpcModel::setDateFiltrage)
 
                 // droitsLibertes => via postProcessor (cf. plus bas)
         );
@@ -182,19 +177,6 @@ public class DecisionFiltrageQpcImportService {
     // Helpers de parsing
     // ----------------------------------------------------------------------
 
-    private <E extends Enum<E>> Function<String, E> enumParser(Class<E> enumClass) {
-        return s -> {
-            if (s == null || s.isBlank()) return null;
-            String trimmed = s.trim();
-            try {
-                return Enum.valueOf(enumClass, trimmed);
-            } catch (IllegalArgumentException e) {
-                // valeur inconnue => on met null comme tu le veux
-                return null;
-            }
-        };
-    }
-
     private LocalDate parseDate(String s) {
         if (s == null || s.isBlank()) return null;
         // deux cas possibles: "2024-01-01T00:00" depuis POI ou "01/01/2024" direct
@@ -209,13 +191,8 @@ public class DecisionFiltrageQpcImportService {
         }
     }
 
-    private LocalDateTime parseDateTime(String s) {
-        if (s == null || s.isBlank()) return null;
-        try {
-            return LocalDateTime.parse(s);
-        } catch (Exception e) {
-            return null;
-        }
+    private static String str(String raw) {
+        return raw == null ? null : raw.trim();
     }
 
     private ListeDeroulanteModel findOrCreateListe(String champ, String valeur) {
@@ -238,9 +215,9 @@ public class DecisionFiltrageQpcImportService {
 
     /**
      * Exemple : tu as dans ton XLS des colonnes "droitLiberte1", "droitLiberte2", ... avec la valeur
-     * "CODE - Libellé" (comme à l'export).
+     * du texte du droit/liberté.
+     * On va chercher les entités correspondantes et les lier à la décision.
      *
-     * Tu peux adapter le prefix / format si besoin.
      */
     private void postProcessDroitsLibertes(DecisionFiltrageQpcModel target,
                                            Map<String, String> raw) {
@@ -250,13 +227,26 @@ public class DecisionFiltrageQpcImportService {
         raw.forEach((header, value) -> {
             if (value == null || value.isBlank()) return;
 
-            // Exemple de convention : headers qui commencent par "droitLiberte" // FIXME
-            if (header.startsWith("droitLiberte")) {
-                droitLiberteRepository.findByTexte(value)
-                        .ifPresent(set::add);
+            // Colonnes du type "droitLiberte1", "droitLiberte2", ...
+            if (header.startsWith("Droits et libertés invoqués")) {
+                String texte = String.valueOf(value).trim();
+
+                Optional<DroitLiberteModel> droitOpt = droitLiberteRepository.findByTexte(texte);
+                if (droitOpt.isPresent()) {
+                    set.add(droitOpt.get());
+                } else {
+                    // add new DroitLiberteModel if not found
+                    DroitLiberteModel newDroit = DroitLiberteModel.builder()
+                            .texte(texte)
+                            .build();
+                    droitLiberteRepository.save(newDroit);
+                    set.add(newDroit);
+                }
+
             }
         });
 
         target.setDroitsLibertes(set);
     }
+
 }

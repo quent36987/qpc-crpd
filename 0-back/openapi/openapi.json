@@ -1169,45 +1169,172 @@
         }
       },
       "DecisionQpcCcSearchRequest": {
+        "required": [
+          "applicationTheorieChangementCirconstances",
+          "caractereNotableDecision",
+          "dateDecisionFrom",
+          "dateDecisionTo",
+          "delaiAvantAbrogationExpression",
+          "demandeRecusation",
+          "deport",
+          "dispositifsDecisionCcIds",
+          "droitsLibertesIds",
+          "interpretationJurisprudence",
+          "matieresIds",
+          "motifsInconstitutionnalite",
+          "nombreInterventionsExact",
+          "nombreInterventionsMax",
+          "nombreInterventionsMin",
+          "nombreMembresSieges",
+          "numero",
+          "oralite",
+          "originesQpcIds",
+          "qualitesDemandeurIds",
+          "qualitesTiersInterventionIds",
+          "referenceDecisionConseil",
+          "reserveOpportunite",
+          "reservesIncompetenceConseilIds",
+          "techniquesControle",
+          "traitementsEffetsPassesIds"
+        ],
         "type": "object",
         "properties": {
-          "origineQpcId": {
-            "type": "integer",
-            "format": "int64"
+          "numero": {
+            "type": "string"
           },
-          "qualiteDemandeurId": {
-            "type": "integer",
-            "format": "int64"
+          "referenceDecisionConseil": {
+            "type": "string"
           },
-          "typeDispositionLegislativeId": {
-            "type": "integer",
-            "format": "int64"
+          "referenceDecisionTransmission": {
+            "type": "string"
           },
-          "matiereId": {
-            "type": "integer",
-            "format": "int64"
+          "identiteDemandeur": {
+            "type": "string"
           },
-          "dispositifDecisionCcId": {
-            "type": "integer",
-            "format": "int64"
+          "nomMembreDeporteOuRecuse": {
+            "type": "string"
           },
-          "traitementEffetsPassesId": {
-            "type": "integer",
-            "format": "int64"
+          "remarque": {
+            "type": "string"
           },
-          "oraliteId": {
-            "type": "integer",
-            "format": "int64"
+          "dateDecisionFrom": {
+            "type": "string",
+            "format": "date"
           },
-          "qualiteTiersInterventionId": {
-            "type": "integer",
-            "format": "int64"
+          "dateDecisionTo": {
+            "type": "string",
+            "format": "date"
           },
-          "reserveIncompetenceConseilId": {
+          "originesQpcIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          "qualitesDemandeurIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          "matieresIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          "dispositifsDecisionCcIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          "traitementsEffetsPassesIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          "qualitesTiersInterventionIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          "reservesIncompetenceConseilIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          "droitsLibertesIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          "delaiAvantAbrogationExpression": {
+            "type": "string"
+          },
+          "nombreInterventionsExact": {
             "type": "integer",
-            "format": "int64"
+            "format": "int32"
+          },
+          "nombreInterventionsMin": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombreInterventionsMax": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombreMembresSieges": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "demandeRecusation": {
+            "type": "boolean"
+          },
+          "deport": {
+            "type": "boolean"
+          },
+          "applicationTheorieChangementCirconstances": {
+            "type": "boolean"
+          },
+          "reserveOpportunite": {
+            "type": "boolean"
+          },
+          "interpretationJurisprudence": {
+            "type": "boolean"
+          },
+          "caractereNotableDecision": {
+            "type": "boolean"
+          },
+          "oralite": {
+            "type": "boolean"
+          },
+          "techniquesControle": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "motifsInconstitutionnalite": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
-        }
+        },
+        "description": "Requête de recherche pour les décisions QPC du Conseil Constitutionnel"
       },
       "DecisionQpcCcRowDTO": {
         "required": [

@@ -46,10 +46,10 @@ public class DecisionFiltrageQpcModel {
     @Column(name = "niveau_filtrage", length = 100)
     private ENiveauFiltrage niveauFiltrage;
 
-    // 6. origine_juridictionnelle_qpc : texte
-    @Lob
-    @Column(name = "origine_juridictionnelle_qpc")
-    private String origineJuridictionnelleQpc;
+    // 6. origine_juridictionnelle_qpc : liste déroulante
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "origine_juridictionnelle_qpc_id")
+    private ListeDeroulanteModel origineJuridictionnelleQpc;
 
     // 7. niveau_competence : liste déroulante
     @ManyToOne(fetch = FetchType.LAZY)
@@ -60,9 +60,10 @@ public class DecisionFiltrageQpcModel {
     @Column(name = "date_filtrage")
     private LocalDate dateFiltrage;
 
-    // 9. formation_jugement : (je la laisse en VARCHAR simple, tu peux aussi en faire un enum)
-    @Column(name = "formation_jugement", length = 100)
-    private String formationJugement;
+    // 9. formation_jugement
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "formation_jugement_id")
+    private ListeDeroulanteModel formationJugement;
 
     // 10. reference : texte
     @Column(name = "reference", length = 255)
@@ -73,14 +74,13 @@ public class DecisionFiltrageQpcModel {
     private String numeroDecision;
 
     // 12. reference_dispositions_contestees : texte
-    @Lob
     @Column(name = "reference_dispositions_contestees")
     private String referenceDispositionsContestees;
 
-    // 13. loi_origine_disposition : texte
-    @Lob
-    @Column(name = "loi_origine_disposition")
-    private String loiOrigineDisposition;
+    // 13. loi_origine_disposition
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "loi_origine_disposition_id")
+    private ListeDeroulanteModel loiOrigineDisposition;
 
     // 14. matiere : liste déroulante
     @ManyToOne(fetch = FetchType.LAZY)
@@ -98,7 +98,6 @@ public class DecisionFiltrageQpcModel {
     private ListeDeroulanteModel qualitePreciseDemandeur;
 
     // 17. identite_demandeur : texte
-    @Lob
     @Column(name = "identite_demandeur")
     private String identiteDemandeur;
 
@@ -118,26 +117,23 @@ public class DecisionFiltrageQpcModel {
     private ListeDeroulanteModel applicationTheorieChangementCirconstances;
 
     // 22. nombre_droits_non_mentionnes : TEXTE dans le changelog
-    @Lob
     @Column(name = "nombre_droits_non_mentionnes")
     private String nombreDroitsNonMentionnes;
 
     // 23. autres_remarques
-    @Lob
     @Column(name = "autres_remarques")
     private String autresRemarques;
 
     // 24. mots_cles
-    @Lob
     @Column(name = "mots_cles")
     private String motsCles;
 
     // Métadonnées
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedAt = LocalDateTime.now();
 
     // Many-to-many avec droits_libertes via decision_filtrage_qpc__droits_libertes
     @ManyToMany

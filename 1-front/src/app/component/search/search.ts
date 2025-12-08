@@ -7,7 +7,7 @@ import {
   DcisionsDeFiltrageQPCApi,
   DecisionFiltrageQpcDTO,
   DecisionFiltrageQpcRowDTO,
-  DecisionFiltrageQpcSearchRequest,
+  DecisionFiltrageQpcSearchRequest, DroitLiberteDTO, DroitsLibertsApi,
   ListeDeroulanteDTO,
   ListesDroulantesApi,
   PageDTODecisionFiltrageQpcRowDTO
@@ -29,11 +29,13 @@ export class SearchComponent implements OnInit {
 
   // === Données brutes venant du back pour les listes déroulantes ===
   listeDeroulanteOptions: ListeDeroulanteDTO[] = [];
+  droitsLibertesRaw: DroitLiberteDTO[] = [];
 
   // === Options pour le template (utilisées par les <app-multi-select>) ===
   options = {
     juridictions: [] as MultiSelectOption[],
     niveauxFiltrage: [] as MultiSelectOption[],
+
     formationsJugement: [] as MultiSelectOption[],
     chambresSection: [] as MultiSelectOption[],
     numerosChambresReunies: [] as MultiSelectOption[],
@@ -71,6 +73,7 @@ export class SearchComponent implements OnInit {
     private notifService: NotificationService,
     private listeDeroulanteApi: ListesDroulantesApi,
     private decisionFiltrageService: DcisionsDeFiltrageQPCApi,
+    private droitsLibertesApi: DroitsLibertsApi,
   ) {
   }
 
@@ -90,9 +93,8 @@ export class SearchComponent implements OnInit {
     ];
 
     this.options.niveauxFiltrage = [
-      { value: DecisionFiltrageQpcSearchRequest.NiveauxFiltrageEnum.None, label: 'Aucun' },
-      { value: DecisionFiltrageQpcSearchRequest.NiveauxFiltrageEnum.PremierEtDernier, label: 'Premier et dernier' },
-      { value: DecisionFiltrageQpcSearchRequest.NiveauxFiltrageEnum.DeuxiemeFiltrage, label: 'Deuxième filtrage' },
+      {value: DecisionFiltrageQpcSearchRequest.NiveauxFiltrageEnum.PremierEtDernier, label: 'Premier et dernier'},
+      {value: DecisionFiltrageQpcSearchRequest.NiveauxFiltrageEnum.DeuxiemeFiltrage, label: 'Deuxième filtrage'},
     ];
 
     this.listeDeroulanteApi.getAllListeDeroulante()
@@ -102,38 +104,61 @@ export class SearchComponent implements OnInit {
         this.buildListeDeroulanteOptions();
       });
 
-    // si tu as un service pour droitsLibertes, tu peux aussi les charger ici
+    this.droitsLibertesApi.getAllDroitLiberte()
+      .pipe(apiWrapper(this.spinnerService, this.notifService))
+      .subscribe(dls => {
+        this.droitsLibertesRaw = dls;
+        this.options.droitsLibertes = dls.map(dl => ({
+          value: dl.id,
+          label: dl.texte,
+        }));
+      });
   }
 
+  // ---------------------------------------------------------------------------
+  //  Construction des options à partir de ListeDeroulanteDTO (FILTRAGE QPC)
+  // ---------------------------------------------------------------------------
   private buildListeDeroulanteOptions() {
     const byChamp = (champ: string) =>
       this.listeDeroulanteOptions.filter(o => o.champ === champ && o.actif);
 
-    this.options.chambresSection = byChamp('CHAMBRE_SOUS_SECTION').map(o => ({
+    this.options.chambresSection = byChamp('decision_filtrage_qpc.chambre_sous_section').map(o => ({
       value: o.id,
       label: o.valeur,
     }));
 
-    this.options.numerosChambresReunies = byChamp('NUMERO_CHAMBRES_REUNIES').map(o => ({
+    this.options.formationsJugement = byChamp('decision_filtrage_qpc.formation_jugement').map(o => ({
       value: o.id,
       label: o.valeur,
     }));
 
-    this.options.matieres = byChamp('MATIERE').map(o => ({
+    this.options.origines = byChamp('decision_filtrage_qpc.origine').map(o => ({
       value: o.id,
       label: o.valeur,
     }));
 
-    this.options.applicationTheorieOptions = byChamp('APPLICATION_THEORIE_CHANGEMENT_CIRCONSTANCES').map(o => ({
+    this.options.origines = byChamp('decision_filtrage_qpc.origine_juridictionnelle_qpc').map(o => ({
       value: o.id,
       label: o.valeur,
     }));
 
-    // si ces champs viennent aussi de liste déroulante :
-    // this.options.formationsJugement = byChamp('FORMATION_JUGEMENT').map(o => ({ value: o.valeur, label: o.valeur }));
-    // this.options.origines = byChamp('ORIGINE_JURIDICTIONNELLE').map(o => ({ value: o.valeur, label: o.valeur }));
-    // this.options.codes = byChamp('CODE').map(o => ({ value: o.valeur, label: o.valeur }));
+    this.options.numerosChambresReunies = byChamp('decision_filtrage_qpc.numero_chambres_reunies').map(o => ({
+      value: o.id,
+      label: o.valeur,
+    }));
+
+    this.options.matieres = byChamp('decision_filtrage_qpc.matiere').map(o => ({
+      value: o.id,
+      label: o.valeur,
+    }));
+
+    this.options.applicationTheorieOptions =
+      byChamp('decision_filtrage_qpc.application_theorie_changement_circonstances').map(o => ({
+        value: o.id,
+        label: o.valeur,
+      }));
   }
+
 
   onSearch() {
     this.isLoading = true;
@@ -143,7 +168,7 @@ export class SearchComponent implements OnInit {
 
   private search(payload: DecisionFiltrageQpcSearchRequest) {
     this.decisionFiltrageService
-      .searchDecisionFiltrage(this.currentPage, this.pageSize, [], payload)
+      .searchDecisionFiltrage(this.currentPage - 1, this.pageSize, [], payload)
       .pipe(apiWrapper(this.spinnerService, this.notifService))
       .subscribe(res => {
         this.searchResult = res;

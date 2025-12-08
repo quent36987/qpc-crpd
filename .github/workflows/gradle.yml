@@ -49,3 +49,38 @@ jobs:
           docker push ghcr.io/${{ github.repository_owner }}/qpc-back:${{ env.VERSION }}
           docker push ghcr.io/${{ github.repository_owner }}/qpc-back:latest
           
+  build-front:
+    name: Build Mobile + Push Docker
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 1-front
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Get version from package.json
+        id: get_version
+        run: |
+          VERSION=$(jq -r '.version' < package.json)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+        env:
+          VERSION: $VERSION
+
+      - name: Login to GitHub Container Registry
+        run: echo "${{ secrets.CR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build & Push Docker Image (Front)
+        run: |
+          docker build \
+            --build-arg CONFIGURATION=production \
+            -t ghcr.io/${{ github.repository_owner }}/qpc-front:${{ env.VERSION }} \
+            -t ghcr.io/${{ github.repository_owner }}/qpc-front:latest .
+          docker push ghcr.io/${{ github.repository_owner }}/qpc-front:${{ env.VERSION }}
+          docker push ghcr.io/${{ github.repository_owner }}/qpc-front:latest

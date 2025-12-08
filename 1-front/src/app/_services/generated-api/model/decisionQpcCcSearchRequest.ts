@@ -9,15 +9,39 @@
  */
 
 
+/**
+ * Requête de recherche pour les décisions QPC du Conseil Constitutionnel
+ */
 export interface DecisionQpcCcSearchRequest { 
-    origineQpcId?: number;
-    qualiteDemandeurId?: number;
-    typeDispositionLegislativeId?: number;
-    matiereId?: number;
-    dispositifDecisionCcId?: number;
-    traitementEffetsPassesId?: number;
-    oraliteId?: number;
-    qualiteTiersInterventionId?: number;
-    reserveIncompetenceConseilId?: number;
+    numero: string;
+    referenceDecisionConseil: string;
+    referenceDecisionTransmission?: string;
+    identiteDemandeur?: string;
+    nomMembreDeporteOuRecuse?: string;
+    remarque?: string;
+    dateDecisionFrom: string;
+    dateDecisionTo: string;
+    originesQpcIds: Array<number>;
+    qualitesDemandeurIds: Array<number>;
+    matieresIds: Array<number>;
+    dispositifsDecisionCcIds: Array<number>;
+    traitementsEffetsPassesIds: Array<number>;
+    qualitesTiersInterventionIds: Array<number>;
+    reservesIncompetenceConseilIds: Array<number>;
+    droitsLibertesIds: Array<number>;
+    delaiAvantAbrogationExpression: string;
+    nombreInterventionsExact: number;
+    nombreInterventionsMin: number;
+    nombreInterventionsMax: number;
+    nombreMembresSieges: number;
+    demandeRecusation: boolean;
+    deport: boolean;
+    applicationTheorieChangementCirconstances: boolean;
+    reserveOpportunite: boolean;
+    interpretationJurisprudence: boolean;
+    caractereNotableDecision: boolean;
+    oralite: boolean;
+    techniquesControle: Array<string>;
+    motifsInconstitutionnalite: Array<string>;
 }
 

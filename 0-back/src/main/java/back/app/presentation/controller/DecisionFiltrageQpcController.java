@@ -192,7 +192,7 @@ public class DecisionFiltrageQpcController {
                     root.get("matiere").get("id").in(req.getMatieresIds()));
         }
 
-        // ⭐ NOUVEAU : droits/libertés via leur id (many-to-many)
+        // droits/libertés via leur id (many-to-many)
         if (req.getDroitsLibertesIds() != null && !req.getDroitsLibertesIds().isEmpty()) {
             spec = spec.and((root, query, cb) -> {
                 query.distinct(true);
