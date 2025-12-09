@@ -1,0 +1,81 @@
+services:
+  qpc-front:
+    restart: on-failure
+    image: ghcr.io/quent36987/qpc-front:0.0.2
+    container_name: qpc-front
+    depends_on:
+      - qpc-back
+    networks:
+      - web
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.qpc-front.rule=Host(`app.qpc.quentin.ovh`)
+      - traefik.http.routers.qpc-front.entrypoints=web-secure
+      - traefik.http.routers.qpc-front.tls=true
+      - traefik.http.services.qpc-front.loadbalancer.server.port=80
+      - traefik.docker.network=web
+      - traefik.http.routers.qpc-front.tls.certresolver=production
+
+  qpc-back:
+    restart: on-failure
+    image: ghcr.io/quent36987/qpc-back:0.0.2
+    container_name: qpc-back
+    environment:
+      DB_URL: jdbc:postgresql://qpc-bdd:5432/qpc-bdd
+      JWT_SECRET: ======================xxxxxxxxxxx===========================
+      FRONT_URL: https://app.qpc.quentin.ovh
+      ADMIN_PASSWORD: xxxxxxx
+      ADMIN_EMAIL: "quent36987@gmail.com"
+      DB_PASSWORD: "xxxxxxxx"
+      MAIL_PASSWORD: "xxxxxxxx"
+    volumes:
+      - /mnt/docker-data/qpc/logs:/app/logs
+    depends_on:
+      - qpc-bdd
+    networks:
+      - web
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.qpc-back.rule=Host(`api.qpc.quentin.ovh`)
+      - traefik.http.routers.qpc-back.entrypoints=web-secure
+      - traefik.http.routers.qpc-back.tls=true
+      - traefik.http.services.qpc-back.loadbalancer.server.port=9001
+      - traefik.docker.network=web
+      - traefik.http.routers.qpc-back.tls.certresolver=production
+
+  log-watcher:
+    restart: on-failure
+    container_name: log-watcher
+    image: ghcr.io/quent36987/log-watcher:0.0.5
+    ports:
+      - 9104:3001
+    volumes:
+      - /mnt/docker-data/qpc/logs:/mnt/logs
+    networks:
+      - web
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.log-watcher.rule=Host(`log.qpc.quentin.ovh`)
+      - traefik.http.routers.log-watcher.entrypoints=web-secure
+      - traefik.http.routers.log-watcher.tls=true
+      - traefik.http.services.log-watcher.loadbalancer.server.port=3001
+      - traefik.docker.network=web
+      - traefik.http.routers.log-watcher.tls.certresolver=production
+      - traefik.http.routers.log-watcher.middlewares=auth-basic@file
+
+  qpc-bdd:
+    restart: on-failure
+    image: postgres:12.1-alpine
+    container_name: qpc-bdd
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: xxxxxxxxxx
+      POSTGRES_DB: qpc-bdd
+    volumes:
+      - /mnt/docker-data/qpc/bdd-data:/var/lib/postgresql/data
+    networks:
+      - web
+
+networks:
+  web:
+    external: true
