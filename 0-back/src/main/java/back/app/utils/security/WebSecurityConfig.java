@@ -75,7 +75,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/v3/api-docs/**").permitAll()
                                 .requestMatchers("/api/decisions-qpc-cc/**").permitAll()
                                 .requestMatchers("/api/decisions-filtrage-qpc/**").permitAll()
-                                .requestMatchers("/api/decisions-qpc-cc/**").permitAll()
+                                .requestMatchers("/api/droits-libertes/**").permitAll()
                                 .requestMatchers("/api/listes-deroulantes/**").permitAll()
                                 .anyRequest().authenticated()
 
