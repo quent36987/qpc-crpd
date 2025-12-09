@@ -28,6 +28,10 @@
   gap: 2rem;
 }
 
+.td-numero {
+  width: 100px;
+}
+
 .search-form {
   background: white;
   border-radius: 12px;

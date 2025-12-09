@@ -19,7 +19,7 @@ RUN ng build --configuration=$CONFIGURATION
 FROM nginx:latest
 
 # Copy the Angular build files to the nginx directory
-COPY --from=build /app/dist/aerolight-front/browser/ /usr/share/nginx/html
+COPY --from=build /app/dist/front/browser/ /usr/share/nginx/html
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose the port and start Nginx

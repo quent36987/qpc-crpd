@@ -26,7 +26,6 @@
 }
 
 .description {
-  max-width: 800px;
   margin: 0 auto 2.5rem;
   text-align: left;
   background: #f7fafc;
@@ -44,6 +43,20 @@
 .description p:last-child {
   margin-bottom: 0;
 }
+
+.description-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #1e3c72;
+}
+
+.description-signature {
+  margin-top: 1.5rem;
+  font-style: italic;
+  color: #2d3748;
+}
+
 
 .cta-buttons {
   display: flex;

@@ -520,7 +520,7 @@
           </thead>
           <tbody>
           <tr *ngFor="let decision of (searchResult?.content || [])">
-            <td>{{ decision.numero }}</td>
+            <td class="td-numero">{{ decision.numero }}</td>
             <td>{{ decision.referenceDecisionConseil }}</td>
             <td>{{ decision.dateDecision | date: 'dd/MM/yyyy' }}</td>
             <td>{{ decision.origineQpc }}</td>
