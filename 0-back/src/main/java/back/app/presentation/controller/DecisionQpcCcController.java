@@ -11,7 +11,8 @@ import back.app.presentation.request.DecisionQpcCcSearchRequest;
 import back.app.utils.errors.RestError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.criteria.Path;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,9 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
-import jakarta.persistence.criteria.Predicate;
 
 import java.util.Arrays;
 
@@ -145,6 +143,13 @@ public class DecisionQpcCcController {
                     cb.like(cb.lower(root.get("identiteDemandeur")), value));
         }
 
+        if (req.getDispositionsLegislativesContestees() != null
+                && !req.getDispositionsLegislativesContestees().isBlank()) {
+            String value = "%" + req.getDispositionsLegislativesContestees().toLowerCase() + "%";
+            spec = spec.and((root, query, cb) ->
+                    cb.like(cb.lower(root.get("dispositionsLegislativesContestees")), value));
+        }
+
         if (req.getNomMembreDeporteOuRecuse() != null && !req.getNomMembreDeporteOuRecuse().isBlank()) {
             String value = "%" + req.getNomMembreDeporteOuRecuse().toLowerCase() + "%";
             spec = spec.and((root, query, cb) ->
@@ -156,6 +161,19 @@ public class DecisionQpcCcController {
             spec = spec.and((root, query, cb) ->
                     cb.like(cb.lower(root.get("autresRemarques")), value));
         }
+
+        if (req.getTechniquesControle() != null && !req.getTechniquesControle().isBlank()) {
+            String value = "%" + req.getTechniquesControle().toLowerCase() + "%";
+            spec = spec.and((root, query, cb) ->
+                    cb.like(cb.lower(root.get("techniquesControle")), value));
+        }
+
+        if (req.getMotifsInconstitutionnalite() != null && !req.getMotifsInconstitutionnalite().isBlank()) {
+            String value = "%" + req.getMotifsInconstitutionnalite().toLowerCase() + "%";
+            spec = spec.and((root, query, cb) ->
+                    cb.like(cb.lower(root.get("motifInconstitutionnalite")), value));
+        }
+
 
         // --------------------
         // DATES
@@ -170,6 +188,16 @@ public class DecisionQpcCcController {
                     cb.lessThanOrEqualTo(root.get("dateDecision"), req.getDateDecisionTo()));
         }
 
+        if (req.getDateAbrogationDiffereeFrom() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.greaterThanOrEqualTo(root.get("dateAbrogationDifferee"), req.getDateAbrogationDiffereeFrom()));
+        }
+
+        if (req.getDateAbrogationDiffereeTo() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.lessThanOrEqualTo(root.get("dateAbrogationDifferee"), req.getDateAbrogationDiffereeTo()));
+        }
+
         // --------------------
         // LISTES DÉROULANTES (ids de ListeDeroulanteModel)
         // --------------------
@@ -181,6 +209,11 @@ public class DecisionQpcCcController {
         if (req.getQualitesDemandeurIds() != null && !req.getQualitesDemandeurIds().isEmpty()) {
             spec = spec.and((root, query, cb) ->
                     root.get("qualiteDemandeur").get("id").in(req.getQualitesDemandeurIds()));
+        }
+
+        if (req.getTypesDispositionLegislativeIds() != null && !req.getTypesDispositionLegislativeIds().isEmpty()) {
+            spec = spec.and((root, query, cb) ->
+                    root.get("typeDispositionLegislative").get("id").in(req.getTypesDispositionLegislativeIds()));
         }
 
         if (req.getMatieresIds() != null && !req.getMatieresIds().isEmpty()) {
@@ -220,21 +253,21 @@ public class DecisionQpcCcController {
         }
 
         // --------------------
-        // DÉLAI AVANT ABROGATION (expression type: >6, <=12, =0, <>3, ...)
+        // DÉLAI AVANT ABROGATION (bornes)
         // --------------------
-        if (req.getDelaiAvantAbrogationExpression() != null &&
-                !req.getDelaiAvantAbrogationExpression().isBlank()) {
-            spec = spec.and(buildDelaiAvantAbrogationSpec(req.getDelaiAvantAbrogationExpression()));
-        }
-
-        // --------------------
-        // NOMBRE D'INTERVENTIONS ADMISES
-        // --------------------
-        if (req.getNombreInterventionsExact() != null) {
+        if (req.getDelaiAvantAbrogationMin() != null) {
             spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("nombreInterventionsAdmises"), req.getNombreInterventionsExact()));
+                    cb.greaterThanOrEqualTo(root.get("delaiAvantAbrogationMois"), req.getDelaiAvantAbrogationMin()));
         }
 
+        if (req.getDelaiAvantAbrogationMax() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.lessThanOrEqualTo(root.get("delaiAvantAbrogationMois"), req.getDelaiAvantAbrogationMax()));
+        }
+
+        // --------------------
+        // NOMBRE D'INTERVENTIONS ADMISES (bornes)
+        // --------------------
         if (req.getNombreInterventionsMin() != null) {
             spec = spec.and((root, query, cb) ->
                     cb.greaterThanOrEqualTo(root.get("nombreInterventionsAdmises"), req.getNombreInterventionsMin()));
@@ -246,11 +279,94 @@ public class DecisionQpcCcController {
         }
 
         // --------------------
-        // NOMBRE DE MEMBRES SIÉGEANT
+        // NOMBRE DE MEMBRES SIÉGEANT (bornes)
         // --------------------
-        if (req.getNombreMembresSieges() != null) {
+        if (req.getNombreMembresSiegesMin() != null) {
             spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("nombreMembresSieges"), req.getNombreMembresSieges()));
+                    cb.greaterThanOrEqualTo(root.get("nombreMembresSieges"), req.getNombreMembresSiegesMin()));
+        }
+
+        if (req.getNombreMembresSiegesMax() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.lessThanOrEqualTo(root.get("nombreMembresSieges"), req.getNombreMembresSiegesMax()));
+        }
+
+        // --------------------
+        // NOMBRE DE DROITS & LIBERTÉS INVOQUÉS (bornes)
+        // --------------------
+        if (req.getNombreDroitsLibertesMin() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.greaterThanOrEqualTo(root.get("nombreDroitsLibertesInvoques"),
+                            req.getNombreDroitsLibertesMin()));
+        }
+
+        if (req.getNombreDroitsLibertesMax() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.lessThanOrEqualTo(root.get("nombreDroitsLibertesInvoques"),
+                            req.getNombreDroitsLibertesMax()));
+        }
+
+        // --------------------
+        // RÉPARTITION PAR TYPES DE PARTIES (bornes)
+        // --------------------
+        if (req.getNombrePersonnesPhysiquesMin() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.greaterThanOrEqualTo(root.get("nombrePersonnesPhysiques"),
+                            req.getNombrePersonnesPhysiquesMin()));
+        }
+
+        if (req.getNombrePersonnesPhysiquesMax() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.lessThanOrEqualTo(root.get("nombrePersonnesPhysiques"),
+                            req.getNombrePersonnesPhysiquesMax()));
+        }
+
+        if (req.getNombreAssociationsMin() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.greaterThanOrEqualTo(root.get("nombreAssociations"),
+                            req.getNombreAssociationsMin()));
+        }
+
+        if (req.getNombreAssociationsMax() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.lessThanOrEqualTo(root.get("nombreAssociations"),
+                            req.getNombreAssociationsMax()));
+        }
+
+        if (req.getNombreEntreprisesMin() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.greaterThanOrEqualTo(root.get("nombreEntreprises"),
+                            req.getNombreEntreprisesMin()));
+        }
+
+        if (req.getNombreEntreprisesMax() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.lessThanOrEqualTo(root.get("nombreEntreprises"),
+                            req.getNombreEntreprisesMax()));
+        }
+
+        if (req.getNombreSyndicatsApOpMin() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.greaterThanOrEqualTo(root.get("nombreSyndicatsApOp"),
+                            req.getNombreSyndicatsApOpMin()));
+        }
+
+        if (req.getNombreSyndicatsApOpMax() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.lessThanOrEqualTo(root.get("nombreSyndicatsApOp"),
+                            req.getNombreSyndicatsApOpMax()));
+        }
+
+        if (req.getNombreCollectivitesTerritorialesMin() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.greaterThanOrEqualTo(root.get("nombreCollectivitesTerritoriales"),
+                            req.getNombreCollectivitesTerritorialesMin()));
+        }
+
+        if (req.getNombreCollectivitesTerritorialesMax() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.lessThanOrEqualTo(root.get("nombreCollectivitesTerritoriales"),
+                            req.getNombreCollectivitesTerritorialesMax()));
         }
 
         // --------------------
@@ -311,110 +427,13 @@ public class DecisionQpcCcController {
                             req.getCaractereNotableDecision()));
         }
 
-        // Oralité : ton modèle a un ListeDeroulanteModel "oralite"
-        // et le formulaire Oui/Non → ici, on interprète :
-        //   true  => il y a une valeur d'oralité
-        //   false => pas d'oralité
+        // Oralité est maintenant un booléen directement sur le modèle
         if (req.getOralite() != null) {
-            if (req.getOralite()) {
-                spec = spec.and((root, query, cb) ->
-                        cb.isNotNull(root.get("oralite")));
-            } else {
-                spec = spec.and((root, query, cb) ->
-                        cb.isNull(root.get("oralite")));
-            }
-        }
-
-        // --------------------
-        // TECHNIQUES DE CONTRÔLE (search texte sur LOB)
-        // --------------------
-        if (req.getTechniquesControle() != null && !req.getTechniquesControle().isEmpty()) {
-            spec = spec.and((root, query, cb) -> {
-                var field = cb.lower(root.get("techniquesControle"));
-                java.util.List<Predicate> predicates = new java.util.ArrayList<>();
-                for (String t : req.getTechniquesControle()) {
-                    if (t != null && !t.isBlank()) {
-                        predicates.add(cb.like(field, "%" + t.toLowerCase() + "%"));
-                    }
-                }
-                if (predicates.isEmpty()) {
-                    return cb.conjunction();
-                }
-                return cb.or(predicates.toArray(new Predicate[0]));
-            });
-        }
-
-        // --------------------
-        // MOTIFS D'INCONSTITUTIONNALITÉ (search texte sur LOB)
-        // --------------------
-        if (req.getMotifsInconstitutionnalite() != null && !req.getMotifsInconstitutionnalite().isEmpty()) {
-            spec = spec.and((root, query, cb) -> {
-                var field = cb.lower(root.get("motifInconstitutionnalite"));
-                java.util.List<Predicate> predicates = new java.util.ArrayList<>();
-                for (String m : req.getMotifsInconstitutionnalite()) {
-                    if (m != null && !m.isBlank()) {
-                        predicates.add(cb.like(field, "%" + m.toLowerCase() + "%"));
-                    }
-                }
-                if (predicates.isEmpty()) {
-                    return cb.conjunction();
-                }
-                return cb.or(predicates.toArray(new Predicate[0]));
-            });
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("oralite"), req.getOralite()));
         }
 
         return spec;
-    }
-
-    /**
-     * Parse une expression de délai d'abrogation du type
-     * ">6", "<=3", "=12", "<>0", "<10" ...
-     * et construit la Specification correspondante sur le champ
-     * "delaiAvantAbrogationMois".
-     */
-    private Specification<DecisionQpcCcModel> buildDelaiAvantAbrogationSpec(String expression) {
-        return (root, query, cb) -> {
-            if (expression == null) {
-                return cb.conjunction();
-            }
-
-            String exp = expression.trim().replace(" ", "");
-            if (exp.isEmpty()) {
-                return cb.conjunction();
-            }
-
-            String op = "=";
-            String valuePart = exp;
-
-            // opérateurs à 2 caractères
-            if (exp.startsWith("<=") || exp.startsWith(">=") || exp.startsWith("<>")) {
-                op = exp.substring(0, 2);
-                valuePart = exp.substring(2);
-            } else if (exp.startsWith("<") || exp.startsWith(">") || exp.startsWith("=")) {
-                op = exp.substring(0, 1);
-                valuePart = exp.substring(1);
-            }
-
-            Integer value;
-            try {
-                value = Integer.valueOf(valuePart);
-            } catch (Exception e) {
-                throw RestError.INVALID_FIELD.get("delaiAvantAbrogationExpression");
-            }
-
-            // === CORRECTION ICI ===
-            Path<Integer> path = root.get("delaiAvantAbrogationMois");
-
-            return switch (op) {
-                case "<" -> cb.lt(path, value);
-                case "<=" -> cb.le(path, value);
-                case ">" -> cb.gt(path, value);
-                case ">=" -> cb.ge(path, value);
-                case "<>" -> cb.notEqual(path, value);
-                case "=" -> cb.equal(path, value);
-                default -> cb.conjunction();
-            };
-        };
     }
 
 }

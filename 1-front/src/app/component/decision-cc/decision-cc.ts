@@ -1,16 +1,21 @@
-import {Component, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import {
   DcisionsQPCCCApi,
-  DecisionFiltrageQpcSearchRequest, DecisionQpcCcDTO, DecisionQpcCcRowDTO,
-  DecisionQpcCcSearchRequest, DroitLiberteDTO, DroitsLibertsApi,
-  ListeDeroulanteDTO, ListesDroulantesApi, PageDTODecisionQpcCcRowDTO
-} from "../../_services/generated-api";
-import {MultiSelectComponent, MultiSelectOption} from "../multi-select/multi-select";
-import {SpinnerService} from "../../_services/spinner.service";
-import {NotificationService} from "../../_services/notification.service";
-import {apiWrapper} from "../../_services/api-wrapper";
+  DecisionQpcCcDTO,
+  DecisionQpcCcRowDTO,
+  DecisionQpcCcSearchRequest,
+  DroitLiberteDTO,
+  DroitsLibertsApi,
+  ListeDeroulanteDTO,
+  ListesDroulantesApi,
+  PageDTODecisionQpcCcRowDTO
+} from '../../_services/generated-api';
+import { MultiSelectComponent, MultiSelectOption } from '../multi-select/multi-select';
+import { SpinnerService } from '../../_services/spinner.service';
+import { NotificationService } from '../../_services/notification.service';
+import { apiWrapper } from '../../_services/api-wrapper';
 
 @Component({
   selector: 'app-decision-cc',
@@ -21,7 +26,7 @@ import {apiWrapper} from "../../_services/api-wrapper";
 })
 export class DecisionCCComponent implements OnInit {
 
-  // === DTO de recherche, c’est lui qui part au back ===
+  // === DTO de recherche, tel qu’envoyé au back ===
   searchCriteria: DecisionQpcCcSearchRequest = {} as any;
 
   // === Données brutes venant du back pour les listes déroulantes ===
@@ -32,15 +37,15 @@ export class DecisionCCComponent implements OnInit {
   options = {
     origines: [] as MultiSelectOption[],
     qualitesDemandeur: [] as MultiSelectOption[],
+    typesDispositionLegislative: [] as MultiSelectOption[],
     matieres: [] as MultiSelectOption[],
     dispositifs: [] as MultiSelectOption[],
     traitementsEffetsPasses: [] as MultiSelectOption[],
     qualitesTiers: [] as MultiSelectOption[],
     reservesIncompetence: [] as MultiSelectOption[],
     droitsLibertes: [] as MultiSelectOption[],
-    techniquesControle: [] as MultiSelectOption[],
-    motifsInconstitutionnalite: [] as MultiSelectOption[],
   };
+
 
   // === Résultats / pagination / détails ===
   searchResult: PageDTODecisionQpcCcRowDTO | null = null;
@@ -55,12 +60,15 @@ export class DecisionCCComponent implements OnInit {
     private spinnerService: SpinnerService,
     private notifService: NotificationService,
     private listeDeroulanteApi: ListesDroulantesApi,
-    private decisionQpcCcService: DcisionsQPCCCApi, // adapte le nom si différent
+    private decisionQpcCcService: DcisionsQPCCCApi,
     private droitsLibertesApi: DroitsLibertsApi,
   ) {}
 
+  // ---------------------------------------------------------------------------
+  //                                  Init
+  // ---------------------------------------------------------------------------
   ngOnInit(): void {
-    // 1) Charger toutes les listes déroulantes génériques
+    // 1) Listes déroulantes génériques
     this.listeDeroulanteApi.getAllListeDeroulante()
       .pipe(apiWrapper(this.spinnerService, this.notifService))
       .subscribe(data => {
@@ -68,13 +76,14 @@ export class DecisionCCComponent implements OnInit {
         this.buildListeDeroulanteOptions();
       });
 
+    // 2) Droits & libertés
     this.droitsLibertesApi.getAllDroitLiberte()
       .pipe(apiWrapper(this.spinnerService, this.notifService))
       .subscribe(dls => {
         this.droitsLibertesRaw = dls;
         this.options.droitsLibertes = dls.map(dl => ({
-          value: dl.id,
-          label: dl.texte,
+          value: dl.id!,
+          label: dl.texte!,
         }));
       });
   }
@@ -88,51 +97,53 @@ export class DecisionCCComponent implements OnInit {
 
     // Origine QPC
     this.options.origines = byChamp('decision_qpc_cc.origine_qpc').map(o => ({
-      value: o.id,
-      label: o.valeur,
+      value: o.id!,
+      label: o.valeur!,
     }));
 
-    // Qualité du demandeur
+    // Qualité demandeur
     this.options.qualitesDemandeur = byChamp('decision_qpc_cc.qualite_demandeur').map(o => ({
-      value: o.id,
-      label: o.valeur,
+      value: o.id!,
+      label: o.valeur!,
+    }));
+
+    // Type de disposition législative contestée
+    this.options.typesDispositionLegislative = byChamp('decision_qpc_cc.type_disposition_legislative').map(o => ({
+      value: o.id!,
+      label: o.valeur!,
     }));
 
     // Matière
     this.options.matieres = byChamp('decision_qpc_cc.matiere').map(o => ({
-      value: o.id,
-      label: o.valeur,
+      value: o.id!,
+      label: o.valeur!,
     }));
 
-    // Dispositif de la décision du CC
+    // Dispositif décision CC
     this.options.dispositifs = byChamp('decision_qpc_cc.dispositif_decision_cc').map(o => ({
-      value: o.id,
-      label: o.valeur,
+      value: o.id!,
+      label: o.valeur!,
     }));
 
     // Traitement des effets passés
     this.options.traitementsEffetsPasses = byChamp('decision_qpc_cc.traitement_effets_passes').map(o => ({
-      value: o.id,
-      label: o.valeur,
+      value: o.id!,
+      label: o.valeur!,
     }));
 
-    // Qualité des tiers intervenants
+    // Qualité tiers intervenants
     this.options.qualitesTiers = byChamp('decision_qpc_cc.qualite_tiers_intervention').map(o => ({
-      value: o.id,
-      label: o.valeur,
+      value: o.id!,
+      label: o.valeur!,
     }));
 
     // Réserve d’incompétence du Conseil
     this.options.reservesIncompetence = byChamp('decision_qpc_cc.reserve_incompetence_conseil').map(o => ({
-      value: o.id,
-      label: o.valeur,
+      value: o.id!,
+      label: o.valeur!,
     }));
 
-    // Si un jour tu ajoutes "oralité" en filtre :
-    // this.options.oralites = byChamp('decision_qpc_cc.oralite').map(o => ({
-    //   value: o.id,
-    //   label: o.valeur,
-    // }));
+    // Oralité est maintenant un booléen dans le modèle => pas de liste ici
   }
 
   // ---------------------------------------------------------------------------
@@ -167,7 +178,7 @@ export class DecisionCCComponent implements OnInit {
   totalPages(): number {
     const result = this.searchResult;
     if (!result) return 0;
-    return Math.ceil(result.totalElements / this.pageSize);
+    return Math.ceil(result.totalElements! / this.pageSize);
   }
 
   resetForm(): void {
@@ -176,10 +187,11 @@ export class DecisionCCComponent implements OnInit {
     this.searchResult = null;
     this.currentPage = 1;
     this.selectedDecision = null;
+    this.formCollapsed = false;
   }
 
   viewDetails(decision: DecisionQpcCcRowDTO): void {
-    this.decisionQpcCcService.getDecisionsById(decision.id)
+    this.decisionQpcCcService.getDecisionsById(decision.id!)
       .pipe(apiWrapper(this.spinnerService, this.notifService))
       .subscribe(data => {
         this.selectedDecision = data;

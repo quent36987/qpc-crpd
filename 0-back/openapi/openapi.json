@@ -1170,32 +1170,23 @@
       },
       "DecisionQpcCcSearchRequest": {
         "required": [
-          "applicationTheorieChangementCirconstances",
-          "caractereNotableDecision",
-          "dateDecisionFrom",
-          "dateDecisionTo",
-          "delaiAvantAbrogationExpression",
-          "demandeRecusation",
-          "deport",
           "dispositifsDecisionCcIds",
+          "dispositionsLegislativesContestees",
           "droitsLibertesIds",
-          "interpretationJurisprudence",
+          "identiteDemandeur",
           "matieresIds",
           "motifsInconstitutionnalite",
-          "nombreInterventionsExact",
-          "nombreInterventionsMax",
-          "nombreInterventionsMin",
-          "nombreMembresSieges",
+          "nomMembreDeporteOuRecuse",
           "numero",
-          "oralite",
           "originesQpcIds",
           "qualitesDemandeurIds",
           "qualitesTiersInterventionIds",
           "referenceDecisionConseil",
-          "reserveOpportunite",
+          "remarque",
           "reservesIncompetenceConseilIds",
           "techniquesControle",
-          "traitementsEffetsPassesIds"
+          "traitementsEffetsPassesIds",
+          "typesDispositionLegislativeIds"
         ],
         "type": "object",
         "properties": {
@@ -1209,6 +1200,9 @@
             "type": "string"
           },
           "identiteDemandeur": {
+            "type": "string"
+          },
+          "dispositionsLegislativesContestees": {
             "type": "string"
           },
           "nomMembreDeporteOuRecuse": {
@@ -1225,6 +1219,14 @@
             "type": "string",
             "format": "date"
           },
+          "dateAbrogationDiffereeFrom": {
+            "type": "string",
+            "format": "date"
+          },
+          "dateAbrogationDiffereeTo": {
+            "type": "string",
+            "format": "date"
+          },
           "originesQpcIds": {
             "type": "array",
             "items": {
@@ -1233,6 +1235,13 @@
             }
           },
           "qualitesDemandeurIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          "typesDispositionLegislativeIds": {
             "type": "array",
             "items": {
               "type": "integer",
@@ -1281,10 +1290,11 @@
               "format": "int64"
             }
           },
-          "delaiAvantAbrogationExpression": {
-            "type": "string"
+          "delaiAvantAbrogationMin": {
+            "type": "integer",
+            "format": "int32"
           },
-          "nombreInterventionsExact": {
+          "delaiAvantAbrogationMax": {
             "type": "integer",
             "format": "int32"
           },
@@ -1296,7 +1306,59 @@
             "type": "integer",
             "format": "int32"
           },
-          "nombreMembresSieges": {
+          "nombreMembresSiegesMin": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombreMembresSiegesMax": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombreDroitsLibertesMin": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombreDroitsLibertesMax": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombrePersonnesPhysiquesMin": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombrePersonnesPhysiquesMax": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombreAssociationsMin": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombreAssociationsMax": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombreEntreprisesMin": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombreEntreprisesMax": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombreSyndicatsApOpMin": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombreSyndicatsApOpMax": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombreCollectivitesTerritorialesMin": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombreCollectivitesTerritorialesMax": {
             "type": "integer",
             "format": "int32"
           },
@@ -1322,19 +1384,13 @@
             "type": "boolean"
           },
           "techniquesControle": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "type": "string"
           },
           "motifsInconstitutionnalite": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "type": "string"
           }
         },
-        "description": "Requête de recherche pour les décisions QPC du Conseil Constitutionnel"
+        "description": "Requête de recherche pour les décisions QPC du Conseil constitutionnel"
       },
       "DecisionQpcCcRowDTO": {
         "required": [
@@ -1458,7 +1514,6 @@
             "items": {
               "type": "string",
               "enum": [
-                "NONE",
                 "PREMIER_ET_DERNIER",
                 "DEUXIEME_FILTRAGE"
               ]
@@ -1564,7 +1619,6 @@
           "niveauFiltrage": {
             "type": "string",
             "enum": [
-              "NONE",
               "PREMIER_ET_DERNIER",
               "DEUXIEME_FILTRAGE"
             ]
@@ -1817,7 +1871,7 @@
             "type": "string"
           },
           "oralite": {
-            "type": "string"
+            "type": "boolean"
           },
           "applicationTheorieChangementCirconstances": {
             "type": "boolean"
@@ -1964,7 +2018,6 @@
           "niveauFiltrage": {
             "type": "string",
             "enum": [
-              "NONE",
               "PREMIER_ET_DERNIER",
               "DEUXIEME_FILTRAGE"
             ]

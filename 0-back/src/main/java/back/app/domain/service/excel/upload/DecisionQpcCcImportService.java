@@ -128,7 +128,7 @@ public class DecisionQpcCcImportService {
                         DecisionQpcCcModel::setNomMembreDeporteOuRecuse),
 
                 ExcelImportColumn.of("Oralité",
-                        s -> findOrCreateListe("decision_qpc_cc.oralite", s),
+                        GenericExcelImportService::parseBoolean,
                         DecisionQpcCcModel::setOralite),
 
                 // ---------- Bloc "Interventions / tiers" ----------

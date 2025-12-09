@@ -75,7 +75,28 @@
           </div>
         </div>
 
-        <!-- Ligne 4 : droits / qualité tiers -->
+        <!-- Ligne 4 : dispositions contestées / type -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Dispositions législatives contestées</label>
+            <input
+              type="text"
+              [(ngModel)]="searchCriteria.dispositionsLegislativesContestees"
+              name="dispositionsLegislativesContestees"
+              placeholder="Texte libre...">
+          </div>
+
+          <div class="form-group">
+            <label>Type de disposition législative</label>
+            <app-multi-select
+              [options]="options.typesDispositionLegislative"
+              [(selectedItems)]="searchCriteria.typesDispositionLegislativeIds"
+              placeholder="Sélectionner type(s)...">
+            </app-multi-select>
+          </div>
+        </div>
+
+        <!-- Ligne 5 : droits / qualité tiers -->
         <div class="form-row">
           <div class="form-group">
             <label>Droit(s) et liberté(s) invoqué(s)</label>
@@ -96,10 +117,10 @@
           </div>
         </div>
 
-        <!-- Ligne 5 : dates -->
+        <!-- Ligne 6 : dates décision -->
         <div class="form-row">
           <div class="form-group">
-            <label>Date - De</label>
+            <label>Date de décision - De</label>
             <input
               type="date"
               [(ngModel)]="searchCriteria.dateDecisionFrom"
@@ -107,7 +128,7 @@
           </div>
 
           <div class="form-group">
-            <label>Date - À</label>
+            <label>Date de décision - À</label>
             <input
               type="date"
               [(ngModel)]="searchCriteria.dateDecisionTo"
@@ -115,7 +136,26 @@
           </div>
         </div>
 
-        <!-- Ligne 6 : matière / dispositif -->
+        <!-- Ligne 7 : dates abrogation différée -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date d'abrogation différée - De</label>
+            <input
+              type="date"
+              [(ngModel)]="searchCriteria.dateAbrogationDiffereeFrom"
+              name="dateAbrogationDiffereeFrom">
+          </div>
+
+          <div class="form-group">
+            <label>Date d'abrogation différée - À</label>
+            <input
+              type="date"
+              [(ngModel)]="searchCriteria.dateAbrogationDiffereeTo"
+              name="dateAbrogationDiffereeTo">
+          </div>
+        </div>
+
+        <!-- Ligne 8 : matière / dispositif -->
         <div class="form-row">
           <div class="form-group">
             <label>Matière</label>
@@ -136,16 +176,23 @@
           </div>
         </div>
 
-        <!-- Ligne 7 : délai abrogation / traitements effets passés -->
+        <!-- Ligne 9 : délai abrogation / traitements effets passés -->
         <div class="form-row">
           <div class="form-group">
             <label>Délai avant abrogation (en mois)</label>
-            <input
-              type="text"
-              [(ngModel)]="searchCriteria.delaiAvantAbrogationExpression"
-              name="delaiAvantAbrogationExpression"
-              placeholder="Ex: >6 ou =12">
-            <small>Opérateurs possibles: &lt;, &lt;=, &gt;, &gt;=, &lt;&gt;, =</small>
+            <div class="input-group">
+              <input
+                type="number"
+                [(ngModel)]="searchCriteria.delaiAvantAbrogationMin"
+                name="delaiAvantAbrogationMin"
+                placeholder="Min">
+              <span>et</span>
+              <input
+                type="number"
+                [(ngModel)]="searchCriteria.delaiAvantAbrogationMax"
+                name="delaiAvantAbrogationMax"
+                placeholder="Max">
+            </div>
           </div>
 
           <div class="form-group">
@@ -158,19 +205,10 @@
           </div>
         </div>
 
-        <!-- Ligne 8 : interventions -->
+        <!-- Ligne 10 : interventions -->
         <div class="form-row">
           <div class="form-group">
-            <label>Nombre exact d'interventions admises</label>
-            <input
-              type="number"
-              [(ngModel)]="searchCriteria.nombreInterventionsExact"
-              name="nombreInterventionsExact"
-              placeholder="Nombre exact">
-          </div>
-
-          <div class="form-group">
-            <label>Ou entre</label>
+            <label>Nombre d'interventions admises</label>
             <div class="input-group">
               <input
                 type="number"
@@ -185,56 +223,27 @@
                 placeholder="Max">
             </div>
           </div>
-        </div>
 
-        <!-- Ligne 9 : nb membres / demande récusation -->
-        <div class="form-row">
           <div class="form-group">
             <label>Nombre de membres siégeant</label>
-            <div class="radio-group-inline">
-              <label class="radio-label">
-                <input
-                  type="radio"
-                  [(ngModel)]="searchCriteria.nombreMembresSieges"
-                  name="nombreMembresSieges"
-                  [value]="6">
-                6
-              </label>
-              <label class="radio-label">
-                <input
-                  type="radio"
-                  [(ngModel)]="searchCriteria.nombreMembresSieges"
-                  name="nombreMembresSieges"
-                  [value]="7">
-                7
-              </label>
-              <label class="radio-label">
-                <input
-                  type="radio"
-                  [(ngModel)]="searchCriteria.nombreMembresSieges"
-                  name="nombreMembresSieges"
-                  [value]="8">
-                8
-              </label>
-              <label class="radio-label">
-                <input
-                  type="radio"
-                  [(ngModel)]="searchCriteria.nombreMembresSieges"
-                  name="nombreMembresSieges"
-                  [value]="9">
-                9
-              </label>
-              <label class="radio-label">
-                <input
-                  type="radio"
-                  [(ngModel)]="searchCriteria.nombreMembresSieges"
-                  name="nombreMembresSieges"
-                  [value]="10">
-                10
-              </label>
+            <div class="input-group">
+              <input
+                type="number"
+                [(ngModel)]="searchCriteria.nombreMembresSiegesMin"
+                name="nombreMembresSiegesMin"
+                placeholder="Min">
+              <span>et</span>
+              <input
+                type="number"
+                [(ngModel)]="searchCriteria.nombreMembresSiegesMax"
+                name="nombreMembresSiegesMax"
+                placeholder="Max">
             </div>
           </div>
+        </div>
 
+        <!-- Ligne 11 : demande récusation / déport -->
+        <div class="form-row">
           <div class="form-group">
             <label>Demande de récusation</label>
             <div class="radio-group-inline">
@@ -256,10 +265,7 @@
               </label>
             </div>
           </div>
-        </div>
 
-        <!-- Ligne 10 : déport / nom membre -->
-        <div class="form-row">
           <div class="form-group">
             <label>Déport</label>
             <div class="radio-group-inline">
@@ -281,7 +287,10 @@
               </label>
             </div>
           </div>
+        </div>
 
+        <!-- Ligne 12 : nom membre / nb droits & libertés (optionnel) -->
+        <div class="form-row">
           <div class="form-group">
             <label>Nom du membre déporté/récusé</label>
             <input
@@ -290,9 +299,26 @@
               name="nomMembreDeporteOuRecuse"
               placeholder="Ex: M. Martin">
           </div>
+
+          <div class="form-group">
+            <label>Nombre de droits & libertés invoqués</label>
+            <div class="input-group">
+              <input
+                type="number"
+                [(ngModel)]="searchCriteria.nombreDroitsLibertesMin"
+                name="nombreDroitsLibertesMin"
+                placeholder="Min">
+              <span>et</span>
+              <input
+                type="number"
+                [(ngModel)]="searchCriteria.nombreDroitsLibertesMax"
+                name="nombreDroitsLibertesMax"
+                placeholder="Max">
+            </div>
+          </div>
         </div>
 
-        <!-- Ligne 11 : théorie / réserve d'opportunité -->
+        <!-- Ligne 13 : théorie / réserve d'opportunité -->
         <div class="form-row">
           <div class="form-group">
             <label>Théorie changement de circonstances</label>
@@ -339,7 +365,7 @@
           </div>
         </div>
 
-        <!-- Ligne 12 : réserve incomp / interprétation -->
+        <!-- Ligne 14 : réserve incomp / interprétation -->
         <div class="form-row">
           <div class="form-group">
             <label>Réserve d'incompétence</label>
@@ -373,28 +399,28 @@
           </div>
         </div>
 
-        <!-- Ligne 13 : techniques / motifs -->
+        <!-- Ligne 15 : techniques / motifs (TEXT simple) -->
         <div class="form-row">
           <div class="form-group">
-            <label>Technique de contrôle</label>
-            <app-multi-select
-              [options]="options.techniquesControle"
-              [(selectedItems)]="searchCriteria.techniquesControle"
-              placeholder="Sélectionner technique(s)...">
-            </app-multi-select>
+            <label>Techniques de contrôle (texte)</label>
+            <input
+              type="text"
+              [(ngModel)]="searchCriteria.techniquesControle"
+              name="techniquesControle"
+              placeholder="Recherche texte dans la/les technique(s)...">
           </div>
 
           <div class="form-group">
-            <label>Motif d'inconstitutionnalité</label>
-            <app-multi-select
-              [options]="options.motifsInconstitutionnalite"
-              [(selectedItems)]="searchCriteria.motifsInconstitutionnalite"
-              placeholder="Sélectionner motif(s)...">
-            </app-multi-select>
+            <label>Motifs d'inconstitutionnalité (texte)</label>
+            <input
+              type="text"
+              [(ngModel)]="searchCriteria.motifsInconstitutionnalite"
+              name="motifsInconstitutionnalite"
+              placeholder="Recherche texte dans les motifs...">
           </div>
         </div>
 
-        <!-- Ligne 14 : remarque / caractère notable -->
+        <!-- Ligne 16 : remarque / caractère notable -->
         <div class="form-row">
           <div class="form-group">
             <label>Remarque</label>
@@ -428,7 +454,7 @@
           </div>
         </div>
 
-        <!-- Ligne 15 : oralité -->
+        <!-- Ligne 17 : oralité -->
         <div class="form-row">
           <div class="form-group">
             <label>Oralité</label>
@@ -499,12 +525,12 @@
             <td>{{ decision.dateDecision | date: 'dd/MM/yyyy' }}</td>
             <td>{{ decision.origineQpc }}</td>
             <td>
-<!--              <span class="badge"-->
-<!--                    [class.badge-success]="decision.dispositifDecisionCc === 'Conformité'"-->
-<!--                    [class.badge-warning]="decision.dispositifDecisionCc?.includes('sous réserve')"-->
-<!--                    [class.badge-danger]="decision.dispositifDecisionCc?.includes('Non-conformité')">-->
-                {{ decision.dispositifDecisionCc }}
-<!--              </span>-->
+              <!--              <span class="badge"-->
+              <!--                    [class.badge-success]="decision.dispositifDecisionCc === 'Conformité'"-->
+              <!--                    [class.badge-warning]="decision.dispositifDecisionCc?.includes('sous réserve')"-->
+              <!--                    [class.badge-danger]="decision.dispositifDecisionCc?.includes('Non-conformité')">-->
+              {{ decision.dispositifDecisionCc }}
+              <!--              </span>-->
             </td>
             <td>{{ decision.matiere }}</td>
             <td>
@@ -536,154 +562,229 @@
   </div>
 
   <!-- Modal détails -->
+  <!-- Modal détails -->
   <div class="modal" *ngIf="selectedDecision" (click)="closeDetails()">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h2>Détails de la décision</h2>
         <button class="close-btn" (click)="closeDetails()">✕</button>
       </div>
+
       <div class="modal-body">
+        <!-- Informations générales -->
         <div class="detail-section">
           <h3>Informations générales</h3>
           <div class="detail-grid">
             <div class="detail-item">
-              <strong>Numéro:</strong>
+              <strong>Numéro :</strong>
               <span>{{ selectedDecision?.numero }}</span>
             </div>
             <div class="detail-item">
-              <strong>Référence CC:</strong>
+              <strong>Référence CC :</strong>
               <span>{{ selectedDecision?.referenceDecisionConseil }}</span>
             </div>
             <div class="detail-item">
-              <strong>Date:</strong>
+              <strong>Date :</strong>
               <span>{{ selectedDecision?.dateDecision | date: 'dd/MM/yyyy' }}</span>
             </div>
             <div class="detail-item">
-              <strong>Origine:</strong>
+              <strong>Origine :</strong>
               <span>{{ selectedDecision?.origineQpc }}</span>
             </div>
             <div class="detail-item">
-              <strong>Réf. transmission:</strong>
+              <strong>Réf. transmission :</strong>
               <span>{{ selectedDecision?.referenceDecisionTransmission }}</span>
             </div>
             <div class="detail-item">
-              <strong>Matière:</strong>
+              <strong>Matière :</strong>
               <span>{{ selectedDecision?.matiere }}</span>
             </div>
           </div>
         </div>
 
+        <!-- Demandeur -->
         <div class="detail-section">
           <h3>Demandeur</h3>
           <div class="detail-grid">
             <div class="detail-item">
-              <strong>Identité:</strong>
+              <strong>Identité :</strong>
               <span>{{ selectedDecision?.identiteDemandeur }}</span>
             </div>
             <div class="detail-item">
-              <strong>Qualité:</strong>
+              <strong>Qualité :</strong>
               <span>{{ selectedDecision?.qualiteDemandeur }}</span>
             </div>
           </div>
         </div>
 
+        <!-- Dispositions contestées -->
         <div class="detail-section">
           <h3>Dispositions contestées</h3>
           <div class="detail-grid">
             <div class="detail-item">
-              <strong>Dispositions:</strong>
+              <strong>Dispositions :</strong>
               <span>{{ selectedDecision?.dispositionsLegislativesContestees }}</span>
             </div>
             <div class="detail-item">
-              <strong>Type:</strong>
+              <strong>Type :</strong>
               <span>{{ selectedDecision?.typeDispositionLegislative }}</span>
             </div>
           </div>
         </div>
 
+        <!-- Décision -->
         <div class="detail-section">
           <h3>Décision</h3>
           <div class="detail-grid">
             <div class="detail-item">
-              <strong>Dispositif:</strong>
-<!--              <span class="badge"-->
-<!--                    [class.badge-success]="selectedDecision?.dispositifDecisionCc === 'Conformité'"-->
-<!--                    [class.badge-warning]="selectedDecision?.dispositifDecisionCc?.includes('sous réserve')"-->
-<!--                    [class.badge-danger]="selectedDecision?.dispositifDecisionCc?.includes('Non-conformité')">-->
-                {{ selectedDecision?.dispositifDecisionCc }}
-
+              <strong>Dispositif :</strong>
+              <span>{{ selectedDecision?.dispositifDecisionCc }}</span>
             </div>
-            <div class="detail-item" *ngIf="selectedDecision?.delaiAvantAbrogationMois">
-              <strong>Délai avant abrogation:</strong>
+            <div class="detail-item" *ngIf="selectedDecision?.dateAbrogationDifferee">
+              <strong>Date d'abrogation différée :</strong>
+              <span>{{ selectedDecision?.dateAbrogationDifferee | date:'dd/MM/yyyy' }}</span>
+            </div>
+            <div class="detail-item" *ngIf="selectedDecision?.delaiAvantAbrogationMois != null">
+              <strong>Délai avant abrogation :</strong>
               <span>{{ selectedDecision?.delaiAvantAbrogationMois }} mois</span>
             </div>
             <div class="detail-item">
-              <strong>Traitement effets passés:</strong>
+              <strong>Traitement des effets passés :</strong>
               <span>{{ selectedDecision?.traitementEffetsPasses }}</span>
             </div>
           </div>
         </div>
 
+        <!-- Composition et procédure -->
         <div class="detail-section">
           <h3>Composition et procédure</h3>
           <div class="detail-grid">
             <div class="detail-item">
-              <strong>Membres siégeant:</strong>
+              <strong>Membres siégeant :</strong>
               <span>{{ selectedDecision?.nombreMembresSieges }}</span>
             </div>
             <div class="detail-item">
-              <strong>Demande récusation:</strong>
-              <span>{{ selectedDecision?.demandeRecusation ? 'Oui' : 'Non' }}</span>
+              <strong>Demande(s) de récusation :</strong>
+              <span>
+              {{ selectedDecision?.demandeRecusation || 0 }}
+                ({{ (selectedDecision?.demandeRecusation || 0) > 0 ? 'Oui' : 'Non' }})
+            </span>
             </div>
             <div class="detail-item">
-              <strong>Déport:</strong>
-              <span>{{ selectedDecision?.deport ? 'Oui' : 'Non' }}</span>
+              <strong>Déport(s) :</strong>
+              <span>
+              {{ selectedDecision?.deport || 0 }}
+                ({{ (selectedDecision?.deport || 0) > 0 ? 'Oui' : 'Non' }})
+            </span>
             </div>
             <div class="detail-item" *ngIf="selectedDecision?.nomMembreDeporteOuRecuse">
-              <strong>Membre déporté/récusé:</strong>
+              <strong>Membre déporté/récusé :</strong>
               <span>{{ selectedDecision?.nomMembreDeporteOuRecuse }}</span>
             </div>
             <div class="detail-item">
-              <strong>Oralité:</strong>
+              <strong>Oralité :</strong>
               <span>{{ selectedDecision?.oralite ? 'Oui' : 'Non' }}</span>
             </div>
             <div class="detail-item">
-              <strong>Interventions admises:</strong>
+              <strong>Interventions admises :</strong>
               <span>{{ selectedDecision?.nombreInterventionsAdmises }}</span>
             </div>
           </div>
         </div>
 
+        <!-- Intervenants / parties -->
+        <div class="detail-section">
+          <h3>Intervenants et parties</h3>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <strong>Qualité des tiers :</strong>
+              <span>{{ selectedDecision?.qualiteTiersIntervention }}</span>
+            </div>
+
+            <div class="detail-item" *ngIf="selectedDecision?.nombrePersonnesPhysiques != null">
+              <strong>Personnes physiques :</strong>
+              <span>
+              {{ selectedDecision?.nombrePersonnesPhysiques }}
+                <ng-container *ngIf="selectedDecision?.identitePersonnesPhysiques">
+                — {{ selectedDecision?.identitePersonnesPhysiques }}
+              </ng-container>
+            </span>
+            </div>
+
+            <div class="detail-item" *ngIf="selectedDecision?.nombreAssociations != null">
+              <strong>Associations :</strong>
+              <span>
+              {{ selectedDecision?.nombreAssociations }}
+                <ng-container *ngIf="selectedDecision?.identiteAssociations">
+                — {{ selectedDecision?.identiteAssociations }}
+              </ng-container>
+            </span>
+            </div>
+
+            <div class="detail-item" *ngIf="selectedDecision?.nombreEntreprises != null">
+              <strong>Entreprises :</strong>
+              <span>
+              {{ selectedDecision?.nombreEntreprises }}
+                <ng-container *ngIf="selectedDecision?.identiteEntreprises">
+                — {{ selectedDecision?.identiteEntreprises }}
+              </ng-container>
+            </span>
+            </div>
+
+            <div class="detail-item" *ngIf="selectedDecision?.nombreSyndicatsApOp != null">
+              <strong>Syndicats / AP / OP :</strong>
+              <span>
+              {{ selectedDecision?.nombreSyndicatsApOp }}
+                <ng-container *ngIf="selectedDecision?.identiteSyndicatsApOp">
+                — {{ selectedDecision?.identiteSyndicatsApOp }}
+              </ng-container>
+            </span>
+            </div>
+
+            <div class="detail-item" *ngIf="selectedDecision?.nombreCollectivitesTerritoriales != null">
+              <strong>Collectivités territoriales :</strong>
+              <span>
+              {{ selectedDecision?.nombreCollectivitesTerritoriales }}
+                <ng-container *ngIf="selectedDecision?.identiteCollectivites">
+                — {{ selectedDecision?.identiteCollectivites }}
+              </ng-container>
+            </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contrôle -->
         <div class="detail-section">
           <h3>Contrôle</h3>
           <div class="detail-grid">
             <div class="detail-item">
-              <strong>Technique:</strong>
+              <strong>Technique(s) :</strong>
               <span>{{ selectedDecision?.techniquesControle }}</span>
             </div>
             <div class="detail-item">
-              <strong>Motif:</strong>
+              <strong>Motif(s) :</strong>
               <span>{{ selectedDecision?.motifInconstitutionnalite }}</span>
             </div>
             <div class="detail-item">
-              <strong>Théorie changement:</strong>
+              <strong>Théorie du changement :</strong>
               <span>{{ selectedDecision?.applicationTheorieChangementCirconstances ? 'Oui' : 'Non' }}</span>
             </div>
             <div class="detail-item">
-              <strong>Réserve opportunité:</strong>
+              <strong>Réserve d'opportunité :</strong>
               <span>{{ selectedDecision?.reserveOpportunite ? 'Oui' : 'Non' }}</span>
             </div>
             <div class="detail-item">
-              <strong>Réserve incompétence:</strong>
+              <strong>Réserve d'incompétence :</strong>
               <span>{{ selectedDecision?.reserveIncompetenceConseil }}</span>
             </div>
             <div class="detail-item">
-              <strong>Interprétation jurisprudence:</strong>
+              <strong>Interprétation jurisprudentielle :</strong>
               <span>{{ selectedDecision?.priseEnCompteInterpretationJurisprudentielle ? 'Oui' : 'Non' }}</span>
             </div>
           </div>
         </div>
 
+        <!-- Droits & libertés -->
         <div class="detail-section" *ngIf="selectedDecision?.droitsLibertes?.length">
           <h3>Droits et libertés invoqués ({{ selectedDecision?.nombreDroitsLibertesInvoques }})</h3>
           <div class="rights-list">
@@ -693,23 +794,14 @@
           </div>
         </div>
 
+        <!-- Remarques -->
         <div class="detail-section" *ngIf="selectedDecision?.autresRemarques">
           <h3>Remarques</h3>
           <p>{{ selectedDecision?.autresRemarques }}</p>
         </div>
-
-        <div class="detail-section">
-          <h3>Caractéristiques</h3>
-          <div class="detail-grid">
-            <div class="detail-item">
-              <strong>Décision notable:</strong>
-              <span class="badge" [class.badge-success]="selectedDecision?.caractereNotableDecision">
-                {{ selectedDecision?.caractereNotableDecision ? 'Oui' : 'Non' }}
-              </span>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
+
+
 </div>

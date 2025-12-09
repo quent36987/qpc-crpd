@@ -30,7 +30,7 @@ export interface DecisionQpcCcDTO {
     demandeRecusation: number;
     deport: number;
     nomMembreDeporteOuRecuse: string;
-    oralite: string;
+    oralite: boolean;
     applicationTheorieChangementCirconstances: boolean;
     nombreDroitsLibertesInvoques: number;
     nombreInterventionsAdmises: number;

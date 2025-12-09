@@ -10,38 +10,55 @@
 
 
 /**
- * Requête de recherche pour les décisions QPC du Conseil Constitutionnel
+ * Requête de recherche pour les décisions QPC du Conseil constitutionnel
  */
 export interface DecisionQpcCcSearchRequest { 
     numero: string;
     referenceDecisionConseil: string;
     referenceDecisionTransmission?: string;
-    identiteDemandeur?: string;
-    nomMembreDeporteOuRecuse?: string;
-    remarque?: string;
-    dateDecisionFrom: string;
-    dateDecisionTo: string;
+    identiteDemandeur: string;
+    dispositionsLegislativesContestees: string;
+    nomMembreDeporteOuRecuse: string;
+    remarque: string;
+    dateDecisionFrom?: string;
+    dateDecisionTo?: string;
+    dateAbrogationDiffereeFrom?: string;
+    dateAbrogationDiffereeTo?: string;
     originesQpcIds: Array<number>;
     qualitesDemandeurIds: Array<number>;
+    typesDispositionLegislativeIds: Array<number>;
     matieresIds: Array<number>;
     dispositifsDecisionCcIds: Array<number>;
     traitementsEffetsPassesIds: Array<number>;
     qualitesTiersInterventionIds: Array<number>;
     reservesIncompetenceConseilIds: Array<number>;
     droitsLibertesIds: Array<number>;
-    delaiAvantAbrogationExpression: string;
-    nombreInterventionsExact: number;
-    nombreInterventionsMin: number;
-    nombreInterventionsMax: number;
-    nombreMembresSieges: number;
-    demandeRecusation: boolean;
-    deport: boolean;
-    applicationTheorieChangementCirconstances: boolean;
-    reserveOpportunite: boolean;
-    interpretationJurisprudence: boolean;
-    caractereNotableDecision: boolean;
-    oralite: boolean;
-    techniquesControle: Array<string>;
-    motifsInconstitutionnalite: Array<string>;
+    delaiAvantAbrogationMin?: number;
+    delaiAvantAbrogationMax?: number;
+    nombreInterventionsMin?: number;
+    nombreInterventionsMax?: number;
+    nombreMembresSiegesMin?: number;
+    nombreMembresSiegesMax?: number;
+    nombreDroitsLibertesMin?: number;
+    nombreDroitsLibertesMax?: number;
+    nombrePersonnesPhysiquesMin?: number;
+    nombrePersonnesPhysiquesMax?: number;
+    nombreAssociationsMin?: number;
+    nombreAssociationsMax?: number;
+    nombreEntreprisesMin?: number;
+    nombreEntreprisesMax?: number;
+    nombreSyndicatsApOpMin?: number;
+    nombreSyndicatsApOpMax?: number;
+    nombreCollectivitesTerritorialesMin?: number;
+    nombreCollectivitesTerritorialesMax?: number;
+    demandeRecusation?: boolean;
+    deport?: boolean;
+    applicationTheorieChangementCirconstances?: boolean;
+    reserveOpportunite?: boolean;
+    interpretationJurisprudence?: boolean;
+    caractereNotableDecision?: boolean;
+    oralite?: boolean;
+    techniquesControle: string;
+    motifsInconstitutionnalite: string;
 }
 

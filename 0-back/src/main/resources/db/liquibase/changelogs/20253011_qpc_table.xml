@@ -131,8 +131,8 @@
             <!-- 18. nom_membre_deporte_ou_recuse -->
             <column name="nom_membre_deporte_ou_recuse" type="VARCHAR(255)"/>
 
-            <!-- 19. oralite : liste déroulante -->
-            <column name="oralite_id" type="BIGINT"/>
+            <!-- 19. oralite : bool -->
+            <column name="oralite" type="boolean"/>
 
             <!-- 20. application_theorie_changement_circonstances : booléen -->
             <column name="application_theorie_changement_circonstances" type="BOOLEAN"/>
@@ -248,11 +248,6 @@
                                  referencedColumnNames="id"
                                  constraintName="fk_decision_qpc_cc_traitement_effets"/>
 
-        <addForeignKeyConstraint baseTableName="decision_qpc_cc"
-                                 baseColumnNames="oralite_id"
-                                 referencedTableName="listes_deroulantes"
-                                 referencedColumnNames="id"
-                                 constraintName="fk_decision_qpc_cc_oralite"/>
 
         <addForeignKeyConstraint baseTableName="decision_qpc_cc"
                                  baseColumnNames="qualite_tiers_intervention_id"

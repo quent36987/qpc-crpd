@@ -99,10 +99,9 @@ public class DecisionQpcCcModel {
     @Column(name = "nom_membre_deporte_ou_recuse")
     private String nomMembreDeporteOuRecuse;
 
-    // 19. oralite : liste déroulante
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "oralite_id")
-    private ListeDeroulanteModel oralite;
+    // 19. oralite : booléen
+    @Column(name = "oralite")
+    private Boolean oralite;
 
     // 20. application_theorie_changement_circonstances : booléen
     @Column(name = "application_theorie_changement_circonstances")

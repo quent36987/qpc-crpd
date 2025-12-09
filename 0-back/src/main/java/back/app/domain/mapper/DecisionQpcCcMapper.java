@@ -22,7 +22,6 @@ public interface DecisionQpcCcMapper {
     @Mapping(target = "matiere",                   source = "matiere.valeur")
     @Mapping(target = "dispositifDecisionCc",      source = "dispositifDecisionCc.valeur")
     @Mapping(target = "traitementEffetsPasses",    source = "traitementEffetsPasses.valeur")
-    @Mapping(target = "oralite",                   source = "oralite.valeur")
     @Mapping(target = "qualiteTiersIntervention",  source = "qualiteTiersIntervention.valeur")
     @Mapping(target = "reserveIncompetenceConseil",source = "reserveIncompetenceConseil.valeur")
     DecisionQpcCcDTO toDTO(DecisionQpcCcModel model);

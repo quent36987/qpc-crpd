@@ -50,9 +50,8 @@ export namespace DecisionFiltrageQpcDTO {
         ConseilEtat: 'CONSEIL_ETAT' as JuridictionEnum,
         CourDeCassation: 'COUR_DE_CASSATION' as JuridictionEnum
     };
-    export type NiveauFiltrageEnum = 'NONE' | 'PREMIER_ET_DERNIER' | 'DEUXIEME_FILTRAGE';
+    export type NiveauFiltrageEnum = 'PREMIER_ET_DERNIER' | 'DEUXIEME_FILTRAGE';
     export const NiveauFiltrageEnum = {
-        None: 'NONE' as NiveauFiltrageEnum,
         PremierEtDernier: 'PREMIER_ET_DERNIER' as NiveauFiltrageEnum,
         DeuxiemeFiltrage: 'DEUXIEME_FILTRAGE' as NiveauFiltrageEnum
     };

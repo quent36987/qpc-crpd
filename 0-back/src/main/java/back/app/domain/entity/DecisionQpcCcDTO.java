@@ -84,7 +84,7 @@ public class DecisionQpcCcDTO {
     private String nomMembreDeporteOuRecuse;
 
     // 19. oralite : valeur de la liste déroulante
-    private String oralite;
+    private Boolean oralite;
 
     // 20. application_theorie_changement_circonstances : booléen
     private Boolean applicationTheorieChangementCirconstances;

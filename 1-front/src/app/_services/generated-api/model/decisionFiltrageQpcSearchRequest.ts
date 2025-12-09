@@ -34,9 +34,8 @@ export namespace DecisionFiltrageQpcSearchRequest {
         ConseilEtat: 'CONSEIL_ETAT' as JuridictionsEnum,
         CourDeCassation: 'COUR_DE_CASSATION' as JuridictionsEnum
     };
-    export type NiveauxFiltrageEnum = 'NONE' | 'PREMIER_ET_DERNIER' | 'DEUXIEME_FILTRAGE';
+    export type NiveauxFiltrageEnum = 'PREMIER_ET_DERNIER' | 'DEUXIEME_FILTRAGE';
     export const NiveauxFiltrageEnum = {
-        None: 'NONE' as NiveauxFiltrageEnum,
         PremierEtDernier: 'PREMIER_ET_DERNIER' as NiveauxFiltrageEnum,
         DeuxiemeFiltrage: 'DEUXIEME_FILTRAGE' as NiveauxFiltrageEnum
     };

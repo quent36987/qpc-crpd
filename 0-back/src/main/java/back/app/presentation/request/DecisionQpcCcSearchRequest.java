@@ -1,7 +1,6 @@
 package back.app.presentation.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.SchemaProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,108 +13,172 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Schema(description = "Requête de recherche pour les décisions QPC du Conseil Constitutionnel",
-        requiredProperties = { "numero", "referenceDecisionConseil", "dateDecisionFrom", "dateDecisionTo",
-                "originesQpcIds", "qualitesDemandeurIds", "matieresIds", "dispositifsDecisionCcIds",
-                "traitementsEffetsPassesIds", "qualitesTiersInterventionIds", "reservesIncompetenceConseilIds",
-                "droitsLibertesIds", "delaiAvantAbrogationExpression", "nombreInterventionsExact",
-                "nombreInterventionsMin", "nombreInterventionsMax", "nombreMembresSieges", "demandeRecusation",
-                "deport", "applicationTheorieChangementCirconstances", "reserveOpportunite",
-                "interpretationJurisprudence", "caractereNotableDecision", "oralite", "techniquesControle",
-                "motifsInconstitutionnalite" })
+@Schema(description = "Requête de recherche pour les décisions QPC du Conseil constitutionnel",
+        requiredProperties = {"numero", "referenceDecisionConseil", "identiteDemandeur", "dispositionsLegislativesContestees",
+        "nomMembreDeporteOuRecuse", "remarque", "originesQpcIds", "qualitesDemandeurIds",
+        "typesDispositionLegislativeIds", "matieresIds", "dispositifsDecisionCcIds",
+        "traitementsEffetsPassesIds", "qualitesTiersInterventionIds", "reservesIncompetenceConseilIds",
+        "droitsLibertesIds", "techniquesControle", "motifsInconstitutionnalite"})
 public class DecisionQpcCcSearchRequest {
 
-    // --- Champs texte simples ---
+    // ---------------------------------------------------------------------
+    // Champs texte simples (recherche 'contient')
+    // ---------------------------------------------------------------------
 
-    /** Numéro (champ "numero") */
+    /** Numéro de la décision (numero) */
     private String numero;
 
-    /** Réf. décision du CC (referenceDecisionConseil) */
+    /** Référence de la décision du Conseil (reference_decision_conseil) */
     private String referenceDecisionConseil;
 
-    /** Réf. décision de transmission */
+    /** Référence de la décision de transmission (Cass / CE) */
     private String referenceDecisionTransmission;
 
-    /** Identité(s) des auteurs de la QPC */
+    /** Identité du ou des demandeurs (identite_demandeur) */
     private String identiteDemandeur;
 
-    /** Nom du membre déporté / récusé */
+    /** Dispositions législatives contestées (dispositions_legislatives_contestees) */
+    private String dispositionsLegislativesContestees;
+
+    /** Nom du membre déporté ou récusé (nom_membre_deporte_ou_recuse) */
     private String nomMembreDeporteOuRecuse;
 
-    /** Recherche texte dans les remarques */
+    /** Recherche texte dans les remarques (autres_remarques) */
     private String remarque;
 
 
-    // --- Dates ---
+    // ---------------------------------------------------------------------
+    // Dates
+    // ---------------------------------------------------------------------
 
-    /** Date de décision - De */
+    /** Date de décision - Du (date_decision) */
     private LocalDate dateDecisionFrom;
 
-    /** Date de décision - À */
+    /** Date de décision - Au (date_decision) */
     private LocalDate dateDecisionTo;
 
+    /** Date d’abrogation différée - Du (date_abrogation_differee) */
+    private LocalDate dateAbrogationDiffereeFrom;
 
-    // --- Listes déroulantes (IDs de ListeDeroulanteModel) ---
+    /** Date d’abrogation différée - Au (date_abrogation_differee) */
+    private LocalDate dateAbrogationDiffereeTo;
 
-    /** Origine QPC (origine_qpc) */
+
+    // ---------------------------------------------------------------------
+    // Listes déroulantes (IDs de ListeDeroulanteModel)
+    // ---------------------------------------------------------------------
+
+    /** Origine QPC (decision_qpc_cc.origine_qpc) */
     private List<Long> originesQpcIds;
 
-    /** Catégorie des auteurs de QPC (qualite_demandeur) */
+    /** Qualité du demandeur (decision_qpc_cc.qualite_demandeur) */
     private List<Long> qualitesDemandeurIds;
 
-    /** Matière (matiere) */
+    /** Type de disposition législative contestée (decision_qpc_cc.type_disposition_legislative) */
+    private List<Long> typesDispositionLegislativeIds;
+
+    /** Matière (decision_qpc_cc.matiere) */
     private List<Long> matieresIds;
 
-    /** Dispositif de la décision du CC (dispositif_decision_cc) */
+    /** Dispositif de la décision du CC (decision_qpc_cc.dispositif_decision_cc) */
     private List<Long> dispositifsDecisionCcIds;
 
-    /** Traitement des effets passés (traitement_effets_passes) */
+    /** Traitement des effets passés (decision_qpc_cc.traitement_effets_passes) */
     private List<Long> traitementsEffetsPassesIds;
 
-    /** Qualité du/des tiers intervenants (qualite_tiers_intervention) */
+    /** Qualité du/des tiers intervenants (decision_qpc_cc.qualite_tiers_intervention) */
     private List<Long> qualitesTiersInterventionIds;
 
-    /** Réserve d’incompétence du Conseil (reserve_incompetence_conseil) */
+    /** Réserve d’incompétence du Conseil (decision_qpc_cc.reserve_incompetence_conseil) */
     private List<Long> reservesIncompetenceConseilIds;
 
 
-    // --- Droits & libertés (many-to-many) ---
+    // ---------------------------------------------------------------------
+    // Droits & libertés (many-to-many)
+    // ---------------------------------------------------------------------
 
-    /** Droit(s) et liberté(s) invoqué(s) */
+    /** Droit(s) et liberté(s) invoqué(s) (IDs de DroitLiberteModel) */
     private List<Long> droitsLibertesIds;
 
 
-    // --- Délai avant abrogation (en mois) ---
+    // ---------------------------------------------------------------------
+    // Délai avant abrogation (en mois) : bornes
+    // ---------------------------------------------------------------------
 
-    /**
-     * Expression telle que saisie dans le champ texte :
-     * exemple : ">6", "<=3", "=12", "<>0"
-     * On pourra parser cette string côté back pour construire la Spec.
-     */
-    private String delaiAvantAbrogationExpression;
+    /** Délai avant abrogation - min (delai_avant_abrogation_mois) */
+    private Integer delaiAvantAbrogationMin;
+
+    /** Délai avant abrogation - max (delai_avant_abrogation_mois) */
+    private Integer delaiAvantAbrogationMax;
 
 
-    // --- Nombre d’interventions admises ---
+    // ---------------------------------------------------------------------
+    // Nombre d’interventions admises & membres / DL invoqués : bornes
+    // ---------------------------------------------------------------------
 
-    /** Nombre exact d'interventions admises */
-    private Integer nombreInterventionsExact;
-
-    /** Nombre d'interventions admises minimum (intervalle) */
+    /** Nombre d’interventions admises - min (nombre_interventions_admises) */
     private Integer nombreInterventionsMin;
 
-    /** Nombre d'interventions admises maximum (intervalle) */
+    /** Nombre d’interventions admises - max (nombre_interventions_admises) */
     private Integer nombreInterventionsMax;
 
+    /** Nombre de membres ayant siégé - min (nombre_membres_sieges) */
+    private Integer nombreMembresSiegesMin;
 
-    // --- Autres champs numériques / booléens ---
+    /** Nombre de membres ayant siégé - max (nombre_membres_sieges) */
+    private Integer nombreMembresSiegesMax;
 
-    /** Nombre de membres siégeant (6,7,8,9,10) */
-    private Integer nombreMembresSieges;
+    /** Nombre de droits et libertés invoqués - min (nombre_droits_libertes_invoques) */
+    private Integer nombreDroitsLibertesMin;
+
+    /** Nombre de droits et libertés invoqués - max (nombre_droits_libertes_invoques) */
+    private Integer nombreDroitsLibertesMax;
+
+
+    // ---------------------------------------------------------------------
+    // Répartition par type de parties (bornes)
+    // ---------------------------------------------------------------------
+
+    /** Personnes physiques - min (nombre_personnes_physiques) */
+    private Integer nombrePersonnesPhysiquesMin;
+
+    /** Personnes physiques - max (nombre_personnes_physiques) */
+    private Integer nombrePersonnesPhysiquesMax;
+
+    /** Associations - min (nombre_associations) */
+    private Integer nombreAssociationsMin;
+
+    /** Associations - max (nombre_associations) */
+    private Integer nombreAssociationsMax;
+
+    /** Entreprises - min (nombre_entreprises) */
+    private Integer nombreEntreprisesMin;
+
+    /** Entreprises - max (nombre_entreprises) */
+    private Integer nombreEntreprisesMax;
+
+    /** Syndicats / AP / OP - min (nombre_syndicats_ap_op) */
+    private Integer nombreSyndicatsApOpMin;
+
+    /** Syndicats / AP / OP - max (nombre_syndicats_ap_op) */
+    private Integer nombreSyndicatsApOpMax;
+
+    /** Collectivités territoriales - min (nombre_collectivites_territoriales) */
+    private Integer nombreCollectivitesTerritorialesMin;
+
+    /** Collectivités territoriales - max (nombre_collectivites_territoriales) */
+    private Integer nombreCollectivitesTerritorialesMax;
+
+
+    // ---------------------------------------------------------------------
+    // Booléens
+    // ---------------------------------------------------------------------
 
     /**
      * Demande de récusation :
      * - true  => au moins une demande (demande_recusation > 0)
-     * - false => aucune demande (demande_recusation = 0 ou null)
+     * - false => aucune (demande_recusation = 0 ou null)
+     * - null  => pas de filtre
      */
     private Boolean demandeRecusation;
 
@@ -123,6 +186,7 @@ public class DecisionQpcCcSearchRequest {
      * Déport :
      * - true  => au moins un déport (deport > 0)
      * - false => aucun (deport = 0 ou null)
+     * - null  => pas de filtre
      */
     private Boolean deport;
 
@@ -138,17 +202,24 @@ public class DecisionQpcCcSearchRequest {
     /** Caractère notable de la décision */
     private Boolean caractereNotableDecision;
 
-    /**
-     * Oralité (ton modèle a un ListeDeroulanteModel "oralite"
-     */
+    /** Oralité (champ booléen dans ton modèle modifié) */
     private Boolean oralite;
 
 
-    // --- Techniques / motifs (si stockés en texte) ---
+    // ---------------------------------------------------------------------
+    // Techniques / motifs (multi-select côté front, stockés en texte)
+    // ---------------------------------------------------------------------
 
-    /** Techniques de contrôle (multi-select) */
-    private List<String> techniquesControle;
+    /**
+     * Techniques de contrôle :
+     * par exemple des valeurs codées 'proportionnalite', 'controle_concret', etc.
+     * À toi de décider si tu fais un "contient un des éléments" dans la Spec.
+     */
+    private String techniquesControle;
 
-    /** Motifs d'inconstitutionnalité (multi-select) */
-    private List<String> motifsInconstitutionnalite;
+    /**
+     * Motifs d’inconstitutionnalité :
+     * idem, valeurs textuelles que tu peux parser / matcher dans le champ motif_inconstitutionnalite.
+     */
+    private String motifsInconstitutionnalite;
 }
