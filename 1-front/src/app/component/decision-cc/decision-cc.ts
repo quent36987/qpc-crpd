@@ -26,7 +26,7 @@ export class DecisionCCComponent implements OnInit {
 
   // === Données brutes venant du back pour les listes déroulantes ===
   listeDeroulanteOptions: ListeDeroulanteDTO[] = [];
-   droitsLibertesRaw: DroitLiberteDTO[] = [];
+  droitsLibertesRaw: DroitLiberteDTO[] = [];
 
   // === Options pour les <app-multi-select> (toujours { value, label }) ===
   options = {
@@ -77,23 +77,6 @@ export class DecisionCCComponent implements OnInit {
           label: dl.texte,
         }));
       });
-
-
-    // 3) Techniques de contrôle / motifs d’inconstitutionnalité :
-    // si c’est aussi en liste déroulante, tu pourras les construire
-    // à partir de listeDeroulanteOptions, sinon tu peux les coder en dur.
-    // Exemple simple (à adapter) :
-    this.options.techniquesControle = [
-      { value: 'proportionnalite', label: 'Proportionnalité' },
-      { value: 'controle_concret', label: 'Contrôle concret' },
-      { value: 'controle_abstrait', label: 'Contrôle abstrait' },
-    ];
-
-    this.options.motifsInconstitutionnalite = [
-      { value: 'violation_droit_defense', label: 'Violation des droits de la défense' },
-      { value: 'violation_egalite', label: 'Violation du principe d’égalité' },
-      // ...
-    ];
   }
 
   // ---------------------------------------------------------------------------
@@ -104,49 +87,52 @@ export class DecisionCCComponent implements OnInit {
       this.listeDeroulanteOptions.filter(o => o.champ === champ && o.actif);
 
     // Origine QPC
-    this.options.origines = byChamp('ORIGINE_QPC').map(o => ({
+    this.options.origines = byChamp('decision_qpc_cc.origine_qpc').map(o => ({
       value: o.id,
       label: o.valeur,
     }));
 
-    // Qualité demandeur
-    this.options.qualitesDemandeur = byChamp('QUALITE_DEMANDEUR_QPC_CC').map(o => ({
+    // Qualité du demandeur
+    this.options.qualitesDemandeur = byChamp('decision_qpc_cc.qualite_demandeur').map(o => ({
       value: o.id,
       label: o.valeur,
     }));
 
     // Matière
-    this.options.matieres = byChamp('MATIERE_QPC_CC').map(o => ({
+    this.options.matieres = byChamp('decision_qpc_cc.matiere').map(o => ({
       value: o.id,
       label: o.valeur,
     }));
 
-    // Dispositif décision CC
-    this.options.dispositifs = byChamp('DISPOSITIF_DECISION_CC').map(o => ({
+    // Dispositif de la décision du CC
+    this.options.dispositifs = byChamp('decision_qpc_cc.dispositif_decision_cc').map(o => ({
       value: o.id,
       label: o.valeur,
     }));
 
     // Traitement des effets passés
-    this.options.traitementsEffetsPasses = byChamp('TRAITEMENT_EFFETS_PASSES').map(o => ({
+    this.options.traitementsEffetsPasses = byChamp('decision_qpc_cc.traitement_effets_passes').map(o => ({
       value: o.id,
       label: o.valeur,
     }));
 
-    // Qualité tiers intervenants
-    this.options.qualitesTiers = byChamp('QUALITE_TIERS_INTERVENTION').map(o => ({
+    // Qualité des tiers intervenants
+    this.options.qualitesTiers = byChamp('decision_qpc_cc.qualite_tiers_intervention').map(o => ({
       value: o.id,
       label: o.valeur,
     }));
 
-    // Réserves d’incompétence
-    this.options.reservesIncompetence = byChamp('RESERVE_INCOMPETENCE_CONSEIL').map(o => ({
+    // Réserve d’incompétence du Conseil
+    this.options.reservesIncompetence = byChamp('decision_qpc_cc.reserve_incompetence_conseil').map(o => ({
       value: o.id,
       label: o.valeur,
     }));
 
-    // Si techniques/motifs viennent aussi de liste déroulante, tu peux également
-    // les construire ici plutôt que de les coder en dur dans ngOnInit.
+    // Si un jour tu ajoutes "oralité" en filtre :
+    // this.options.oralites = byChamp('decision_qpc_cc.oralite').map(o => ({
+    //   value: o.id,
+    //   label: o.valeur,
+    // }));
   }
 
   // ---------------------------------------------------------------------------

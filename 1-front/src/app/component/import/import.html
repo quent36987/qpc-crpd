@@ -1,18 +1,65 @@
 <div class="import-container">
-  <h2>Importer un fichier</h2>
+  <div class="import-header">
+    <h1>Import des décisions QPC</h1>
+    <p>
+      Importez un fichier Excel contenant les décisions de filtrage ou les décisions
+      du Conseil constitutionnel.
+    </p>
+  </div>
 
-  <!-- Sélection du fichier -->
-  <input
-    type="file"
-    (change)="onFileSelected($event)"
-    accept=".xls,.xlsx"
-  />
+  <div class="import-card">
+    <div class="upload-zone">
+      <label class="file-label">
+        <input
+          type="file"
+          (change)="onFileSelected($event)"
+          accept=".xls,.xlsx"
+        />
+        <span>Choisir un fichier Excel</span>
+      </label>
 
-  <!-- Bouton d'upload -->
-  <button
-    (click)="uploadFile()"
-    [disabled]="!fileToUpload"
-  >
-    Importer
-  </button>
+      <p class="file-help">
+        Formats acceptés : <strong>.xls</strong>, <strong>.xlsx</strong>
+      </p>
+
+      <p class="file-name" *ngIf="fileToUpload">
+        Fichier sélectionné : <strong>{{ fileToUpload?.name }}</strong>
+      </p>
+      <p class="file-name file-name-empty" *ngIf="!fileToUpload">
+        Aucun fichier sélectionné.
+      </p>
+    </div>
+
+    <div class="import-actions">
+      <button
+        type="button"
+        class="btn-primary"
+        (click)="uploadFileFiltrage()"
+        [disabled]="!fileToUpload"
+      >
+        📊 Importer décisions de filtrage
+      </button>
+
+      <button
+        type="button"
+        class="btn-secondary"
+        (click)="uploadFileQpcCc()"
+        [disabled]="!fileToUpload"
+      >
+        ⚖ Importer décisions du Conseil constitutionnel
+      </button>
+    </div>
+
+    <div class="import-hint">
+      <h2>Informations</h2>
+      <ul>
+        <li>Le même fichier peut contenir plusieurs décisions.</li>
+        <li>Assurez-vous que le format du fichier respecte le modèle attendu.</li>
+        <li>
+          En cas d’erreur, un message de notification vous indiquera la cause
+          de l’échec de l’import.
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>

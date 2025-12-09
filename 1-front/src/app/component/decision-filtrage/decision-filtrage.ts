@@ -19,8 +19,8 @@ import {MultiSelectComponent, MultiSelectOption} from "../multi-select/multi-sel
   selector: 'app-search',
   standalone: true,
   imports: [CommonModule, FormsModule, MultiSelectComponent],
-  templateUrl: './search.html',
-  styleUrls: ['./search.css'],
+  templateUrl: './decision-filtrage.html',
+  styleUrls: ['./decision-filtrage.css'],
 })
 export class SearchComponent implements OnInit {
 

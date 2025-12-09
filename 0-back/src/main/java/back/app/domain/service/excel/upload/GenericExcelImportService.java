@@ -6,6 +6,8 @@ import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -13,7 +15,8 @@ import java.util.*;
 @RequiredArgsConstructor
 public class GenericExcelImportService {
 
-    
+    private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
     public <T> List<T> importFromXls(InputStream in, ExcelImportConfig<T> config) {
         try (Workbook wb = WorkbookFactory.create(in)) {
 
@@ -156,6 +159,47 @@ public class GenericExcelImportService {
                     yield Double.toString(cell.getNumericCellValue());
                 }
             }
+            default -> null;
+        };
+    }
+
+    // ----------------------------------------------------------------------
+    // Helpers de parsing
+    // ----------------------------------------------------------------------
+
+    public static LocalDate parseDate(String s) {
+        if (s == null || s.isBlank()) return null;
+        // deux cas possibles: "2024-01-01T00:00" depuis POI ou "01/01/2024" direct
+        s = s.trim();
+        try {
+            if (s.contains("T")) {
+                return LocalDate.parse(s.substring(0, 10)); // "yyyy-MM-dd..."
+            }
+            return LocalDate.parse(s, DATE_FMT);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static String str(String raw) {
+        return raw == null ? null : raw.trim();
+    }
+
+    public static Integer parseInteger(String s) {
+        if (s == null || s.isBlank()) return null;
+        try {
+            return Integer.parseInt(s.trim());
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    public static Boolean parseBoolean(String s) {
+        if (s == null || s.isBlank()) return null;
+        String v = s.trim().toLowerCase(Locale.ROOT);
+        return switch (v) {
+            case "1", "true", "vrai", "oui", "o", "x" -> Boolean.TRUE;
+            case "0", "false", "faux", "non", "n" -> Boolean.FALSE;
             default -> null;
         };
     }

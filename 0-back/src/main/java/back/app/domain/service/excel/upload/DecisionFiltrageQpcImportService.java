@@ -1,17 +1,11 @@
 package back.app.domain.service.excel.upload;
 
-import back.app.data.model.qpc.DecisionFiltrageQpcModel;
-import back.app.data.model.qpc.DroitLiberteModel;
-import back.app.data.model.qpc.EJuridiction;
-import back.app.data.model.qpc.ENiveauFiltrage;
-import back.app.data.model.qpc.EOrdreJuridictionnel;
-import back.app.data.model.qpc.ListeDeroulanteModel;
+import back.app.data.model.qpc.*;
 import back.app.data.repository.interfaces.DecisionFiltrageQpcRepository;
 import back.app.data.repository.interfaces.DroitLiberteRepository;
 import back.app.data.repository.interfaces.ListeDeroulanteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.sl.draw.geom.GuideIf;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,20 +14,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.function.Function;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class DecisionFiltrageQpcImportService {
 
-
     private final GenericExcelImportService genericExcelImportService;
     private final DecisionFiltrageQpcRepository decisionFiltrageQpcRepository;
     private final ListeDeroulanteRepository listeDeroulanteRepository;
     private final DroitLiberteRepository droitLiberteRepository;
-
-    private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @Transactional
     public void importFromXls(InputStream in) {
@@ -128,36 +118,36 @@ public class DecisionFiltrageQpcImportService {
 
                 // Textes simples
                 ExcelImportColumn.of("Références",
-                        DecisionFiltrageQpcImportService::str,
+                        GenericExcelImportService::str,
                         DecisionFiltrageQpcModel::setReference),
 
                 ExcelImportColumn.of("n° de la décision",
-                        DecisionFiltrageQpcImportService::str,
+                        GenericExcelImportService::str,
                         DecisionFiltrageQpcModel::setNumeroDecision),
 
                 ExcelImportColumn.of("Références de la ou des dispositions législatives contestée(s) dans la QPC",
-                        DecisionFiltrageQpcImportService::str,
+                        GenericExcelImportService::str,
                         DecisionFiltrageQpcModel::setReferenceDispositionsContestees),
 
                 ExcelImportColumn.of("Identité du demandeur",
-                        DecisionFiltrageQpcImportService::str,
+                        GenericExcelImportService::str,
                         DecisionFiltrageQpcModel::setIdentiteDemandeur),
 
                 ExcelImportColumn.of("Autres remarques",
-                        DecisionFiltrageQpcImportService::str,
+                        GenericExcelImportService::str,
                         DecisionFiltrageQpcModel::setAutresRemarques),
 
                 ExcelImportColumn.of("Mots-clés",
-                        DecisionFiltrageQpcImportService::str,
+                        GenericExcelImportService::str,
                         DecisionFiltrageQpcModel::setMotsCles),
 
                 ExcelImportColumn.of("Nombre de droits et libertés invoqués",
-                        DecisionFiltrageQpcImportService::str,
+                        GenericExcelImportService::str,
                         DecisionFiltrageQpcModel::setNombreDroitsNonMentionnes),
 
                 // Dates
                 ExcelImportColumn.of("Date",
-                        this::parseDate,
+                        GenericExcelImportService::parseDate,
                         DecisionFiltrageQpcModel::setDateFiltrage)
 
                 // droitsLibertes => via postProcessor (cf. plus bas)
@@ -173,27 +163,7 @@ public class DecisionFiltrageQpcImportService {
                 .build();
     }
 
-    // ----------------------------------------------------------------------
-    // Helpers de parsing
-    // ----------------------------------------------------------------------
 
-    private LocalDate parseDate(String s) {
-        if (s == null || s.isBlank()) return null;
-        // deux cas possibles: "2024-01-01T00:00" depuis POI ou "01/01/2024" direct
-        s = s.trim();
-        try {
-            if (s.contains("T")) {
-                return LocalDate.parse(s.substring(0, 10)); // "yyyy-MM-dd..."
-            }
-            return LocalDate.parse(s, DATE_FMT);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    private static String str(String raw) {
-        return raw == null ? null : raw.trim();
-    }
 
     private ListeDeroulanteModel findOrCreateListe(String champ, String valeur) {
         if (valeur == null || valeur.isBlank()) return null;
@@ -229,7 +199,7 @@ public class DecisionFiltrageQpcImportService {
 
             // Colonnes du type "droitLiberte1", "droitLiberte2", ...
             if (header.startsWith("Droits et libertés invoqués")) {
-                String texte = String.valueOf(value).trim();
+                String texte = value.trim();
 
                 Optional<DroitLiberteModel> droitOpt = droitLiberteRepository.findByTexte(texte);
                 if (droitOpt.isPresent()) {

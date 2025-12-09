@@ -13,7 +13,7 @@ import {Configuration} from "./app/_services/generated-api";
 import {API_URL_OPENAPI} from "./app/environments/environment";
 import Aura from '@primeng/themes/aura';
 import {HeaderComponent} from "./app/component/header/header";
-import {SearchComponent} from "./app/component/search/search";
+import {SearchComponent} from "./app/component/decision-filtrage/decision-filtrage";
 import {DecisionCCComponent} from "./app/component/decision-cc/decision-cc";
 import {HomeComponent} from "./app/component/home/home";
 import {LoginComponent} from "./app/component/login/login";

@@ -48,12 +48,10 @@ public class DecisionQpcCcModel {
     private ListeDeroulanteModel qualiteDemandeur;
 
     // 7. identite_demandeur
-    @Lob
     @Column(name = "identite_demandeur")
     private String identiteDemandeur;
 
     // 8. dispositions_legislatives_contestees
-    @Lob
     @Column(name = "dispositions_legislatives_contestees")
     private String dispositionsLegislativesContestees;
 
@@ -98,7 +96,6 @@ public class DecisionQpcCcModel {
     private Integer deport;
 
     // 18. nom_membre_deporte_ou_recuse
-    @Lob
     @Column(name = "nom_membre_deporte_ou_recuse")
     private String nomMembreDeporteOuRecuse;
 
@@ -129,7 +126,6 @@ public class DecisionQpcCcModel {
     private Integer nombrePersonnesPhysiques;
 
     // 25. identite_personnes_physiques
-    @Lob
     @Column(name = "identite_personnes_physiques")
     private String identitePersonnesPhysiques;
 
@@ -138,7 +134,6 @@ public class DecisionQpcCcModel {
     private Integer nombreAssociations;
 
     // 27. identite_associations
-    @Lob
     @Column(name = "identite_associations")
     private String identiteAssociations;
 
@@ -147,7 +142,6 @@ public class DecisionQpcCcModel {
     private Integer nombreEntreprises;
 
     // 29. identite_entreprises
-    @Lob
     @Column(name = "identite_entreprises")
     private String identiteEntreprises;
 
@@ -156,7 +150,7 @@ public class DecisionQpcCcModel {
     private Integer nombreSyndicatsApOp;
 
     // 31. identite_syndicats_ap_op
-    @Lob
+
     @Column(name = "identite_syndicats_ap_op")
     private String identiteSyndicatsApOp;
 
@@ -165,7 +159,6 @@ public class DecisionQpcCcModel {
     private Integer nombreCollectivitesTerritoriales;
 
     // 33. identite_collectivites
-    @Lob
     @Column(name = "identite_collectivites")
     private String identiteCollectivites;
 
@@ -183,17 +176,14 @@ public class DecisionQpcCcModel {
     private Boolean priseEnCompteInterpretationJurisprudentielle;
 
     // 37. techniques_controle
-    @Lob
     @Column(name = "techniques_controle")
     private String techniquesControle;
 
     // 38. motif_inconstitutionnalite
-    @Lob
     @Column(name = "motif_inconstitutionnalite")
     private String motifInconstitutionnalite;
 
     // 39. autres_remarques
-    @Lob
     @Column(name = "autres_remarques")
     private String autresRemarques;
 

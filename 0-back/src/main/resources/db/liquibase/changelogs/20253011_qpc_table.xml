@@ -96,10 +96,10 @@
             <column name="qualite_demandeur_id" type="BIGINT"/>
 
             <!-- 7. identite_demandeur -->
-            <column name="identite_demandeur" type="TEXT"/>
+            <column name="identite_demandeur" type="VARCHAR(255)"/>
 
             <!-- 8. dispositions_legislatives_contestees -->
-            <column name="dispositions_legislatives_contestees" type="TEXT"/>
+            <column name="dispositions_legislatives_contestees" type="VARCHAR(500)"/>
 
             <!-- 9. type_disposition_legislative : liste déroulante -->
             <column name="type_disposition_legislative_id" type="BIGINT"/>
@@ -129,7 +129,7 @@
             <column name="deport" type="INT"/>
 
             <!-- 18. nom_membre_deporte_ou_recuse -->
-            <column name="nom_membre_deporte_ou_recuse" type="TEXT"/>
+            <column name="nom_membre_deporte_ou_recuse" type="VARCHAR(255)"/>
 
             <!-- 19. oralite : liste déroulante -->
             <column name="oralite_id" type="BIGINT"/>
@@ -156,25 +156,25 @@
             <column name="nombre_associations" type="INT"/>
 
             <!-- 27. identite_associations -->
-            <column name="identite_associations" type="TEXT"/>
+            <column name="identite_associations" type="VARCHAR(255)"/>
 
             <!-- 28. nombre_entreprises -->
             <column name="nombre_entreprises" type="INT"/>
 
             <!-- 29. identite_entreprises -->
-            <column name="identite_entreprises" type="TEXT"/>
+            <column name="identite_entreprises" type="VARCHAR(255)"/>
 
             <!-- 30. nombre_syndicats_ap_op -->
             <column name="nombre_syndicats_ap_op" type="INT"/>
 
             <!-- 31. identite_syndicats_ap_op -->
-            <column name="identite_syndicats_ap_op" type="TEXT"/>
+            <column name="identite_syndicats_ap_op" type="VARCHAR(255)"/>
 
             <!-- 32. nombre_collectivites_territoriales -->
             <column name="nombre_collectivites_territoriales" type="INT"/>
 
             <!-- 33. identite_collectivites -->
-            <column name="identite_collectivites" type="TEXT"/>
+            <column name="identite_collectivites" type="VARCHAR(255)"/>
 
             <!-- 34. reserve_opportunite : booléen -->
             <column name="reserve_opportunite" type="BOOLEAN"/>
@@ -186,13 +186,13 @@
             <column name="prise_en_compte_interpretation_jurisprudentielle" type="BOOLEAN"/>
 
             <!-- 37. techniques_controle -->
-            <column name="techniques_controle" type="TEXT"/>
+            <column name="techniques_controle" type="VARCHAR(255)"/>
 
             <!-- 38. motif_inconstitutionnalite -->
-            <column name="motif_inconstitutionnalite" type="TEXT"/>
+            <column name="motif_inconstitutionnalite" type="VARCHAR(1500)"/>
 
             <!-- 39. autres_remarques -->
-            <column name="autres_remarques" type="TEXT"/>
+            <column name="autres_remarques" type="VARCHAR(255)"/>
 
             <!-- 40. caractere_notable_decision -->
             <column name="caractere_notable_decision" type="BOOLEAN"/>

@@ -1,15 +1,18 @@
 import { Component } from '@angular/core';
-import {AuthApi, DcisionsDeFiltrageQPCApi} from "../../_services/generated-api";
+import {AuthApi, DcisionsDeFiltrageQPCApi, DcisionsQPCCCApi} from "../../_services/generated-api";
 import {StorageService} from "../../_services/storage.service";
 import {SpinnerService} from "../../_services/spinner.service";
 import {NotificationService} from "../../_services/notification.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {take} from "rxjs";
 import {apiWrapper} from "../../_services/api-wrapper";
+import {CommonModule} from "@angular/common";
 
 @Component({
   selector: 'app-import',
-  imports: [],
+  imports: [
+    CommonModule,
+  ],
   templateUrl: './import.html',
   styleUrl: './import.css',
 })
@@ -24,7 +27,8 @@ export class Import {
     private notifService: NotificationService,
     private router: Router,
     private route: ActivatedRoute,
-    private decisionFiltrageApi: DcisionsDeFiltrageQPCApi
+    private decisionFiltrageApi: DcisionsDeFiltrageQPCApi,
+    private decisionQpcCcService: DcisionsQPCCCApi,
   ) {
 
   }
@@ -39,8 +43,14 @@ export class Import {
   }
 
 
-  uploadFile() {
+  uploadFileFiltrage() {
     this.decisionFiltrageApi.importDecisionFiltrageXls(this.fileToUpload!)
+      .pipe(apiWrapper(this.spinnerService, this.notifService))
+      .subscribe();
+  }
+
+  uploadFileQpcCc() {
+    this.decisionQpcCcService.importQpcCcXls(this.fileToUpload!)
       .pipe(apiWrapper(this.spinnerService, this.notifService))
       .subscribe();
   }

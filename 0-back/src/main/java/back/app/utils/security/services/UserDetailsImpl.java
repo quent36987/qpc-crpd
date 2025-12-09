@@ -17,23 +17,23 @@ public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
 
     @Getter
-    private Long id;
+    private final Long id;
     @Getter
-    private String nom;
+    private final String nom;
     @Getter
-    private String prenom;
+    private final String prenom;
     @Getter
-    private String email;
+    private final String email;
     @Getter
-    private String tel;
+    private final String tel;
 
     @JsonIgnore
-    private String password;
+    private final String password;
 
     @Getter
-    private ERole role;
+    private final ERole role;
 
-    private Collection<? extends GrantedAuthority> authorities;
+    private final Collection<? extends GrantedAuthority> authorities;
 
     public UserDetailsImpl(Long id,
                            String nom,

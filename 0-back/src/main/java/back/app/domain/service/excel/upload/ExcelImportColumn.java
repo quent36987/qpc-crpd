@@ -34,7 +34,7 @@ public class ExcelImportColumn<T> {
             BiConsumer<T, V> setter
     ) {
         return ExcelImportColumn.<T>builder()
-                .header(header)
+                .header(header.trim())
                 .parser(parser)
                 .rawSetter((t, v) -> setter.accept(t, (V) v))
                 .build();
