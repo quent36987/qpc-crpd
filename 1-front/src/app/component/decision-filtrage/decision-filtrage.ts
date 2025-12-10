@@ -79,8 +79,6 @@ export class SearchComponent implements OnInit {
 
 
   ngOnInit() {
-
-    // enums → value = enum, label = text lisible
     this.options.juridictions = [
       {
         value: DecisionFiltrageQpcSearchRequest.JuridictionsEnum.ConseilEtat,
@@ -112,6 +110,21 @@ export class SearchComponent implements OnInit {
           value: dl.id,
           label: dl.texte,
         }));
+      });
+  }
+
+  downloadExcel() {
+    this.decisionFiltrageService.exportXlsQpcFiltrage(this.searchCriteria)
+      .pipe(apiWrapper(this.spinnerService, this.notifService, undefined, "Téléchargement pret"))
+      .subscribe(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'decisions_filtrage_qpc.xlsx';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
       });
   }
 
@@ -169,7 +182,7 @@ export class SearchComponent implements OnInit {
   private search(payload: DecisionFiltrageQpcSearchRequest) {
     this.decisionFiltrageService
       .searchDecisionFiltrage(this.currentPage - 1, this.pageSize, [], payload)
-      .pipe(apiWrapper(this.spinnerService, this.notifService))
+      .pipe(apiWrapper(this.spinnerService, this.notifService, undefined, "Recherche terminée"))
       .subscribe(res => {
         this.searchResult = res;
         this.showResults = true;

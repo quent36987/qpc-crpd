@@ -171,6 +171,8 @@
 
 .results-header {
   margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
 }
 
 .results-header h2 {

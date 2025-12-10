@@ -84,7 +84,7 @@ public class DecisionFiltrageQpcController {
                     )
             )
     )
-    @GetMapping(value = "/export-xls", produces = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    @PostMapping(value = "/export-xls", produces = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<byte[]> exportXlsQpcFiltrage(@RequestBody(required = false) DecisionFiltrageQpcSearchRequest searchRequest) {
 
         Specification<DecisionFiltrageQpcModel> spec = Specification.where(null);

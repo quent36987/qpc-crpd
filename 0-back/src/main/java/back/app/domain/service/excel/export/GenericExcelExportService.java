@@ -94,7 +94,7 @@ public class GenericExcelExportService {
             }
 
             // Clôture du dernier groupe si nécessaire
-            if (currentGroup != null) {
+            if (currentGroup != null && groupStartCol >= 0 && groupStartCol < columns.size() - 1) {
                 sheet.addMergedRegion(new CellRangeAddress(
                         0, 0,
                         groupStartCol, columns.size() - 1

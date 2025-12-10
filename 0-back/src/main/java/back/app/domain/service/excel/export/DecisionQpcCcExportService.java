@@ -31,9 +31,7 @@ public class DecisionQpcCcExportService {
     @Transactional(readOnly = true)
     public byte[] getXlsDecisionsQpcCc(Specification<DecisionQpcCcModel> specification) {
         List<DecisionQpcCcModel> entities = decisionQpcCcRepository.findAll(specification);
-        List<DecisionQpcCcDTO> dtos = entities.stream()
-                .map(decisionQpcCcMapper::toDTO)
-                .collect(Collectors.toList());
+        List<DecisionQpcCcDTO> dtos = decisionQpcCcMapper.toDTOList(entities);
 
         ExcelExportConfig<DecisionQpcCcDTO> config = buildDecisionQpcCcConfig();
 

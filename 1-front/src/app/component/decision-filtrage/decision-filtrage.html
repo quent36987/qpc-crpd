@@ -1,4 +1,3 @@
-
 <div class="search-container">
   <div class="search-header">
     <h1>Recherche de Décisions de Filtrage QPC</h1>
@@ -16,7 +15,8 @@
         <div class="form-row">
           <div class="form-group">
             <label>Numéro de décision</label>
-            <input type="text" [(ngModel)]="searchCriteria.numeroDecision" name="numeroDecision" placeholder="Ex: 24-10.001">
+            <input type="text" [(ngModel)]="searchCriteria.numeroDecision" name="numeroDecision"
+                   placeholder="Ex: 24-10.001">
           </div>
 
           <div class="form-group">
@@ -138,8 +138,16 @@
 
     <div class="results-section" *ngIf="showResults">
       <div class="results-header">
-        <h2>Résultats de recherche</h2>
-        <p class="results-count">{{ searchResult?.totalElements || 0 }} décision(s) trouvée(s)</p>
+        <div>
+          <h2>Résultats de recherche</h2>
+          <p class="results-count">{{ searchResult?.totalElements || 0 }} décision(s) trouvée(s)</p>
+        </div>
+
+        <div style="text-align:right; margin-bottom:1rem;">
+          <button class="btn-secondary" (click)="downloadExcel()">
+            📥 Export XLSX
+          </button>
+        </div>
       </div>
 
       <div class="table-container">
@@ -162,10 +170,10 @@
             <td>{{ decision.ordreJuridictionnel }}</td>
             <td>{{ decision.dateFiltrage | date: 'dd/MM/yyyy' }}</td>
             <td>
-<!--                    <span class="badge" [class.badge-success]="decision.niveauFiltrage === 'Renvoi'"-->
-<!--                          [class.badge-warning]="decision.niveauFiltrage !== 'Renvoi'">-->
-<!--                      {{ decision.niveauFiltrage }}-->
-<!--                    </span>-->
+              <!--                    <span class="badge" [class.badge-success]="decision.niveauFiltrage === 'Renvoi'"-->
+              <!--                          [class.badge-warning]="decision.niveauFiltrage !== 'Renvoi'">-->
+              <!--                      {{ decision.niveauFiltrage }}-->
+              <!--                    </span>-->
               {{ decision.niveauFiltrage }}
             </td>
             <td>{{ decision.formationJugement }}</td>
@@ -233,10 +241,10 @@
           <div class="detail-grid">
             <div class="detail-item">
               <strong>Niveau de filtrage:</strong>
-<!--              <span class="badge" [class.badge-success]="selectedDecision()!.niveauFiltrage === 'Renvoi'"-->
-<!--                    [class.badge-warning]="selectedDecision()!.niveauFiltrage !== 'Renvoi'">-->
-<!--                    {{ selectedDecision()!.niveauFiltrage }}-->
-<!--                  </span>-->
+              <!--              <span class="badge" [class.badge-success]="selectedDecision()!.niveauFiltrage === 'Renvoi'"-->
+              <!--                    [class.badge-warning]="selectedDecision()!.niveauFiltrage !== 'Renvoi'">-->
+              <!--                    {{ selectedDecision()!.niveauFiltrage }}-->
+              <!--                  </span>-->
               <span class="detail-item">
                     {{ selectedDecision.niveauFiltrage }}
                   </span>

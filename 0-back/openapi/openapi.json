@@ -532,6 +532,37 @@
         }
       }
     },
+    "/api/decisions-qpc-cc/export-xls": {
+      "post": {
+        "tags": [
+          "Décisions QPC CC"
+        ],
+        "summary": "Export XLSX d\u0027une requête de décisions QPC CC",
+        "operationId": "exportQpcCcXls",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionQpcCcSearchRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Fichier XLSX",
+            "content": {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/decisions-filtrage-qpc/search": {
       "post": {
         "tags": [
@@ -626,6 +657,37 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/decisions-filtrage-qpc/export-xls": {
+      "post": {
+        "tags": [
+          "Décisions de filtrage QPC"
+        ],
+        "summary": "Export XLSX d\u0027une requête de décisions de filtrage QPC",
+        "operationId": "exportXlsQpcFiltrage",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionFiltrageQpcSearchRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Fichier XLSX",
+            "content": {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
           }
         }
       }
@@ -906,44 +968,6 @@
         }
       }
     },
-    "/api/decisions-qpc-cc/export-xls": {
-      "get": {
-        "tags": [
-          "Décisions QPC CC"
-        ],
-        "summary": "Export XLSX des décisions QPC CC",
-        "operationId": "exportQpcCcXls",
-        "parameters": [
-          {
-            "name": "searchRequest",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/DecisionQpcCcSearchRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/decisions-filtrage-qpc/{id}": {
       "get": {
         "tags": [
@@ -969,38 +993,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DecisionFiltrageQpcDTO"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/decisions-filtrage-qpc/export-xls": {
-      "get": {
-        "tags": [
-          "Décisions de filtrage QPC"
-        ],
-        "summary": "Export XLSX d\u0027une requête de décisions de filtrage QPC",
-        "operationId": "exportXlsQpcFiltrage",
-        "parameters": [
-          {
-            "name": "searchRequest",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/DecisionFiltrageQpcSearchRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Fichier XLSX",
-            "content": {
-              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
                 }
               }
             }

@@ -19,15 +19,19 @@ import {HomeComponent} from "./app/component/home/home";
 import {LoginComponent} from "./app/component/login/login";
 import {Import} from "./app/component/import/import";
 import {IsLoginGuard} from "./app/_helpers/IsLoginGuard";
+import {NotificationsComponent} from "./app/_shared/component/notifications/notifications";
+import {SpinnerComponent} from "./app/_shared/component/spinner/spinner.component";
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent],
+  imports: [RouterOutlet, HeaderComponent, NotificationsComponent, SpinnerComponent],
   template: `
     <app-header></app-header>
     <router-outlet></router-outlet>
+    <app-notification />
+    <app-spinner />
   `,
 })
 export class App {}

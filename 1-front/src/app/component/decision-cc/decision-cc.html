@@ -499,10 +499,17 @@
     <!-- Résultats -->
     <div class="results-section" *ngIf="showResults">
       <div class="results-header">
-        <h2>Résultats de recherche</h2>
-        <p class="results-count">
-          {{ searchResult?.totalElements || 0 }} décision(s) trouvée(s)
-        </p>
+        <div>
+          <h2>Résultats de recherche</h2>
+          <p class="results-count">
+            {{ searchResult?.totalElements || 0 }} décision(s) trouvée(s)
+          </p>
+        </div>
+        <div style="text-align:right; margin-bottom:1rem;">
+          <button class="btn-secondary" (click)="downloadExcel()">
+            📥 Export XLSX
+          </button>
+        </div>
       </div>
 
       <div class="table-container">

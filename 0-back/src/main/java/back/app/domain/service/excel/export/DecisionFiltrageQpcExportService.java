@@ -34,9 +34,7 @@ public class DecisionFiltrageQpcExportService {
         @Transactional(readOnly = true)
         public byte[] getXlsDecisionsFiltrage(Specification<DecisionFiltrageQpcModel> specification) {
             List<DecisionFiltrageQpcModel> entities = decisionFiltrageQpcRepository.findAll(specification);
-            List<DecisionFiltrageQpcDTO> dtos = entities.stream()
-                    .map(decisionFiltrageQpcMapper::toDTO)
-                    .collect(Collectors.toList());
+            List<DecisionFiltrageQpcDTO> dtos = decisionFiltrageQpcMapper.toDTOs(entities);
 
             ExcelExportConfig<DecisionFiltrageQpcDTO> config = buildDecisionsFiltrageConfig();
 

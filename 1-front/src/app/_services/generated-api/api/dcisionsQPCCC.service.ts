@@ -40,28 +40,20 @@ export class DcisionsQPCCCApi extends BaseService {
     }
 
     /**
-     * Export XLSX des décisions QPC CC
-     * @param searchRequest 
+     * Export XLSX d\&#39;une requête de décisions QPC CC
+     * @param decisionQpcCcSearchRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public exportQpcCcXls(searchRequest: DecisionQpcCcSearchRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
-    public exportQpcCcXls(searchRequest: DecisionQpcCcSearchRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
-    public exportQpcCcXls(searchRequest: DecisionQpcCcSearchRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
-    public exportQpcCcXls(searchRequest: DecisionQpcCcSearchRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (searchRequest === null || searchRequest === undefined) {
-            throw new Error('Required parameter searchRequest was null or undefined when calling exportQpcCcXls.');
-        }
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>searchRequest, 'searchRequest');
+    public exportQpcCcXls(decisionQpcCcSearchRequest?: DecisionQpcCcSearchRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
+    public exportQpcCcXls(decisionQpcCcSearchRequest?: DecisionQpcCcSearchRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
+    public exportQpcCcXls(decisionQpcCcSearchRequest?: DecisionQpcCcSearchRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
+    public exportQpcCcXls(decisionQpcCcSearchRequest?: DecisionQpcCcSearchRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'application/json'
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -72,23 +64,21 @@ export class DcisionsQPCCCApi extends BaseService {
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
         }
 
         let localVarPath = `/api/decisions-qpc-cc/export-xls`;
-        return this.httpClient.request<string>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                params: localVarQueryParameters,
-                responseType: <any>responseType_,
+                body: decisionQpcCcSearchRequest,
+                responseType: "blob",
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
                 observe: observe,

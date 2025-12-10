@@ -38,4 +38,6 @@ public interface DecisionFiltrageQpcMapper {
     DecisionFiltrageQpcRowDTO toRowDTO(DecisionFiltrageQpcModel model);
 
     List<DecisionFiltrageQpcRowDTO> toRowDTOs(List<DecisionFiltrageQpcModel> models);
+
+    List<DecisionFiltrageQpcDTO> toDTOs(List<DecisionFiltrageQpcModel> models);
 }

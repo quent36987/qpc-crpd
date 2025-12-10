@@ -88,6 +88,21 @@ export class DecisionCCComponent implements OnInit {
       });
   }
 
+  downloadExcel() {
+    this.decisionQpcCcService.exportQpcCcXls(this.searchCriteria)
+      .pipe(apiWrapper(this.spinnerService, this.notifService, undefined, "Téléchargement pret"))
+      .subscribe(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'decisions_filtrage_qpc.xlsx';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      });
+  }
+
   // ---------------------------------------------------------------------------
   //         Construction des options à partir de ListeDeroulanteDTO
   // ---------------------------------------------------------------------------
@@ -158,7 +173,7 @@ export class DecisionCCComponent implements OnInit {
   private search(payload: DecisionQpcCcSearchRequest): void {
     this.decisionQpcCcService
       .searchDecisions(this.currentPage - 1, this.pageSize, [], payload)
-      .pipe(apiWrapper(this.spinnerService, this.notifService))
+      .pipe(apiWrapper(this.spinnerService, this.notifService, undefined, "Recherche terminée"))
       .subscribe((res: PageDTODecisionQpcCcRowDTO) => {
         this.searchResult = res;
         this.showResults = true;

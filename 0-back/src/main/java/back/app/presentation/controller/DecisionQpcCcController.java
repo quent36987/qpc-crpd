@@ -10,6 +10,9 @@ import back.app.domain.service.excel.upload.DecisionQpcCcImportService;
 import back.app.presentation.request.DecisionQpcCcSearchRequest;
 import back.app.utils.errors.RestError;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
@@ -71,8 +74,18 @@ public class DecisionQpcCcController {
         return decisionQpcCcService.getPaginatedDecisionsQpcCc(spec, pageable);
     }
 
-    @Operation(summary = "Export XLSX des décisions QPC CC")
-    @GetMapping(value = "/export-xls", produces = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    @Operation(
+            summary = "Export XLSX d'une requête de décisions QPC CC",
+            responses = @ApiResponse(
+                    responseCode = "200",
+                    description = "Fichier XLSX",
+                    content = @Content(
+                            mediaType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                            schema = @Schema(type = "string", format = "binary")
+                    )
+            )
+    )
+    @PostMapping(value = "/export-xls", produces = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<byte[]> exportQpcCcXls(
             @RequestBody(required = false) DecisionQpcCcSearchRequest searchRequest
     ) {

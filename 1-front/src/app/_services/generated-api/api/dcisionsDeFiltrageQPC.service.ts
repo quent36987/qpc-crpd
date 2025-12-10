@@ -41,21 +41,14 @@ export class DcisionsDeFiltrageQPCApi extends BaseService {
 
     /**
      * Export XLSX d\&#39;une requête de décisions de filtrage QPC
-     * @param searchRequest 
+     * @param decisionFiltrageQpcSearchRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public exportXlsQpcFiltrage(searchRequest: DecisionFiltrageQpcSearchRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
-    public exportXlsQpcFiltrage(searchRequest: DecisionFiltrageQpcSearchRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
-    public exportXlsQpcFiltrage(searchRequest: DecisionFiltrageQpcSearchRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
-    public exportXlsQpcFiltrage(searchRequest: DecisionFiltrageQpcSearchRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (searchRequest === null || searchRequest === undefined) {
-            throw new Error('Required parameter searchRequest was null or undefined when calling exportXlsQpcFiltrage.');
-        }
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>searchRequest, 'searchRequest');
+    public exportXlsQpcFiltrage(decisionFiltrageQpcSearchRequest?: DecisionFiltrageQpcSearchRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
+    public exportXlsQpcFiltrage(decisionFiltrageQpcSearchRequest?: DecisionFiltrageQpcSearchRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
+    public exportXlsQpcFiltrage(decisionFiltrageQpcSearchRequest?: DecisionFiltrageQpcSearchRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
+    public exportXlsQpcFiltrage(decisionFiltrageQpcSearchRequest?: DecisionFiltrageQpcSearchRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -71,11 +64,20 @@ export class DcisionsDeFiltrageQPCApi extends BaseService {
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
         let localVarPath = `/api/decisions-filtrage-qpc/export-xls`;
-        return this.httpClient.request('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                params: localVarQueryParameters,
+                body: decisionFiltrageQpcSearchRequest,
                 responseType: "blob",
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
